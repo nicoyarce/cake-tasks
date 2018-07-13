@@ -19,9 +19,14 @@ Route::get('/', function () {
 });
 
 Route::resource('tareas', 'TareasController');
+Route::resource('proyectos', 'ProyectosController');
 
 Route::get('/grafico', function () {		
 	JavaScript::put(['tarea' => Tarea::sacarDatos()]);
 	return view('grafico');
 });
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

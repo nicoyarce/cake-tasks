@@ -9,7 +9,7 @@ class Proyecto extends Model
     protected $table = 'proyectos';
     protected $fillable = ['nombre','fechainicio','fechatermino','avance'];
 
-    public function tarea(){
-        return $this->hasMany(Tareas::Class);
+    public function tareas(){
+        return $this->hasMany(Tarea::class);
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Tarea;
-
+use App\Proyecto;
+use Illuminate\Http\Request;
 use App\Http\Requests\TareasRequest;
 
 class TareasController extends Controller
@@ -16,23 +15,23 @@ class TareasController extends Controller
     	return view('tareas.index', compact('tareas'));
     }
 
-    public function store(TareasRequest $request){
-        //dd(request()->all());
-        Tarea::create($request->all());
-        //or
-        //Tarea::create(request(['nombre','avance']));
-        return redirect('tareas');
+    public function create(){
+        $listaProyectos = Proyecto::all();
+        return view('tareas.create', compact('listaProyectos'));
     }
 
-    public function create(){
-       return view('tareas.create');
+    public function store(TareasRequest $request){
+        //dd(request()->all());
+        Tarea::create($request->all());        
+        //Tarea::create(request(['nombre',,'fechainicio','fechatermino','avance']));
+        return redirect('tareas');
     }
 
     public function show(Tarea $tarea){     
         return view('tareas.show', compact('tarea'));
     }
 
-    public function edit(Tarea $tarea){             
+    public function edit(Tarea $tarea){        
         return view('tareas.edit', compact('tarea'));
     }
 

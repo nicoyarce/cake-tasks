@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<h1>Editar tarea</h1>
+<h1>Editar proyecto</h1>
 <hr>
 @if(count($errors))
 <div class="form-group">
@@ -13,37 +13,25 @@
 	</div>
 </div>
 @endif
-<form method="POST" action="{{action('TareasController@update', $tarea)}}">
+<form method="POST" action="{{action('ProyectosController@update', $proyecto)}}">
 	{{csrf_field()}}
 	{{method_field('PUT')}}	
 	<div class="form-group">
 		<label for="nombre" class="col-2 col-form-label">Nombre</label>
 		<div class="col-10">
-			<input type="text" class="form-control" id="nombre" required name="nombre" value="{{$tarea->nombre}}">
+			<input type="text" class="form-control" id="nombre" required name="nombre" value="{{$proyecto->nombre}}">
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label for="nombre" class="col-2 col-form-label">Pertenece a proyecto</label>
-		<div class="col-10">
-			<select class="form-control" id="proyecto" required name="proyecto">
-				@for($i=0;$i<=100;$i+=5)
-					<option>{{$i}}</option>
-				@endfor
-			</select>
-		</div>
-	</div>
-	
 	<div class="form-group">
 		<label for="fechainicio" class="col-2 col-form-label">Fecha inicio</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fechainicio" required name="fechainicio" value="{{$tarea->fechainicio}}">
+			<input class="form-control" type="date" id="fechainicio" required name="fechainicio" value="{{$proyecto->fechainicio}}">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="fechatermino" class="col-2 col-form-label">Fecha termino</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fechatermino" required name="fechatermino" value="{{$tarea->fechatermino}}">
+			<input class="form-control" type="date" id="fechatermino" required name="fechatermino" value="{{$proyecto->fechatermino}}">
 		</div>
 	</div>
 	<div class="form-group" >
@@ -51,16 +39,16 @@
 		<div class="col-10">
 			<select class="form-control" id="avance" required name="avance">
 				@for($i=0;$i<=100;$i+=5)
-				@if($i == $tarea->avance)
-					<option selected>{{$tarea->avance}}</option>			
+				@if($i == $proyecto->avance)
+					<option selected>{{$proyecto->avance}}</option>			
 				@else
 					<option>{{$i}}</option>
 				@endif
 				@endfor
 			</select>
-		</div>
-		
+		</div>		
 	</div>
+	
 	<div class="form-group text-center">
 		<button type="submit" class="btn btn-primary">Actualizar</button>
 	</div>

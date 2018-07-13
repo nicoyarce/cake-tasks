@@ -1,8 +1,7 @@
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+button {
+  padding: 5px 5px;
+  align-content: center;
+  align: center;
 }
 
 #grafico{

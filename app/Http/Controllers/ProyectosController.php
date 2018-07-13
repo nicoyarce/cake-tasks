@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Proyecto;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProyectosRequest;
 
-class ProyectoController extends Controller
+class ProyectosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,8 @@ class ProyectoController extends Controller
      */
     public function index()
     {
-        //
+        $proyectos = Proyecto::all();
+        return view('proyectos.index', compact('proyectos'));
     }
 
     /**
@@ -22,9 +24,9 @@ class ProyectoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(ProyectosRequest $request)
     {
-        //
+        return view('proyectos.create');
     }
 
     /**
@@ -35,7 +37,8 @@ class ProyectoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Proyecto::create($request->all());
+        return redirect('proyectos');
     }
 
     /**
@@ -46,7 +49,7 @@ class ProyectoController extends Controller
      */
     public function show(Proyecto $proyecto)
     {
-        //
+        return view('proyectos.show', compact('proyecto'));
     }
 
     /**
@@ -57,7 +60,7 @@ class ProyectoController extends Controller
      */
     public function edit(Proyecto $proyecto)
     {
-        //
+        return view('proyectos.edit', compact('proyecto'));
     }
 
     /**
@@ -69,7 +72,10 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, Proyecto $proyecto)
     {
-        //
+        $proyectonueva = Proyecto::findOrFail($proyecto->id);
+        $proyectonueva->fill($request->all());
+        $proyectonueva->save();
+        return redirect('proyectos');
     }
 
     /**
@@ -80,6 +86,7 @@ class ProyectoController extends Controller
      */
     public function destroy(Proyecto $proyecto)
     {
-        //
+        $proyecto = Proyecto::find($proyecto)->first()->delete();        
+        return redirect('proyectos');
     }
 }

@@ -22,13 +22,16 @@
 				<div class="collapse navbar-collapse" id="navbarCollapse">
 					<ul class="navbar-nav mr-auto">
 						<li class="nav-item active">
-							<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/proyectos/">Proyectos</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/tareas/">Tareas</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="/grafico/">Grafico</a>
+							<a class="nav-link" href="/grafico/">Gráfico</a>
 						</li>
 					</ul>
 				</div>
@@ -42,8 +45,8 @@
 		</main>
 		
 		<footer class="footer">
-			<div class="container">
-				<span class="text-muted">Desarrollado por Nicolas Oyarce</span>
+			<div class="container">				
+				<span class="text-muted small">Desarrollado por Nicolas Oyarce</span>
 			</div>
 		</footer>
 		
