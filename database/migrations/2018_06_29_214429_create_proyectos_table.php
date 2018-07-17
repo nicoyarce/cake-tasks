@@ -16,10 +16,11 @@ class CreateProyectosTable extends Migration
         Schema::create('proyectos', function (Blueprint $table) {
             $table->increments('id');            
             $table->timestamps();
+            $table->integer('user_id')->nullable();
             $table->string('nombre');
-            $table->date('fechainicio');
-            $table->date('fechatermino');
-            $table->integer('avance');
+            $table->date('fecha_inicio');
+            $table->date('fecha_termino');
+            $table->integer('avance')->default(0);
         });
     }
 

@@ -1,10 +1,10 @@
-@extends('layout')
+@extends('layouts.master')
 @section('content')
 <h1>Proyecto: {{$proyecto->nombre}}</h1>
 <hr>
 <ul class="list-group">
-    <li class="list-group-item">Fecha inicio: {{$proyecto->fechainicio}}</li>
-    <li class="list-group-item">Fecha termino: {{$proyecto->fechatermino}}</li>
+    <li class="list-group-item">Fecha inicio: {{$proyecto->fecha_inicio}}</li>
+    <li class="list-group-item">Fecha termino: {{$proyecto->fecha_termino}}</li>
     <li class="list-group-item">Porcentaje avance: {{$proyecto->avance}} %</li>
 </ul>
 <br>
@@ -17,7 +17,7 @@
             </div>
             <div class="col-4">
                 <a type="button" class="btn btn-success float-right"  href="/tareas/create" role="button">
-                    Crear tarea <i class="fas fa-plus"></i>
+                    Agregar tarea <i class="fas fa-plus"></i>
                 </a>
             </div>
         </div>

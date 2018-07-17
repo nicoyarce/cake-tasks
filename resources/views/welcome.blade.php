@@ -1,8 +1,9 @@
-@extends('layout')
+@extends('layouts.master')
 @section('content')
-<br>
-<h1>Bienvenido</h1>
 
-<p>Existen <b>{{$nro}}</b> tareas registradas</p>
+<h1>Bienvenido</h1>
+<hr>
+<p>Existen <b> {{$nroProyectos}} </b> proyectos registrados. </p>
+<p>Existen <b> {{$nroTareas}} </b> tareas registradas.</p>
 
 @endsection

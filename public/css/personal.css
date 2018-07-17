@@ -1,4 +1,4 @@
-/* Sticky footer styles
+/* Personal styles
 -------------------------------------------------- */
 html {
   position: relative;
@@ -8,6 +8,9 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+#barra{
+  background-color: #002546;
+}
 .footer {
   position: absolute;
   bottom: 0;
@@ -16,4 +19,17 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
   background-color: #f5f5f5;
+}
+
+#mensaje{
+  position: absolute;
+  margin: 0 auto;
+  left: 10px ;
+  z-index: 10;
+  animation: mensaje 10s forwards;    
+}
+
+@keyframes mensaje {
+    0%   {opacity: 1;}
+    100% {opacity: 0; display:none;}
 }

@@ -10,23 +10,18 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-use App\Tarea;
-
-Route::get('/', function () {
-    $nro = Tarea::all()->count();    
-    return view('welcome', compact('nro'));
-});
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::resource('tareas', 'TareasController');
 Route::resource('proyectos', 'ProyectosController');
 
-Route::get('/grafico', function () {		
-	JavaScript::put(['tarea' => Tarea::sacarDatos()]);
-	return view('grafico');
-});
+Route::get('/grafico', 'GraficosController@index');
+Route::post('/grafico', 'GraficosController@filtrar');
 
+Route::get('/register', 'RegistrationController@create');
+Route::post('/register', 'RegistrationController@store');
 
-Auth::routes();
+Route::get('/login', 'SessionsController@create');
+Route::post('/login', 'SessionsController@store');
+Route::get('/logout', 'SessionsController@destroy');
 
-Route::get('/home', 'HomeController@index')->name('home');

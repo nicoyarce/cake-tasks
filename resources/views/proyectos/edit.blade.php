@@ -1,53 +1,32 @@
-@extends('layout')
+@extends('layouts.master')
 @section('content')
 <h1>Editar proyecto</h1>
 <hr>
-@if(count($errors))
-<div class="form-group">
-	<div class="alert alert-danger">
-		<ul>
-			@foreach ($errors->all() as $error)
-			<li>{{$error}}</li>
-			@endforeach
-		</ul>
-	</div>
-</div>
-@endif
+@include('layouts.errors')
 <form method="POST" action="{{action('ProyectosController@update', $proyecto)}}">
 	{{csrf_field()}}
 	{{method_field('PUT')}}	
+	
 	<div class="form-group">
 		<label for="nombre" class="col-2 col-form-label">Nombre</label>
 		<div class="col-10">
 			<input type="text" class="form-control" id="nombre" required name="nombre" value="{{$proyecto->nombre}}">
 		</div>
 	</div>
+
 	<div class="form-group">
-		<label for="fechainicio" class="col-2 col-form-label">Fecha inicio</label>
+		<label for="fecha_inicio" class="col-2 col-form-label">Fecha inicio</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fechainicio" required name="fechainicio" value="{{$proyecto->fechainicio}}">
+			<input class="form-control" type="date" id="fecha_inicio" required name="fecha_inicio" value="{{$proyecto->fecha_inicio}}">
 		</div>
 	</div>
+
 	<div class="form-group">
-		<label for="fechatermino" class="col-2 col-form-label">Fecha termino</label>
+		<label for="fecha_termino" class="col-2 col-form-label">Fecha termino</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fechatermino" required name="fechatermino" value="{{$proyecto->fechatermino}}">
+			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino" value="{{$proyecto->fecha_termino}}">
 		</div>
-	</div>
-	<div class="form-group" >
-		<label for="avance" class="col-2 col-form-label">Porcentaje avance</label>
-		<div class="col-10">
-			<select class="form-control" id="avance" required name="avance">
-				@for($i=0;$i<=100;$i+=5)
-				@if($i == $proyecto->avance)
-					<option selected>{{$proyecto->avance}}</option>			
-				@else
-					<option>{{$i}}</option>
-				@endif
-				@endfor
-			</select>
-		</div>		
-	</div>
+	</div>	
 	
 	<div class="form-group text-center">
 		<button type="submit" class="btn btn-primary">Actualizar</button>

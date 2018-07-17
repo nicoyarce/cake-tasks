@@ -16,6 +16,7 @@ class ProyectosController extends Controller
     public function index()
     {
         $proyectos = Proyecto::all();
+        $proyectos = Proyecto::paginate(15);
         return view('proyectos.index', compact('proyectos'));
     }
 
@@ -24,7 +25,7 @@ class ProyectosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(ProyectosRequest $request)
+    public function create()
     {
         return view('proyectos.create');
     }
@@ -35,9 +36,10 @@ class ProyectosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProyectosRequest $request)
     {
         Proyecto::create($request->all());
+        flash('Proyecto registrado')->success();
         return redirect('proyectos');
     }
 
@@ -70,11 +72,12 @@ class ProyectosController extends Controller
      * @param  \App\Proyecto  $proyecto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Proyecto $proyecto)
+    public function update(ProyectosRequest $request, Proyecto $proyecto)
     {
         $proyectonueva = Proyecto::findOrFail($proyecto->id);
         $proyectonueva->fill($request->all());
         $proyectonueva->save();
+        flash('Proyecto actualizado')->success();
         return redirect('proyectos');
     }
 
@@ -86,7 +89,8 @@ class ProyectosController extends Controller
      */
     public function destroy(Proyecto $proyecto)
     {
-        $proyecto = Proyecto::find($proyecto)->first()->delete();        
+        $proyecto = Proyecto::find($proyecto)->first()->delete();
+        flash('Proyecto eliminado')->success();        
         return redirect('proyectos');
     }
 }

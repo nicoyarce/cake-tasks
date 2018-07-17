@@ -1,3 +1,0 @@
-@section('bottom')
-	test
-@endsection
