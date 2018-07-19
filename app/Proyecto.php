@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\FechasTraducidas;
 /**
  * App\Proyecto
  *
@@ -26,10 +26,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Proyecto extends Model
 {
+    use FechasTraducidas;
     protected $table = 'proyectos';
-    protected $fillable = ['nombre','fecha_inicio','fecha_termino','avance'];
+    protected $fillable = ['nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance'];
 
     public function tareas(){
         return $this->hasMany(Tarea::class);
-    }
+    }    
 }

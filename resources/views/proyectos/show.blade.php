@@ -1,32 +1,39 @@
 @extends('layouts.master')
 @section('content')
-<h1>Proyecto: {{$proyecto->nombre}}</h1>
+<div class="row justify-content-between">
+    <div class="col-4">
+        <h2>Proyecto: </h2>
+        <h2>{{$proyecto->nombre}}</h2>
+    </div>
+    <div class="col-4">
+        <a type="button" class="btn btn-primary float-right" href="/proyectos" title="">Atrás <i class="fas fa-arrow-left "></i></a>
+    </div>
+</div>
 <hr>
+
 <ul class="list-group">
-    <li class="list-group-item">Fecha inicio: {{$proyecto->fecha_inicio}}</li>
-    <li class="list-group-item">Fecha termino: {{$proyecto->fecha_termino}}</li>
-    <li class="list-group-item">Porcentaje avance: {{$proyecto->avance}} %</li>
+    
+    <li class="list-group-item">Fecha inicio reparaciones original: {{ $proyecto->fecha_inicio->format('d-M-Y')}}</li>
+    <li class="list-group-item">Fecha término reparaciones original: {{ $proyecto->fecha_termino_original->format('d-M-Y')}}</li>
+    <li class="list-group-item">Fecha término reparaciones modificada: 
+        @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
+        -
+        @else
+        {{ Carbon::parse($proyecto->fecha_termino)->format('d-M-Y')}}
+        @endif
+    </li>
+    <li class="list-group-item">Atraso [días]: 
+        @if(Carbon::parse($proyecto->fecha_termino_original)->lte(Carbon::parse($proyecto->fecha_termino)))
+                -
+                @else
+                {{$proyecto->atraso}}
+                @endif
+    </li>
+    <li class="list-group-item">Porcentaje avance: {{$proyecto->avance}} %</li>    
 </ul>
 <br>
-<ul class="list-group">
-    @if (count($proyecto->tareas)>0)
-    <li class="list-group-item">
-        <div class="row justify-content-between">            
-            <div class="col-4">
-                <p class="font-weight-bold">Lista de tareas:</p>
-            </div>
-            <div class="col-4">
-                <a type="button" class="btn btn-success float-right"  href="/tareas/create" role="button">
-                    Agregar tarea <i class="fas fa-plus"></i>
-                </a>
-            </div>
-        </div>
-    </li>
-    @foreach ($proyecto->tareas as $tarea)
-    <li class="list-group-item">{{$tarea->nombre}}</li>
-    @endforeach
-    @else
-    <li class="list-group-item">No hay tareas</li>
-    @endif
+
+@include('tareas.index', ['proyecto' => $proyecto])
+
 </ul>
 @endsection

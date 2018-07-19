@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Proyecto;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProyectosRequest;
+use Carbon;
 
 class ProyectosController extends Controller
 {
@@ -14,9 +15,13 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $proyectos = Proyecto::all();
+    {        
         $proyectos = Proyecto::paginate(15);
+        foreach ($proyectos as $proyecto) {
+            $final = Carbon::parse($proyecto->fecha_termino);
+            $atrasoCalculado = $final->diffInDays($proyecto->fecha_termino_original);
+            $proyecto->atraso = $atrasoCalculado;
+        }        
         return view('proyectos.index', compact('proyectos'));
     }
 
@@ -37,8 +42,13 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ProyectosRequest $request)
-    {
-        Proyecto::create($request->all());
+    {           
+        $proyecto = new Proyecto($request->all());
+        $proyecto->nombre = $request->nombre;
+        $proyecto->fecha_inicio = $request->fecha_inicio;
+        $proyecto->fecha_termino_original = $request->fecha_termino;
+        $proyecto->fecha_termino = $request->fecha_termino;      
+        $proyecto->save();
         flash('Proyecto registrado')->success();
         return redirect('proyectos');
     }
@@ -51,7 +61,8 @@ class ProyectosController extends Controller
      */
     public function show(Proyecto $proyecto)
     {
-        return view('proyectos.show', compact('proyecto'));
+        $tareas = $proyecto->tareas;
+        return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
     /**

@@ -3,7 +3,6 @@
 
 <h1>Bienvenido</h1>
 <hr>
-<p>Existen <b> {{$nroProyectos}} </b> proyectos registrados. </p>
-<p>Existen <b> {{$nroTareas}} </b> tareas registradas.</p>
+<p>Existen<b><a href="/proyectos/"> {{$nroProyectos}} proyectos</a></b> registrados.</p>
 
 @endsection

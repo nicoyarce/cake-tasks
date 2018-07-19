@@ -5,7 +5,7 @@
 @include('layouts.errors')
 <form method="POST" action="/tareas">
 	{{csrf_field()}}
-	
+	<p>Pertenece a proyecto: {{$proyecto->nombre}}</p>
 	<div class="form-group">
 		<label for="nombre" class="col-2 col-form-label">Nombre</label>
 		<div class="col-10">
@@ -24,15 +24,8 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label for="proyecto_id" class="col-2 col-form-label">Pertenece a proyecto</label>
-		<div class="col-10">
-			<select class="form-control" id="proyecto_id" name="proyecto_id">
-				@foreach ($listaProyectos as $listaProyecto)
-					<option value="{{$listaProyecto->id}}">{{$listaProyecto->nombre}}</option>
-				@endforeach
-			</select>
-		</div>
+	<div class="form-group">		
+		<input type="hidden" id="proyecto_id" name="proyecto_id" value="{{$proyecto->id}}">
 	</div>
 	
 	<div class="form-group">

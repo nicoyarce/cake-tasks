@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\FechasTraducidas;
 /**
  * App\Tarea
  *
@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Tarea extends Model
 {
+    use FechasTraducidas;
     protected $table = 'tareas';
     protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino','avance'];
    
@@ -36,24 +37,7 @@ class Tarea extends Model
     }
 
     public function area(){
-        return $this->hasOne(Area::class);
+        return $this->belongsTo(Area::class);
     }
-
-    public static function sacarDatos($id){
-        if($id==0){
-            $tareas = Tarea::all();
-        }
-        else{
-            $tareas = Tarea::where('area_id', $id)->get();
-        }
-        if($tareas->count() == 0){
-            return 0;
-        }
-        $tareas->makeHidden('area_id');
-        $tareas->makeHidden('proyecto_id');        
-        $tareas->makeHidden('created_at');
-        $tareas->makeHidden('updated_at');
-        $tareas->makeHidden('fecha_inicio');        
-        return $tareas->toJson();
-    }
+   
 }

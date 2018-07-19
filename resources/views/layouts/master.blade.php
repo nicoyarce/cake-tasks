@@ -31,13 +31,7 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/proyectos/">Proyectos</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/tareas/">Tareas</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/grafico/">Gráfico</a>
-						</li>
+						</li>											
 					</ul>
 					@if(Auth::check())
 					<a class="nav-link" href="#">{{Auth::user()->name}}</a>

@@ -4,10 +4,6 @@ button {
   align: center;
 }
 
-#grafico{
-  padding-top: 5px;
-}
-
 .outlineArc:hover, .solidArc:hover{
   fill: cyan;
 }

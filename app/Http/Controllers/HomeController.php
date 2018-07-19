@@ -9,8 +9,7 @@ use App\Tarea;
 class HomeController extends Controller
 {
     public function index(){        
-        $nroProyectos = Proyecto::all()->count();
-        $nroTareas = Tarea::all()->count();
-        return view('welcome', compact('nroProyectos','nroTareas'));
+        $nroProyectos = Proyecto::all()->count();        
+        return view('welcome', compact('nroProyectos'));
     }
 }

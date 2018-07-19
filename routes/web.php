@@ -12,11 +12,15 @@
 */
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::resource('tareas', 'TareasController');
+Route::post('/tareas/create/',[
+    'as' => 'tareas.create', 
+    'uses' => 'TareasController@create']);
+Route::resource('tareas', 'TareasController', ['except' => 'create']);
+
 Route::resource('proyectos', 'ProyectosController');
 
-Route::get('/grafico', 'GraficosController@index');
-Route::post('/grafico', 'GraficosController@filtrar');
+Route::get('/grafico/{proyecto}', 'GraficosController@show');
+Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
 
 Route::get('/register', 'RegistrationController@create');
 Route::post('/register', 'RegistrationController@store');

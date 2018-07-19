@@ -10,6 +10,6 @@ class Area extends Model
     protected $fillable = ['area'];
 
     public function tarea(){
-        return $this->belongsToMany(Tarea::class);
+        return $this->hasMany(Tarea::class);
     }
 }
