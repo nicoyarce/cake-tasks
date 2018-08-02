@@ -14,23 +14,33 @@
         <div class="small">
             <div id="grafico"></div>
         </div>
-    </div>    
-    <div id="botones" class="col-6">
-        <p class="row" id="nroTareas">Numero de tareas: </p>        
+    </div>
+    <div id="botones" class="col-6">        
         <div class="row form-group">
             <label for="opcion">Filtro Area:</label>
             <select data-id="{{$proyecto->id}}" class="form-control" id="opcion" name="opcion">
                 <option selected value="0">Todas</option>
-                @foreach ($areas as $area)                    
-                        <option value="{{$area->id}}">{{$area->nombrearea}}</option>
-                @endforeach                
+                @foreach ($areas as $area)
+                <option value="{{$area->id}}">{{$area->nombrearea}}</option>
+                @endforeach
             </select>
-        </div>              
+        </div>
+        <div class="row form-group">
+            <ul id="detallesTarea" class="list-group w-100" style="display: none;">
+                <li class="list-group-item">Area: <span id="area"></span></li>
+                <li class="list-group-item">Fecha inicio reparaciones: <span id="fir"></span></li>
+                <li class="list-group-item">Fecha termino reparaciones original: <span id="ftro"></span></li>               
+                    <li class="list-group-item">Fecha termino reparaciones modificada: <span id="ftrm"></span></li>
+                    <li class="list-group-item">Atraso [días]: <span id="atraso"></span></li>                
+                <li class="list-group-item">Avance [%]: <span id="avance"></span></li>
+            </ul>
+        </div>
     </div>
     <br>
 </div>
 <div class="row mt-3 col-auto mr-auto">
-    <button value="1" id="activar" class="btn btn-primary" ><i class="fas fa-search"></i> Desactivar zoom</button>
+    <button value="0" id="activar" class="btn btn-primary"> <i class="fas fa-search"></i> <span id="botonZoom">Activar zoom</span></button> 
+
 </div>
 <script src="/js/jquery-3.3.1.min.js"></script>
 <link rel="stylesheet" href="/css/estiloGrafico.css">

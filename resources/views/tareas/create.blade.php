@@ -29,18 +29,18 @@
 	</div>
 	
 	<div class="form-group">
-		<label for="fecha_inicio" class="col-2 col-form-label">Fecha inicio</label>
+		<label for="fecha_inicio" class="col-6 col-form-label">Fecha inicio reparaciones</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fecha_inicio" required name="fecha_inicio">
+			<input class="form-control" type="date" id="fecha_inicio" required name="fecha_inicio" value="">
 		</div>
-	</div>
+	</div>	
 
 	<div class="form-group">
-		<label for="fecha_termino" class="col-2 col-form-label">Fecha termino</label>
+		<label for="fecha_termino" class="col-6 col-form-label">Fecha termino reparaciones</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino">
+			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino" value="">
 		</div>
-	</div>
+	</div>	
 
 	<div class="form-group">
 		<label for="avance" class="col-2 col-form-label">Porcentaje avance</label>

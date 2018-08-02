@@ -16,12 +16,7 @@ class ProyectosController extends Controller
      */
     public function index()
     {        
-        $proyectos = Proyecto::paginate(15);
-        foreach ($proyectos as $proyecto) {
-            $final = Carbon::parse($proyecto->fecha_termino);
-            $atrasoCalculado = $final->diffInDays($proyecto->fecha_termino_original);
-            $proyecto->atraso = $atrasoCalculado;
-        }        
+        $proyectos = Proyecto::paginate(15);              
         return view('proyectos.index', compact('proyectos'));
     }
 
@@ -72,7 +67,7 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Proyecto $proyecto)
-    {
+    {        
         return view('proyectos.edit', compact('proyecto'));
     }
 

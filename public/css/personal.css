@@ -10,6 +10,14 @@ body {
   margin-bottom: 60px;
 }
 
+table{
+  table-layout:auto;
+}
+
+td{
+  width:1px;white-space:nowrap;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -21,8 +29,8 @@ body {
 }
 
 .large{
-  width: 2000px;
-  height: 2000px;
+  width: 1800px;
+  height: 1800px;
 }
 
 .small{

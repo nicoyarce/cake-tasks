@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\FechasTraducidas;
+use Carbon\Carbon;
+use App\Tarea;
 /**
  * App\Proyecto
  *
@@ -32,5 +34,29 @@ class Proyecto extends Model
 
     public function tareas(){
         return $this->hasMany(Tarea::class);
-    }    
+    }
+
+    public function users(){
+        return $this->belongsToMany('App\User');
+    }
+
+    public function getAtrasoAttribute($atraso){
+        $final = Carbon::parse($this->fecha_termino_original);        
+        return $final->diffInDays($this->fecha_termino);
+    }
+
+    public function getAvanceAttribute($avance){
+        $tareas = Tarea::where('proyecto_id',$this->id)->get();
+        $total = 0;
+        foreach ($tareas as $tarea) {
+            $total = $total + $tarea->avance;
+        }
+        if(count($tareas) == 0){
+            return 0;
+        }
+        else{
+            return floor($total/count($tareas));
+        }
+        
+    }
 }

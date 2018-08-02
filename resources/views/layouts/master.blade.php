@@ -31,13 +31,23 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/proyectos/">Proyectos</a>
-						</li>											
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/users/">Usuarios</a>
+						</li>												
 					</ul>
 					@if(Auth::check())
-					<a class="nav-link" href="#">{{Auth::user()->name}}</a>
+						<span class="navbar-text" href="">
+						@if(Auth::user()->hasRole('admin'))
+							Administrador: {{Auth::user()->name}}
+						@elseif(Auth::user()->hasRole('cr'))
+							CR: {{Auth::user()->name}}
+						@elseif(Auth::user()->hasRole('user'))
+							Usuario: {{Auth::user()->name}}
+						@endif
+						</span>					
 					<a class="nav-link" onclick="return confirm('Desea finalizar su sesion')" href="{{action('SessionsController@destroy')}}">Cerrar sesion</a>
-					@else
-					<a class="nav-link" href="{{action('RegistrationController@create')}}">Registrarse</a>
+					@else					
 					<a class="nav-link" href="{{action('SessionsController@create')}}">Iniciar sesion</a>
 					@endif
 				</div>

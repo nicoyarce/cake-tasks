@@ -25,7 +25,12 @@ Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
 Route::get('/register', 'RegistrationController@create');
 Route::post('/register', 'RegistrationController@store');
 
+Route::get('/users', 'UsersController@index');
+Route::put('/users/{user}', 'UsersController@update');
+Route::delete('/users/{user}', 'UsersController@destroy');
+Route::get('/users/{user}', 'UsersController@show');
+Route::get('/users/{user}/edit', 'UsersController@edit');
+
 Route::get('/login', 'SessionsController@create');
 Route::post('/login', 'SessionsController@store');
 Route::get('/logout', 'SessionsController@destroy');
-

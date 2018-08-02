@@ -10,7 +10,6 @@
 		</a>
 	</div>
 </div>
-<hr>
 @if(count($proyectos)>0)
 <table class="table">
 	<thead>
@@ -29,8 +28,14 @@
 	
 	<tbody>
 		@foreach ($proyectos as $proyecto)
-		<tr>
-			<td><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+		<tr>						
+			@if($proyecto->atraso > 7)
+				<td class="list-group-item-danger"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>		
+			@elseif($proyecto->atraso <= 7 && $proyecto->atraso > 0)
+				<td class="list-group-item-warning"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			@elseif($proyecto->atraso <= 0)
+				<td class="list-group-item-success"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			@endif
 			<td >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
 			<td >{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
 			<td>
@@ -41,7 +46,7 @@
 				@endif
 			</td>
 			<td>
-				@if(Carbon::parse($proyecto->fecha_termino_original)->gte(Carbon::parse($proyecto->fecha_termino)))
+				@if($proyecto->fecha_termino_original->gte($proyecto->fecha_termino))
 				-
 				@else
 				{{$proyecto->atraso}}
@@ -68,8 +73,7 @@
 			</form>
 		</td>
 	</tr>
-	@endforeach
-	
+	@endforeach	
 </tbody>
 </table>
 {{$proyectos->links()}}

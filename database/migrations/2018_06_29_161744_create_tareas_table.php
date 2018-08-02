@@ -20,7 +20,9 @@ class CreateTareasTable extends Migration
             $table->integer('area_id')->nullable();
             $table->string('nombre');
             $table->date('fecha_inicio');
+            $table->date('fecha_termino_original');
             $table->date('fecha_termino');
+            $table->integer('atraso')->nullable();
             $table->integer('avance');
         });
     }

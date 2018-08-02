@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\FechasTraducidas;
+use Carbon\Carbon;
 /**
  * App\Tarea
  *
@@ -30,7 +31,13 @@ class Tarea extends Model
 {
     use FechasTraducidas;
     protected $table = 'tareas';
-    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino','avance'];
+    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance'];
+    /*protected $casts = [
+        'fecha_inicio' => 'date:Y-m-d',
+        'fecha_termino_original' => 'date:Y-m-d',
+        'fecha_termino' => 'date:Y-m-d'
+    ];*/
+    protected $appends = ['nombreArea'];
    
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);
@@ -39,5 +46,24 @@ class Tarea extends Model
     public function area(){
         return $this->belongsTo(Area::class);
     }
-   
+
+    public function getAtrasoAttribute($atraso){
+        $final = Carbon::parse($this->fecha_termino_original);        
+        return $final->diffInDays($this->fecha_termino);
+    }
+
+    public function getNombreAreaAttribute(){
+        $nombreArea = Area::where('id',$this->area_id)->pluck('nombrearea');
+        return $nombreArea;
+    }
+/*
+    public function getFechaInicioAttribute($atraso){
+        return $this->fecha_inicio->toDateTimeString(); 
+    }
+    public function getFechaTerminoOriginalAttribute($atraso){    
+        return $this->fecha_termino_original->toDateTimeString();
+    }
+    public function getFechaTerminoAttribute($atraso){
+        return $this->fecha_termino->toDateTimeString(); 
+    }*/
 }

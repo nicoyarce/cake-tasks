@@ -12,8 +12,13 @@ use App\Http\Requests\ProyectosRequest;
 class TareasController extends Controller
 {
     public function index(){    	
-        /*$tareas = Tarea::all();
-    	return view('tareas.index', compact('tareas'));*/
+        $tareas = Tarea::all();
+        foreach ($tareas as $tarea) {
+            $final = Carbon::parse($tarea->fecha_termino);
+            $atrasoCalculado = $final->diffInDays($tarea->fecha_termino_original);
+            $tarea->atraso = $atrasoCalculado;
+        }
+    	//return view('tareas.index', compact('tareas'));
     }
 
     public function create(Request $request){
@@ -25,8 +30,12 @@ class TareasController extends Controller
 
     public function store(TareasRequest $request){
         //dd(request()->all());
-        Tarea::create($request->all());        
-        //Tarea::create(request(['nombre',,'fecha_inicio','fecha_termino','avance']));
+        $tarea = new Tarea($request->all());
+        $tarea->nombre = $request->nombre;
+        $tarea->fecha_inicio = $request->fecha_inicio;
+        $tarea->fecha_termino_original = $request->fecha_termino;
+        $tarea->fecha_termino = $request->fecha_termino;      
+        $tarea->save();    
         flash('Tarea registrada')->success();
         return redirect()->route('proyectos.show',$request->proyecto_id);
     }

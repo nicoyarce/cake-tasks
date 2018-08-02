@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,8 +12,10 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        \Carbon\Carbon::setLocale('es');
+    {        
+        /*Carbon::serializeUsing(function ($carbon) {
+            return $carbon->format('Y-m-d');
+        });*/
     }
 
     /**

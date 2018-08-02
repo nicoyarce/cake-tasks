@@ -11,8 +11,10 @@ class GraficosController extends Controller
 {   
     public function show(Proyecto $proyecto){
         $areas = Area::all();  
-        $tarea = Tarea::where('proyecto_id', $proyecto->id)->get();        
-        $tarea = $tarea->toJson();
+        $tarea = Tarea::where('proyecto_id', $proyecto->id)->get();
+        $tarea = $tarea->makeHidden('created_at');
+        $tarea = $tarea->makeHidden('updated_at');
+        $tarea = $tarea->toJson();            
         return view('grafico', compact('proyecto','areas','tarea'));
     }
 

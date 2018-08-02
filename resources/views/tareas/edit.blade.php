@@ -29,7 +29,7 @@
 	</div>
 
 	<div class="form-group">
-		<label for="proyecto_id" class="col-2 col-form-label">Pertenece a proyecto</label>
+		<label for="proyecto_id" class="col-6 col-form-label">Pertenece a proyecto</label>
 		<div class="col-10">
 			<select class="form-control" id="proyecto_id" name="proyecto_id">
 				@foreach ($listaProyectos as $listaProyecto)
@@ -44,21 +44,28 @@
 	</div>
 	
 	<div class="form-group">
-		<label for="fecha_inicio" class="col-2 col-form-label">Fecha inicio</label>
+		<label for="fecha_inicio" class="col-6 col-form-label">Fecha inicio reparaciones</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fecha_inicio" required name="fecha_inicio" value="{{$tarea->fecha_inicio}}">
+			<input class="form-control" type="date" id="fecha_inicio" readonly required name="fecha_inicio" value={{$tarea->fecha_inicio}}>
+		</div>
+	</div>	
+
+	<div class="form-group">
+		<label class="col-6 col-form-label">Fecha termino reparaciones original</label>
+		<div class="col-10">			
+			<input class="form-control" type="date" readonly value={{$tarea->fecha_termino_original}}>			
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label for="fecha_termino" class="col-2 col-form-label">Fecha termino</label>
+		<label for="fecha_termino" class="col-6 col-form-label">Fecha termino reparaciones modificada</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino" value="{{$tarea->fecha_termino}}">
+			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino" value="">
 		</div>
-	</div>
+	</div>	
 
 	<div class="form-group" >
-		<label for="avance" class="col-2 col-form-label">Porcentaje avance</label>
+		<label for="avance" class="col-6 col-form-label">Porcentaje avance</label>
 		<div class="col-10">
 			<select class="form-control" id="avance" required name="avance">
 				@foreach($avances as $avance)
