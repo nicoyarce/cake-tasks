@@ -7,17 +7,21 @@
     {{csrf_field()}}
     <h1 class="h3 mb-3 font-weight-normal">Iniciar sesion</h1>
     
-    <label for="email" class="sr-only">Email</label>
-    <input type="email" id="email" name="email" class="form-control" placeholder="Email" required autofocus>
+    <label for="run" class="sr-only">RUN</label>
+    <input type="text" id="run" name="run" class="form-control" placeholder="RUN" required autofocus>
 
     <label for="password" class="sr-only">Contraseña</label>
     <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
-
-    <!--<div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" value="remember-me"> Recuerdame
-        </label>
-    </div>-->
+    
     <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesion</button>
 </form>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/jquery.rut.min.js"></script>
+<script>
+$(function() {
+    $("#run").rut().on('rutValido', function(e, rut, dv) {
+        alert("El run " + rut + "-" + dv + " es correcto");
+    }, { minimumLength: 7} );
+})
+</script>
 @endsection

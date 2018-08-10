@@ -32,7 +32,6 @@ var svg = d3.select("#grafico").append("svg")
     //.attr("width", width)
     //.attr("height", height)
     .attr('viewBox', "0 0 " + 500 + " " + 500)
-    .style("border", '1px solid grey')
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -63,9 +62,10 @@ function dibujarGrafico(datos) {
         .attr("class", "parte")
         /*.on('mouseover', tip.show)
         .on('mouseout', tip.hide)*/
-        .on('click', function(d, i) {
+        .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
             $("#detallesTarea").show();
+            $("#nombre").text(d.data.nombre);
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
             $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
@@ -136,7 +136,6 @@ function actualizarGrafico(entrada) {
         //.attr("width", width)
         //.attr("height", height)
         .attr('viewBox', "0 0 " + 500 + " " + 500)
-        .style("border", '1px solid grey')
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -144,9 +143,10 @@ function actualizarGrafico(entrada) {
         .data(pie(data))
         .enter().append("g")
         .attr("class", "parte")
-        .on('click', function(d, i) {
+        .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
             $("#detallesTarea").show();
+            $("#nombre").text(d.data.nombre);
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
             $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
@@ -222,11 +222,12 @@ function daysBetween(startDate, endDate) {
 }
 
 function habilitarZoom() {
-    
+    /*
     $("#zoom").anythingZoomer({
         clone: true,
         switchEvent : ''
     });
+    */
 }
 
 $("#opcion").change(function() {

@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Role;
 use App\Proyecto;
+use Spatie\Permission\Traits\HasRoles;
 /**
  * App\User
  *
@@ -29,14 +30,14 @@ use App\Proyecto;
 class User extends Authenticatable
 {
     use Notifiable;
-
+    use HasRoles;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'nombre', 'rut', 'password',
+        'nombre', 'run', 'password'
     ];
 
     /**
@@ -49,39 +50,7 @@ class User extends Authenticatable
     ];
    
     public function proyectos(){
-        return $this->belongsToMany('App\Proyecto');
+        return $this->belongsToMany(Proyecto::class);
     }
-
-    public function role(){
-        return $this->belongsTo('App\Role');
-    }
-
-    public function authorizeRoles($roles){
-        if($this->hasAntRole($roles)){
-            return true;
-        }
-        abort(401, 'Esta acción no está autorizada.');
-    }
-
-    public function hasAnyRole($roles){
-        if(is_array($roles)){
-            foreach ($roles as $role) {
-                if($this->hasRole($role)){
-                    return true;
-                }
-            }
-        }else{
-            if($this->hasRole($roles)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public function hasRole($role){
-        if($this->roles()->where('name',$role)->first()){
-            return true;
-        }
-        return false;
-    }
+           
 }

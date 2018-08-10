@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('content')
 @include('layouts.errors')
-    <div class="row justify-content-between">
+<div class="row justify-content-between">
     <div class="col-4">
         <h1>Usuarios</h1>
     </div>
-    <div class="col-4">        
-        <a type="button" class="btn btn-success float-right" href="{{action('RegistrationController@create')}}" role="button">Crear usuario
+    <div class="col-4">
+        <a type="button" class="btn btn-success float-right" href="{{action('UsersController@create')}}" role="button">Crear usuario
             <i class="fas fa-plus"></i>
         </a>
     </div>
@@ -16,9 +16,9 @@
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>RUT</th>            
+            <th>RUN</th>
             <th>Rol</th>
-            <th>Ver proyectos</th>           
+            {{-- <th>Ver proyectos</th> --}}
             <th>Editar</th>
             <th>Borrar</th>
         </tr>
@@ -28,31 +28,31 @@
         @foreach ($usuarios as $usuario)
         <tr>
             <td>{{$usuario->nombre}}</td>
-            <td>{{$usuario->rut}}</td>            
-            <td>{{$usuario->role->descripcion}}</td>
-            <td>
+            <td>{{$usuario->run}}</td>
+            <td>{{$usuario->getRoleNames()->first()}}</td>
+            {{-- <td>
                 <a href="{{action('UsersController@show', $usuario['id'])}}" type="button" class="btn btn-primary" >
                     <i class="fas fa-eye"></i>
                 </a>
-            </td>
-            <td>
+            </td>--}}
+            <td> 
                 <a href="{{action('UsersController@edit', $usuario['id'])}}" type="button" class="btn btn-primary" >
                     <i class="fas fa-edit"></i>
                 </a>
             </td>
             <td>
-                <form method="POST" action="{{action('UsersController@destroy', $usuario)}}">
+                <form method="POST" action="{{route('users.destroy', $usuario->id)}}">
                     {{csrf_field()}}
                     {{method_field('DELETE')}}
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el usuario?')">
-                <i class="fas fa-trash-alt"></i></a>
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el usuario?')"><i class="fas fa-trash-alt"></i></button>
                 </button>
-            </form>
-        </td>
-    </tr>
-    @endforeach 
-</tbody>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
 </table>
+{{$usuarios->links()}}
 @else
 <h1 align="center">No hay usuarios</h1>
 @endif

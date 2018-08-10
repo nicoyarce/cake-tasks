@@ -5,6 +5,7 @@ use Faker\Factory as Faker;
 use App\Proyecto;
 use App\Tarea;
 use App\Area;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // La creación de datos de roles debe ejecutarse primero
-        $this->call(RoleTableSeeder::class);
-
-        // Los usuarios necesitarán los roles previamente generados
-        $this->call(UserTableSeeder::class);
+        
+        $this->call(RoleTableSeeder::class);        
                 
         $faker = Faker::create('es_ES');
         $minimo = new DateTime('01/01/2018');
@@ -41,6 +39,7 @@ class DatabaseSeeder extends Seeder
 
         $proyectos = Proyecto::all()->pluck('id');
         $areas = Area::all()->pluck('id');
+        $multiplos = DB::table('nomenclaturasAvance')->pluck('porcentaje');
         foreach (range(1,250) as $index){
             $fecha_inicio = $faker->dateTimeBetween($startDate = $minimo, $endDate = $maximo, $timezone = 'America/Santiago');
             $fecha_inicio = $fecha_inicio->format('Y-m-d'); 
@@ -55,8 +54,8 @@ class DatabaseSeeder extends Seeder
                 'fecha_inicio'=>$fecha_inicio,
                 'fecha_termino_original'=>$fecha_termino,
                 'fecha_termino'=>$fecha_termino,
-                'avance'=>$faker->numberBetween($min = 0, $max = 100)
+                'avance'=>$faker->randomElement($multiplos)
             ]);
         }
-    }        
+    }      
 }

@@ -10,27 +10,43 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index');
 
-Route::post('/tareas/create/',[
+Route::group(['middleware' => ['role:Administrador']], function () {
+    Route::resource('users', 'UsersController');
+    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);
+});
+
+Route::group(['middleware' => ['role:Administrador|OCR']], function () {
+    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);   
+    Route::get('/grafico/{proyecto}', 'GraficosController@show');
+    Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
+
+    Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
-    'uses' => 'TareasController@create']);
-Route::resource('tareas', 'TareasController', ['except' => 'create']);
+    'uses' => 'TareasController@create']);     
+});
 
-Route::resource('proyectos', 'ProyectosController');
+Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
+    Route::get('/tareas/{tarea}/edit',[
+    'as' => 'tareas.edit', 
+    'uses' => 'TareasController@edit']);
 
-Route::get('/grafico/{proyecto}', 'GraficosController@show');
-Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
+    Route::put('/tareas/{tarea}',[
+    'as' => 'tareas.update', 
+    'uses' => 'TareasController@update']);
 
-Route::get('/register', 'RegistrationController@create');
-Route::post('/register', 'RegistrationController@store');
+    Route::get('/proyectos', [
+    'as' => 'proyectos.index', 
+    'uses' => 'ProyectosController@index']);
 
-Route::get('/users', 'UsersController@index');
-Route::put('/users/{user}', 'UsersController@update');
-Route::delete('/users/{user}', 'UsersController@destroy');
-Route::get('/users/{user}', 'UsersController@show');
-Route::get('/users/{user}/edit', 'UsersController@edit');
+    Route::get('/proyectos/{proyecto}', [
+    'as' => 'proyectos.show', 
+    'uses' =>'ProyectosController@show']);
+});
 
-Route::get('/login', 'SessionsController@create');
+
+
+Route::get('/login', 'SessionsController@create')->name('login');
 Route::post('/login', 'SessionsController@store');
 Route::get('/logout', 'SessionsController@destroy');

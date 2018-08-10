@@ -5,18 +5,24 @@
 @include('layouts.errors')
 <form method="POST" action="{{action('TareasController@update', $tarea)}}">
 	{{csrf_field()}}
-	{{method_field('PUT')}}	
+	{{method_field('PUT')}}
+
+	@foreach ($listaProyectos as $listaProyecto)
+		@if($listaProyecto->id == $tarea->proyecto_id)
+			<p>Pertenece a proyecto: {{$listaProyecto->nombre}}</p>
+		@endif
+	@endforeach
 	<div class="form-group">
 		<label for="nombre" class="col-2 col-form-label">Nombre</label>
 		<div class="col-10">
-			<input type="text" class="form-control" id="nombre" required name="nombre" value="{{$tarea->nombre}}">
+			<input @role('Usuario') readonly @endrole type="text" class="form-control" id="nombre" required name="nombre" value="{{$tarea->nombre}}">
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="area_id" class="col-2 col-form-label">Área</label>
 		<div class="col-10">
-			<select class="form-control" id="area_id" required name="area_id">
+			<select @role('Usuario') readonly @endrole class="form-control" id="area_id" required name="area_id">
 				@foreach ($areas as $area)
 					@if($area->id == $tarea->id)
 						<option selected value="{{$area->id}}">{{$area->nombrearea}}</option>
@@ -27,40 +33,25 @@
 			</select>
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label for="proyecto_id" class="col-6 col-form-label">Pertenece a proyecto</label>
-		<div class="col-10">
-			<select class="form-control" id="proyecto_id" name="proyecto_id">
-				@foreach ($listaProyectos as $listaProyecto)
-					@if($listaProyecto->id == $tarea->proyecto_id)
-						<option selected value="{{$listaProyecto->id}}">{{$listaProyecto->nombre}}</option>
-					@else
-						<option value="{{$listaProyecto->id}}">{{$listaProyecto->nombre}}</option>
-					@endif	
-				@endforeach
-			</select>
-		</div>
-	</div>
 	
 	<div class="form-group">
-		<label for="fecha_inicio" class="col-6 col-form-label">Fecha inicio reparaciones</label>
+		<label for="fecha_inicio" class="col-6 col-form-label">FIT</label>
 		<div class="col-10">
 			<input class="form-control" type="date" id="fecha_inicio" readonly required name="fecha_inicio" value={{$tarea->fecha_inicio}}>
 		</div>
 	</div>	
 
 	<div class="form-group">
-		<label class="col-6 col-form-label">Fecha termino reparaciones original</label>
+		<label class="col-6 col-form-label">FTT original</label>
 		<div class="col-10">			
 			<input class="form-control" type="date" readonly value={{$tarea->fecha_termino_original}}>			
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label for="fecha_termino" class="col-6 col-form-label">Fecha termino reparaciones modificada</label>
+		<label for="fecha_termino" class="col-6 col-form-label">FTT modificada</label>
 		<div class="col-10">
-			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino" value="">
+			<input @role('Usuario') readonly @endrole class="form-control" type="date" id="fecha_termino" name="fecha_termino" value="">
 		</div>
 	</div>	
 

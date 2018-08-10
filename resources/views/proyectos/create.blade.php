@@ -14,14 +14,14 @@
     </div>
 
     <div class="form-group">
-        <label for="fecha_inicio" class="col-6 col-form-label">Fecha inicio reparaciones</label>
+        <label for="fecha_inicio" class="col-6 col-form-label">FIR</label>
         <div class="col-10">
             <input class="form-control" type="date" id="fecha_inicio" required name="fecha_inicio">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="fecha_termino" class="col-6 col-form-label">Fecha término reparaciones</label>
+        <label for="fecha_termino" class="col-6 col-form-label">FTR</label>
         <div class="col-10">
             <input class="form-control" type="date" id="fecha_termino" required name="fecha_termino">
         </div>

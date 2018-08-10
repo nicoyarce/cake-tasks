@@ -10,12 +10,12 @@ body {
   margin-bottom: 60px;
 }
 
-table{
-  table-layout:auto;
+td{  
+  text-align: center;
 }
 
-td{
-  width:1px;white-space:nowrap;
+th{  
+  text-align: center;
 }
 
 .footer {

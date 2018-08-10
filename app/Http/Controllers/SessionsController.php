@@ -14,18 +14,18 @@ class SessionsController extends Controller
         return view('sessions.create');
     }
 
-    public function store(){
-        if(! auth()->attempt(request(['email','password']))){
+    public function store(){        
+        if(! auth()->attempt(request(['run','password']))){
             return back()->withErrors([
                 'message' => 'Revise sus datos e intente de nuevo']);
         }
         flash('Inicio de sesion correcto')->success();
-        return redirect()->home();
+        return redirect('/');
     }
 
     public function destroy(){
         auth()->logout();
         flash('Cierre de sesion correcto')->success();
-        return redirect()->home();
+        return redirect('/');
     }
 }

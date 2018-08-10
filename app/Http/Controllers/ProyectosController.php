@@ -2,21 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Proyecto;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Proyecto;
 use App\Http\Requests\ProyectosRequest;
 use Carbon;
 
 class ProyectosController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');        
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        $proyectos = Proyecto::paginate(15);              
+    {
+        if(Auth::user()->hasRole('Administrador')){
+            $proyectos = Proyecto::paginate(10);            
+        }
+        else{
+            $proyectos = Auth::user()->proyectos;            
+        }                      
         return view('proyectos.index', compact('proyectos'));
     }
 
@@ -37,7 +47,7 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ProyectosRequest $request)
-    {           
+    {  
         $proyecto = new Proyecto($request->all());
         $proyecto->nombre = $request->nombre;
         $proyecto->fecha_inicio = $request->fecha_inicio;
@@ -67,7 +77,7 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Proyecto $proyecto)
-    {        
+    {
         return view('proyectos.edit', compact('proyecto'));
     }
 
@@ -79,10 +89,10 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(ProyectosRequest $request, Proyecto $proyecto)
-    {
-        $proyectonueva = Proyecto::findOrFail($proyecto->id);
-        $proyectonueva->fill($request->all());
-        $proyectonueva->save();
+    { 
+        $proyectonuevo = Proyecto::find($proyecto->id);
+        $proyectonuevo->fill($request->all());
+        $proyectonuevo->save();
         flash('Proyecto actualizado')->success();
         return redirect('proyectos');
     }

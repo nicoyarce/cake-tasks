@@ -153,6 +153,7 @@ return [
         Laraveles\Spanish\SpanishServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
         Freshwork\ChileanBundle\Laravel\ChileanBundleServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
         /*
          * Application Service Providers...

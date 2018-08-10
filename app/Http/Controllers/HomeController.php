@@ -2,20 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Proyecto;
 
 class HomeController extends Controller
-{
+{    
     /**
      * Create a new controller instance.
      *
      * @return void
      */
 
-    public function index(){        
-        $nroProyectos = Proyecto::all()->count();        
-        return view('welcome', compact('nroProyectos'));
+    public function index(){
+        if(Auth::check()){
+            if(Auth::user()->hasRole('Administrador')){
+                $nroProyectos = Proyecto::all()->count();
+            }
+            else{
+                $nroProyectos = Auth::user()->proyectos->count();            
+            }
+            return view('welcome', compact('nroProyectos'));
+        }
+        else{
+            return view('welcome');
+        }
+        
+        
     }
 
     /*public function __construct()

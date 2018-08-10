@@ -9,6 +9,11 @@ use App\Proyecto;
 
 class GraficosController extends Controller
 {   
+    public function __construct()
+    {
+        $this->middleware('auth');        
+    }
+    
     public function show(Proyecto $proyecto){
         $areas = Area::all();  
         $tarea = Tarea::where('proyecto_id', $proyecto->id)->get();

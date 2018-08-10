@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\FechasTraducidas;
 use Carbon\Carbon;
 use App\Tarea;
+use App\User;
 /**
  * App\Proyecto
  *
@@ -37,12 +38,17 @@ class Proyecto extends Model
     }
 
     public function users(){
-        return $this->belongsToMany('App\User');
+        return $this->belongsToMany(User::class);
     }
 
     public function getAtrasoAttribute($atraso){
-        $final = Carbon::parse($this->fecha_termino_original);        
-        return $final->diffInDays($this->fecha_termino);
+        $final = Carbon::parse($this->fecha_termino_original);
+        if($final->diffInDays($this->fecha_termino, false) == 0){
+            return $final->diffInDays(Carbon::today(), false);
+        }
+        else{
+            return $final->diffInDays($this->fecha_termino, false);    
+        }        
     }
 
     public function getAvanceAttribute($avance){
