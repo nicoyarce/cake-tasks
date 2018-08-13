@@ -6,8 +6,11 @@ use App\Tarea;
 use App\Proyecto;
 use App\Area;
 use Illuminate\Http\Request;
-use App\Http\Requests\TareasRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreTareasRequest;
+use App\Http\Requests\UpdateTareasRequest;
 use App\Http\Requests\ProyectosRequest;
+
 
 class TareasController extends Controller
 {
@@ -16,9 +19,8 @@ class TareasController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(){    	
-        $tareas = Tarea::all();        
-    	//return view('tareas.index', compact('tareas'));
+    public function index(){
+        
     }
 
     public function create($proyectoId){        
@@ -28,7 +30,7 @@ class TareasController extends Controller
         return view('tareas.create', compact('proyecto','areas','avances'));
     }
 
-    public function store(TareasRequest $request){        
+    public function store(StoreTareasRequest $request){        
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
         $proyecto = Proyecto::find($request->proyecto_id);
@@ -55,13 +57,20 @@ class TareasController extends Controller
         return view('tareas.edit', compact('tarea','listaProyectos','areas','avances'));
     }
 
-    public function update(TareasRequest $request, Tarea $tarea){
-        $tareanueva = Tarea::find($tarea->id);
-        if($request->has('fecha_termino')){
+    public function update(Request $request, Tarea $tarea){
+        $validatedData = $request->validate([
+            'fecha_termino' => 'nullable|after:fecha_termino_original',
+        ]);
+        $tareanueva = Tarea::find($tarea->id);        
+        if(Auth::user()->hasRole('Usuario')){
+            $tareanueva->fill($request->only('avance'));
+        }
+        else if(is_null($request->fecha_termino)){
+            $tareanueva->fill($request->except('fecha_termino'));
+            $tareanueva->fecha_termino = $tarea->fecha_termino;
+        }
+        else{            
             $tareanueva->fill($request->all());
-        }else{
-            $input = $request->except(['fecha_termino']);
-            $tareanueva->fill($input);
         }       
         $tareanueva->save();
         flash('Tarea actualizada')->success();
@@ -69,10 +78,12 @@ class TareasController extends Controller
     }
 
     public function destroy(Tarea $tarea){        
-        $temp = Tarea::where('id', $tarea->id)->first();        
+        $temp = Tarea::where('id', $tarea->id)->first(); 
+        $id = $temp->proyecto_id;      
         $tarea = Tarea::find($tarea)->first()->delete();
+        $temp->first()->delete();
         flash('Tarea eliminada')->success(); 
-        return redirect()->route('proyectos.show', $temp->proyecto_id);
+        return redirect()->route('proyectos.show', $id);
     }
        
 }

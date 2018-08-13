@@ -19,8 +19,7 @@ class CreateProyectosTable extends Migration
             $table->string('nombre');            
             $table->date('fecha_inicio');
             $table->date('fecha_termino_original');
-            $table->date('fecha_termino');
-            $table->integer('atraso')->nullable();
+            $table->date('fecha_termino');            
             $table->integer('avance')->default(0);
         });
     }

@@ -13,10 +13,11 @@ class CreateProyectoUserTable extends Migration
      */
     public function up()
     {
+        Schema::enableForeignKeyConstraints();
         Schema::create('proyecto_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('proyecto_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->unsignedInteger('proyecto_id');
+            $table->unsignedInteger('user_id');
             $table->timestamps();
         });
     }

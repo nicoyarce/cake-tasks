@@ -1,6 +1,6 @@
 <div class="row justify-content-between">
 	<div class="col-4">
-		<h3>Tareas - Total: {{count($tareas)}}</h3>
+		<h3>Tareas - Total: {{count($proyecto->tareas)}}</h3>
 	</div>
 	@can('crear_tareas')
 	<div class="col-4">		
@@ -8,11 +8,11 @@
 	</div>
 	@endcan
 </div>
-@if(count($tareas)>0)
+@if(count($proyecto->tareas)>0)
 <table class="table">
 	<thead>
 		<tr>
-			<th>NOMBRE</th>
+			<th>NOMBRE<br>TAREA</th>
 			<th>FIT<br>&nbsp;</th>
 			<th>FTT<br>Original</th>
 			<th>FTT<br>Modificada</th>
@@ -29,11 +29,11 @@
 	<tbody>
 		@foreach ($tareas as $tarea)
 		<tr>
-			@if($tarea->atraso > 7)
-				<td class="table-danger">{{$tarea->nombre}}</td>				
-			@elseif($tarea->atraso <= 7 && $tarea->atraso > 0)
+			@if($tarea->colorAtraso == "ROJO")
+				<td class="table-danger"><p class="text-warning">{{$tarea->nombre}}</p></td>				
+			@elseif($tarea->colorAtraso == "NARANJO")
 				<td class="table-warning">{{$tarea->nombre}}</td>
-			@elseif($tarea->atraso <= 0)
+			@elseif($tarea->colorAtraso == "VERDE")
 				<td class="table-success">{{$tarea->nombre}}</td>
 			@endif			
 			<td>{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
@@ -46,7 +46,7 @@
 				@endif
 			</td>
 			<td>
-				@if($tarea->fecha_termino_original->gte($tarea->fecha_termino))
+				@if($tarea->atraso==0)
 				-
 				@else
 				{{$tarea->atraso}}
@@ -72,6 +72,7 @@
 	@endforeach
 </tbody>
 </table>
+{{$tareas->links()}}
 @else
 <h4 align="center">No hay tareas</h4>
 @endif

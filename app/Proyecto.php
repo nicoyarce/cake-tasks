@@ -41,14 +41,14 @@ class Proyecto extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function delete(){
+        $this->tareas()->delete();
+        return parent::delete();
+    }
+
     public function getAtrasoAttribute($atraso){
         $final = Carbon::parse($this->fecha_termino_original);
-        if($final->diffInDays($this->fecha_termino, false) == 0){
-            return $final->diffInDays(Carbon::today(), false);
-        }
-        else{
-            return $final->diffInDays($this->fecha_termino, false);    
-        }        
+        return $final->diffInDays($this->fecha_termino);
     }
 
     public function getAvanceAttribute($avance){
@@ -62,7 +62,23 @@ class Proyecto extends Model
         }
         else{
             return floor($total/count($tareas));
+        }        
+    }
+
+    public function getColorAtrasoAttribute(){
+        $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
+        $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
+        $hoyCarbon = Carbon::today();
+        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);        
+        $fechaAdvertencia = $fechaInicioCarbon->addDays($diferenciaFechas*(2/3));
+        if($hoyCarbon->lte($fechaAdvertencia)){
+            return "VERDE";
         }
-        
+        else if($hoyCarbon->gte($fechaAdvertencia) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
+            return "NARANJO";
+        }
+        else{
+            return "ROJO";
+        }
     }
 }

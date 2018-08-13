@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TareasRequest extends FormRequest
+class StoreTareasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,9 @@ class TareasRequest extends FormRequest
     {
         return [
             'nombre'=>'required|min:4|max:100',
+            'area_id'=>'required',
             'fecha_inicio'=>'required|date|before:fecha_termino',
-            'fecha_termino'=>'date|after:fecha_inicio',            
+            'fecha_termino'=>'required|date|after:fecha_inicio',            
             'avance'=>'required'
         ];
 

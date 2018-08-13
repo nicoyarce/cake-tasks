@@ -1,22 +1,27 @@
 @extends('layouts.master')
 @section('content')
-<div class="row justify-content-between">
-	<div class="col-4">
+<div class="row">
+	<div class="col-8">
 		<h1>Proyectos</h1>
 	</div>
 	@can('crear_proyectos')
-	<div class="col-4">
+	<div class="col-2">
+		<a type="button" class="btn btn-primary float-right" href="/proyectos/cargar" role="button">Cargar archivo
+			<i class="fas fa-upload"></i>
+		</a>
+	</div>
+	<div class="col-2">
 		<a type="button" class="btn btn-success float-right" href="{{action('ProyectosController@create')}}" role="button">Crear proyecto
 			<i class="fas fa-plus"></i>
 		</a>
 	</div>
-	@endcan	
+	@endcan
 </div>
 @if(count($proyectos)>0)
 <table class="table">
 	<thead>
 		<tr>
-			<th>NOMBRE</th>
+			<th>NOMBRE<br>PROYECTO</th>
 			<th>FIR<br>&nbsp;</th>
 			<th>FTR<br>Original</th>
 			<th>FTR<br>Modificada</th>
@@ -25,23 +30,23 @@
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
-			@can('modiicar_proyectos')			
+			@can('modificar_proyectos')
 			<th>Editar</th>
 			@endcan
 			@can('borrar_proyectos')
 			<th>Borrar</th>
-			@endcan			
+			@endcan
 		</tr>
 	</thead>
 	
 	<tbody>
 		@foreach ($proyectos as $proyecto)
 		<tr>
-			@if($proyecto->atraso > 7)
-			<td class="table-danger"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
-			@elseif($proyecto->atraso <= 7 && $proyecto->atraso > 0)
+			@if($proyecto->colorAtraso == "ROJO")
+			<td class="table-danger"><a class="text-warning" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			@elseif($proyecto->colorAtraso == "NARANJO")
 			<td class="table-warning"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
-			@elseif($proyecto->atraso <= 0)
+			@elseif($proyecto->colorAtraso == "VERDE")
 			<td class="table-success"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
 			@endif
 			<td >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
@@ -54,7 +59,7 @@
 				@endif
 			</td>
 			<td>
-				@if($proyecto->fecha_termino->gte($proyecto->fecha_termino_original))
+				@if($proyecto->atraso==0)
 				-
 				@else
 				{{$proyecto->atraso}}
@@ -68,7 +73,7 @@
 				</a>
 			</td>
 			@endcan
-			@can('modiicar_proyectos')
+			@can('modificar_proyectos')
 			<td>
 				<a href="{{action('ProyectosController@edit', $proyecto['id'])}}" type="button" class="btn btn-primary" >
 					<i class="fas fa-edit"></i>
@@ -80,16 +85,17 @@
 				<form method="POST" action="{{action('ProyectosController@destroy', $proyecto)}}">
 					{{csrf_field()}}
 					{{method_field('DELETE')}}
-					<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el proyecto?')">
-						<i class="fas fa-trash-alt"></i></a>
-					</button>
-				</form>
-			</td>
-			@endcan	
+					<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el proyecto?. Esto también eliminará todas las tareas del proyecto.')">
+				<i class="fas fa-trash-alt"></i></a>
+				</button>
+			</form>
+		</td>
+		@endcan
 	</tr>
 	@endforeach
 </tbody>
 </table>
+{{$proyectos->links()}}
 @else
 <h1 align="center">No hay proyectos</h1>
 @endif

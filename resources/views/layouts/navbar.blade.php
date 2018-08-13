@@ -5,7 +5,7 @@
     </div>
     &nbsp;
     &nbsp;
-    <a class="navbar-brand" href="/">Holistic</a>
+    <a class="navbar-brand" style="color: white">Holistic</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -13,18 +13,15 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/">Home</a>
-            </li>
+            </li>            
+            @if(Auth::check())
             <li class="nav-item">
                 <a class="nav-link" href="/proyectos/">Proyectos</a>
             </li>
-            @if(Auth::check())
             @if(Auth::user()->hasRole('Administrador'))
                 <li class="nav-item">
                     <a class="nav-link" href="/users/">Usuarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
+                </li>                
             @endif
             @endif
         </ul>
@@ -39,8 +36,6 @@
                 @endif
             </span>
             <a class="nav-link" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesion</a>
-        @else
-            <a class="nav-link" href="{{action('SessionsController@create')}}">Iniciar sesion</a>
         @endif
     </div>
 </nav>

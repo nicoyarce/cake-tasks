@@ -17,8 +17,7 @@
         <tr>
             <th>Nombre</th>
             <th>RUN</th>
-            <th>Rol</th>
-            {{-- <th>Ver proyectos</th> --}}
+            <th>Rol</th>            
             <th>Editar</th>
             <th>Borrar</th>
         </tr>
@@ -30,11 +29,7 @@
             <td>{{$usuario->nombre}}</td>
             <td>{{$usuario->run}}</td>
             <td>{{$usuario->getRoleNames()->first()}}</td>
-            {{-- <td>
-                <a href="{{action('UsersController@show', $usuario['id'])}}" type="button" class="btn btn-primary" >
-                    <i class="fas fa-eye"></i>
-                </a>
-            </td>--}}
+            @if(Auth::user()->id != $usuario->id)            
             <td> 
                 <a href="{{action('UsersController@edit', $usuario['id'])}}" type="button" class="btn btn-primary" >
                     <i class="fas fa-edit"></i>
@@ -48,6 +43,10 @@
                 </button>
                 </form>
             </td>
+            @else
+            <td>-</td>
+            <td>-</td>
+            @endif
         </tr>
         @endforeach
     </tbody>

@@ -4,7 +4,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>NOMBRE</th>
+            <th>NOMBRE<br>PROYECTO</th>
             <th>FIR<br>&nbsp;</th>
             <th>FTR<br>Original</th>
             <th>FTR<br>Modificada</th>

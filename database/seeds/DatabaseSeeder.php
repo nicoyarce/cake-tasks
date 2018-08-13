@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
+        DB::unprepared(File::get('poblar tablas area y porcentaje.sql')); 
         $this->call(RoleTableSeeder::class);        
                 
         $faker = Faker::create('es_ES');
@@ -57,5 +57,6 @@ class DatabaseSeeder extends Seeder
                 'avance'=>$faker->randomElement($multiplos)
             ]);
         }
+        
     }      
 }

@@ -195,30 +195,20 @@ function actualizarGrafico(entrada) {
 }
 
 function calcularColor(d) {
-    var hoy = new Date();
-    var fechaActividad = new Date(d.data.fecha_termino.date);
-    var diferencia = daysBetween(hoy, fechaActividad);
-    //console.log(diferencia);
-    if (diferencia < 0) {
-        return "#cc0000"; //rojo    
-    }
-    if (diferencia < 7 && diferencia >= 0) {
+    var fechaInicio = moment(new Date(d.data.fecha_inicio.date));
+    var fechaTermino = moment(new Date(d.data.fecha_termino.date));
+    var hoy = moment(new Date());
+    var diferenciaFechas = fechaInicio.diff(fechaTermino, 'days');
+    var fechaAdvertencia = fechaInicio.add(diferenciaFechas * (2 / 3));
+    //console.log(diferenciaFechas);
+    if (hoy.isSameOrBefore(fechaAdvertencia)) {
+        return "#009900"; //verde            
+    } else if (hoy.isSameOrAfter(fechaAdvertencia) &&
+        hoy.isSameOrBefore(fechaTermino)) {
         return "#ff9900"; //naranjo    
+    } else {
+        return "#cc0000"; //rojo
     }
-    if (diferencia >= 7) {
-        return "#009900"; //verde
-    }
-}
-
-function treatAsUTC(date) {
-    var result = new Date(date);
-    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
-    return result;
-}
-
-function daysBetween(startDate, endDate) {
-    var millisecondsPerDay = 24 * 60 * 60 * 1000;
-    return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
 }
 
 function habilitarZoom() {

@@ -12,18 +12,17 @@ class CreateTareasTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {        
         Schema::create('tareas', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('proyecto_id')->nullable();
-            $table->integer('area_id')->nullable();
+            $table->unsignedInteger('proyecto_id');
+            $table->unsignedInteger('area_id');
             $table->string('nombre');
             $table->date('fecha_inicio');
             $table->date('fecha_termino_original');
-            $table->date('fecha_termino');
-            $table->integer('atraso')->nullable();
-            $table->integer('avance');
+            $table->date('fecha_termino');            
+            $table->integer('avance')->default(0);
         });
     }
 

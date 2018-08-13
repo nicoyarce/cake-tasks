@@ -25,7 +25,7 @@ class HomeController extends Controller
             return view('welcome', compact('nroProyectos'));
         }
         else{
-            return view('welcome');
+            return redirect('login');
         }
         
         

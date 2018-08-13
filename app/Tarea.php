@@ -56,6 +56,23 @@ class Tarea extends Model
         $nombreArea = Area::where('id',$this->area_id)->pluck('nombrearea');
         return $nombreArea;
     }
+
+    public function getColorAtrasoAttribute(){
+        $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
+        $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
+        $hoyCarbon = Carbon::today();
+        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);        
+        $fechaAdvertencia = $fechaInicioCarbon->addDays($diferenciaFechas*(2/3));
+        if($hoyCarbon->lte($fechaAdvertencia)){
+            return "VERDE";
+        }
+        else if($hoyCarbon->gte($fechaAdvertencia) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
+            return "NARANJO";
+        }
+        else{
+            return "ROJO";
+        }
+    }
 /*
     public function getFechaInicioAttribute($atraso){
         return $this->fecha_inicio->toDateTimeString(); 
