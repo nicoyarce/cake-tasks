@@ -69,8 +69,13 @@ function dibujarGrafico(datos) {
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
             $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
-            $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
-            $("#atraso").text(d.data.atraso);
+            if(d.data.fecha_termino.date == d.data.fecha_termino_original.date){                
+                $("#ftrm").text("-");
+                $("#atraso").text("-");
+            }else{                
+                $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
+                $("#atraso").text(d.data.atraso);
+            }  
             $("#avance").text(d.data.avance);
         });
 
@@ -150,8 +155,13 @@ function actualizarGrafico(entrada) {
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
             $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
-            $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
-            $("#atraso").text(d.data.atraso);
+            if(d.data.fecha_termino.date == d.data.fecha_termino_original.date){
+                $("#ftrm").text("-");
+                $("#atraso").text("-");
+            }else{
+                $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
+                $("#atraso").text(d.data.atraso);
+            }            
             $("#avance").text(d.data.avance);
         });
     /*.on('mouseover', tip.show)

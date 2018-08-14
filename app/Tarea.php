@@ -37,7 +37,8 @@ class Tarea extends Model
         'fecha_termino_original' => 'date:Y-m-d',
         'fecha_termino' => 'date:Y-m-d'
     ];*/
-    protected $appends = ['nombreArea'];
+    protected $appends = ['nombreArea', 'atraso'];
+
    
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);

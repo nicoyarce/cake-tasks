@@ -63,11 +63,11 @@
 		</thead>
 		<tbody>
 			<tr>
-				@if($tarea->atraso > 7)
-				<td class="table-danger"><p class="text-warning">{{$tarea->nombre}} </p></td>
-				@elseif($tarea->atraso <= 7 && $tarea->atraso > 0)
+				@if($tarea->colorAtraso == "ROJO")
+				<td class="table-danger"><p class="text-warning">{{$tarea->nombre}}</p></td>				
+				@elseif($tarea->colorAtraso == "NARANJO")
 				<td class="table-warning">{{$tarea->nombre}}</td>
-				@elseif($tarea->atraso <= 0)
+				@elseif($tarea->colorAtraso == "VERDE")
 				<td class="table-success">{{$tarea->nombre}}</td>
 				@endif
 				<td>{{$tarea->area->nombrearea}}</td>
