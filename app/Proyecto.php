@@ -70,11 +70,15 @@ class Proyecto extends Model
         $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
         $hoyCarbon = Carbon::today();
         $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);        
-        $fechaAdvertencia = $fechaInicioCarbon->addDays($diferenciaFechas*(2/3));
-        if($hoyCarbon->lte($fechaAdvertencia)){
+        $mitad = $fechaInicioCarbon->addDays($diferenciaFechas/2);
+        $fechaAdvertencia = Carbon::parse($this->fecha_inicio)->addDays($diferenciaFechas*(3/4));
+        if($hoyCarbon->lte($mitad)){
             return "VERDE";
         }
-        else if($hoyCarbon->gte($fechaAdvertencia) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
+        else if($hoyCarbon->gt($mitad) && $hoyCarbon->lte($fechaAdvertencia)){
+            return "AMARILLO";
+        }
+        else if($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
             return "NARANJO";
         }
         else{

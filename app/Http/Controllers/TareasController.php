@@ -20,7 +20,7 @@ class TareasController extends Controller
     }
     
     public function index(){
-        
+        return view('gantt');
     }
 
     public function create($proyectoId){        
@@ -44,10 +44,6 @@ class TareasController extends Controller
         $tarea->save();    
         flash('Tarea registrada')->success();        
         return redirect()->route('proyectos.show',$request->proyecto_id);
-    }
-
-    public function show(Tarea $tarea){        
-        return view('tareas.show', compact('tarea'));
     }
 
     public function edit(Tarea $tarea){
@@ -74,7 +70,7 @@ class TareasController extends Controller
         }       
         $tareanueva->save();
         flash('Tarea actualizada')->success();
-        return redirect()->route('proyectos.show',$tareanueva->proyecto_id);
+        return redirect()->route('proyectos.show',$tareanueva->proyecto_id)->with('idTareaMod', $tareanueva->id);
     }
 
     public function destroy(Tarea $tarea){        

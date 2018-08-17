@@ -11,9 +11,9 @@
 		<!--Font Awesome -->
 		<link href="/css/all.css" rel="stylesheet">
 		<!-- JQuery -->
+		<link href="/css/jquery-ui.min.css" rel="stylesheet">
 		<script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
-		<!--Bootstrap JS -->
-		<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="/js/jquery-ui.min.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="carga">
@@ -23,7 +23,6 @@
 			@include('layouts.navbar')
 		</header>
 		<!-- Begin page content -->
-		<br>
 		@include('flash::message')
 		<main role="main" class="container">
 			@yield('content')
@@ -34,7 +33,7 @@
 				$(document).ajaxStop(function() {
 					$("#carga").hide();
 				});
-			</script>			
+			</script>
 		</main>
 		<!-- Begin footer -->
 		<footer class="footer">
@@ -42,5 +41,14 @@
 				<span class="text-muted small">Desarrollado por Nicolás Oyarce</span>
 			</div>
 		</footer>
+		
+		<!--Bootstrap JS -->
+		<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+		<script>
+			$('form').submit(function() {
+				console.log("asd");
+				$('#carga').show();
+			});			
+		</script>
 	</body>
 </html>

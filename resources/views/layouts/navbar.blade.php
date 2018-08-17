@@ -5,9 +5,7 @@
     </div>
     &nbsp;
     &nbsp;
-    <a class="navbar-brand" style="color: white; font-size: 25px;">Holistic</a>
-    &nbsp;
-    &nbsp;
+    <a class="navbar-brand" style="color: white;">Holistic</a>    
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>

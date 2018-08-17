@@ -4,21 +4,21 @@
 	<div class="col-8">
 		<h1>Proyectos</h1>
 	</div>
-	@can('crear_proyectos')
+	@can('crear_proyectos')	
 	<div class="col-2">
-		<a type="button" class="btn btn-primary float-right" href="/proyectos/cargar" role="button">Cargar archivo
+		<a type="button" class="btn btn-primary" href="/proyectos/cargarXLS" role="button">Cargar archivo XLS
 			<i class="fas fa-upload"></i>
 		</a>
 	</div>
 	<div class="col-2">
-		<a type="button" class="btn btn-success float-right" href="{{action('ProyectosController@create')}}" role="button">Crear proyecto
+		<a type="button" class="btn btn-success" href="{{action('ProyectosController@create')}}" role="button">Crear proyecto
 			<i class="fas fa-plus"></i>
 		</a>
 	</div>
 	@endcan
 </div>
 @if(count($proyectos)>0)
-<table class="table">
+<table class="table table-hover">
 	<thead>
 		<tr>
 			<th>NOMBRE<br>PROYECTO</th>
@@ -42,12 +42,14 @@
 	<tbody>
 		@foreach ($proyectos as $proyecto)
 		<tr>
-			@if($proyecto->colorAtraso == "ROJO")
-			<td class="table-danger"><a class="text-warning" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			@if($proyecto->colorAtraso == "VERDE" || $proyecto->avance == 100)
+			<td class="bg-success"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			@elseif($proyecto->colorAtraso == "AMARILLO")
+			<td class="fondo-amarillo"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
 			@elseif($proyecto->colorAtraso == "NARANJO")
-			<td class="table-warning"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
-			@elseif($proyecto->colorAtraso == "VERDE")
-			<td class="table-success"><a href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="fondo-naranjo"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			@elseif($proyecto->colorAtraso == "ROJO")
+			<td class="bg-danger"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a><p/td>
 			@endif
 			<td >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
 			<td >{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>

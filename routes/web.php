@@ -13,8 +13,8 @@
 Route::get('/', 'HomeController@index');
 
 Route::group(['middleware' => ['role:Administrador']], function () {
-    Route::get('/proyectos/cargar', 'ProyectosController@vistaCargar');
-    Route::post('/proyectos/cargar', 'ProyectosController@cargar');
+    Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
+    Route::post('/proyectos/cargarXLS', 'ProyectosController@cargarXLS');    
     Route::resource('users', 'UsersController');
     Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);    
 });

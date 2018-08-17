@@ -1,14 +1,14 @@
 @extends('layouts.master')
 @section('content')
 <div class="row justify-content-between">
-    <h1>Cargar proyecto</h1>
+    <h1>Cargar proyecto XLS</h1>
     <div class="col-4">
         <a type="button" class="btn btn-primary float-right" href="/proyectos">Atrás <i class="fas fa-arrow-left "></i></a>
     </div>
 </div>
 <hr>
 @include('layouts.errors')
-<form id="formulario" class="form-horizontal" action="{{action('ProyectosController@cargar')}}" method="POST" enctype="multipart/form-data">
+<form id="formulario" class="form-horizontal" action="{{action('ProyectosController@cargarXLS')}}" method="POST" enctype="multipart/form-data">
     {{ csrf_field() }}
         <div class="form-group col-8 offset-2"> 
             <label class="h4" for="archivo">Seleccione archivo</label>           
@@ -23,11 +23,11 @@
 <script src="/themes/fa/theme.min.js"></script>
 <script src="/js/locales/es.js"></script>
 <script type="text/javascript">    
-        $("#archivo").fileinput({
-            theme:'fa',            
-            language:'es',
-            required:'true',
-            maxfile:'1',});    
+    $("#archivo").fileinput({
+        theme:'fa',            
+        language:'es',
+        required:'true',
+        maxfile:'1',});    
     $('#formulario').submit(function() {
         $('#carga').show();
     });

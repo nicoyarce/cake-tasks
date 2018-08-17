@@ -14,12 +14,12 @@ class GraficosController extends Controller
         $this->middleware('auth');        
     }
     
-    public function show(Proyecto $proyecto){
+    public function show(Proyecto $proyecto){        
         $areas = Area::all();  
-        $tarea = Tarea::where('proyecto_id', $proyecto->id)->get();
+        $tarea = Proyecto::find($proyecto->id)->tareas;
         $tarea = $tarea->makeHidden('created_at');
         $tarea = $tarea->makeHidden('updated_at');
-        $tarea = $tarea->toJson();            
+        $tarea = $tarea->toJson();        
         return view('grafico', compact('proyecto','areas','tarea'));
     }
 
@@ -27,7 +27,7 @@ class GraficosController extends Controller
         $proyectoid = $request->proyectoid;
         $areaid = $request->areaid;
         if($areaid == 0){
-            $tarea = Tarea::where('proyecto_id', $proyectoid)->get();
+            $tarea = Proyecto::find($proyectoid)->tareas;            
         }
         else{
             $tarea = Tarea::where('proyecto_id', $proyectoid)

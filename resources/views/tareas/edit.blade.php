@@ -7,7 +7,7 @@
 	</div>
 </div>
 @include('layouts.errors')
-<form method="POST" action="{{action('TareasController@update', $tarea)}}">
+<form id="formulario" method="POST" action="{{action('TareasController@update', $tarea)}}">
 	{{csrf_field()}}
 	{{method_field('PUT')}}
 	@if(!Auth::user()->hasRole('Usuario'))
@@ -24,13 +24,13 @@
 		</div>
 		<div class="form-group col-6">
 			<label for="area_id">Área</label>
-			<select @role('Usuario') readonly @endrole class="form-control" id="area_id" name="area_id" onchange="this.form.submit()">
+			<select class="form-control" id="area_id" name="area_id"">
 				@foreach ($areas as $area)
-				@if($area->id == $tarea->id)
-				<option selected value="{{$area->id}}">{{$area->nombrearea}}</option>
-				@else
-				<option value="{{$area->id}}">{{$area->nombrearea}}</option>
-				@endif
+					@if($area->id == $tarea->area->id)
+						<option selected value="{{$area->id}}">{{$area->nombrearea}}</option>
+					@else
+						<option value="{{$area->id}}">{{$area->nombrearea}}</option>
+					@endif
 				@endforeach
 			</select>
 		</div>
@@ -46,14 +46,14 @@
 		</div>
 		<div class="form-group col-4">
 			<label for="fecha_termino">FTT modificada</label>			
-			<input class="form-control" type="date" id="fecha_termino" name="fecha_termino" onchange="this.form.submit()">			
+			<input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>			
 		</div>
-	</div>
+	</div>	
 	@else
-	<table class="table">
+	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>NOMBRE<br>&nbsp;</th>
+				<th>NOMBRE<br>TAREA</th>
 				<th>ÁREA<br>&nbsp;</th>
 				<th>FIT<br>&nbsp;</th>
 				<th>FTT<br>Original</th>
@@ -63,13 +63,15 @@
 		</thead>
 		<tbody>
 			<tr>
-				@if($tarea->colorAtraso == "ROJO")
-				<td class="table-danger"><p class="text-warning">{{$tarea->nombre}}</p></td>				
-				@elseif($tarea->colorAtraso == "NARANJO")
-				<td class="table-warning">{{$tarea->nombre}}</td>
-				@elseif($tarea->colorAtraso == "VERDE")
-				<td class="table-success">{{$tarea->nombre}}</td>
-				@endif
+				@if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
+				<td class="bg-success">{{$tarea->nombre}}</td>
+				@elseif($tarea->colorAtraso == "AMARILLO")
+				<td class="fondo-amarillo">{{$tarea->nombre}}</td>				
+			@elseif($tarea->colorAtraso == "NARANJO")
+				<td class="fondo-naranjo">{{$tarea->nombre}}</td>
+			@elseif($tarea->colorAtraso == "ROJO")
+				<td class="bg-danger">{{$tarea->nombre}}</td>
+			@endif	
 				<td>{{$tarea->area->nombrearea}}</td>
 				<td>{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
 				<td >{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
@@ -93,7 +95,7 @@
 	@endif
 	<div class="form-group" >
 		<label for="avance">Porcentaje avance</label>		
-			<select class="form-control" id="avance" required name="avance" onchange="this.form.submit()">
+			<select class="form-control" id="avance" required name="avance" @role('Usuario') onchange="formulario.submit()" @endrole>
 				@foreach($avances as $avance)
 				@if($avance->porcentaje == $tarea->avance)
 				<option selected value="{{$avance->porcentaje}}">{{$avance->porcentaje}}% - {{$avance->glosa}}</option>
@@ -102,6 +104,12 @@
 				@endif
 				@endforeach
 			</select>
-	</div>	
+	</div>
+	@if(!Auth::user()->hasRole('Usuario'))
+	<div class="form-group text-center">
+        <button class="btn btn-primary" type="submit">Confirmar</button>
+    </div>	
+    @endif
 </form>
+
 @endsection

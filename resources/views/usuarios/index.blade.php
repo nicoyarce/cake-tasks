@@ -12,7 +12,7 @@
     </div>
 </div>
 @if(count($usuarios)>0)
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Nombre</th>

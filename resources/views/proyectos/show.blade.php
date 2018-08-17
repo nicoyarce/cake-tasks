@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 @include('layouts.errors')
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>NOMBRE<br>PROYECTO</th>
@@ -15,7 +15,7 @@
     </thead>
     <tbody>
         <tr>
-            <td class="h4">{{ $proyecto->nombre }}</td>
+            <td><b>{{ $proyecto->nombre }}</b></td>
             <td>{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
             <td>{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
             <td>
@@ -40,3 +40,4 @@
 @include('tareas.index', ['proyecto' => $proyecto])
 </ul>
 @endsection
+

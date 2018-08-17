@@ -62,6 +62,9 @@ function dibujarGrafico(datos) {
         .attr("class", "parte")
         /*.on('mouseover', tip.show)
         .on('mouseout', tip.hide)*/
+        .on('click', function(d, i) {            
+            $("#modal").modal();
+        })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
             $("#detallesTarea").show();
@@ -204,20 +207,17 @@ function actualizarGrafico(entrada) {
     }
 }
 
-function calcularColor(d) {
-    var fechaInicio = moment(new Date(d.data.fecha_inicio.date));
-    var fechaTermino = moment(new Date(d.data.fecha_termino.date));
-    var hoy = moment(new Date());
-    var diferenciaFechas = fechaInicio.diff(fechaTermino, 'days');
-    var fechaAdvertencia = fechaInicio.add(diferenciaFechas * (2 / 3));
-    //console.log(diferenciaFechas);
-    if (hoy.isSameOrBefore(fechaAdvertencia)) {
-        return "#009900"; //verde            
-    } else if (hoy.isSameOrAfter(fechaAdvertencia) &&
-        hoy.isSameOrBefore(fechaTermino)) {
-        return "#ff9900"; //naranjo    
-    } else {
-        return "#cc0000"; //rojo
+function calcularColor(d) {    
+    if (d.data.colorAtraso == "VERDE") {
+        return "#28a745"; //verde
+    } else if (d.data.colorAtraso == "AMARILLO") {        
+        return "#ffff00"; //amarillo
+    } else if (d.data.colorAtraso == "NARANJO") {
+        return "#f48024"; //naranjo
+    } else if (d.data.colorAtraso == "ROJO"){
+        return "#dc3545"; //rojo
+    }else{
+        return "#000000";
     }
 }
 
@@ -251,7 +251,7 @@ $("#opcion").change(function() {
         success: function(response) { // What to do if we succeed            
             $("#detallesTarea").hide();
             actualizarGrafico(response);
-            habilitarZoom();
+            habilitarZoom();            
         },
         error: function(jqXHR, textStatus, errorThrown, exception) { // What to do if we fail            
             console.log(JSON.stringify(jqXHR));

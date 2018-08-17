@@ -69,7 +69,7 @@ class ProyectosController extends Controller
      */
     public function show(Proyecto $proyecto)
     {
-        $tareas = $proyecto->tareas()->paginate(10);
+        $tareas = $proyecto->tareas()->get();
         return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
@@ -113,11 +113,11 @@ class ProyectosController extends Controller
         return redirect('proyectos');
     }
 
-    public function vistaCargar(){
-        return view('proyectos.cargar');
+    public function vistaCargarXLS(){
+        return view('proyectos.cargarxls');
     }
 
-    public function cargar(Request $request){        
+    public function cargarXLS(Request $request){        
         $validatedData = $request->validate([
             'archivo' => 'required|file|mimes:xlsx',
         ]);
@@ -133,15 +133,17 @@ class ProyectosController extends Controller
                 'fecha_termino' =>  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString()
             ]);
             $proyecto->save();
-            foreach ($hoja1 as $fila) {                
-                $tarea = new Tarea;
-                $tarea->nombre = $fila->nombre;
-                $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
-                $tarea->fecha_termino_original =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
-                $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();                
-                $tarea->proyecto()->associate($proyecto);
-                $tarea->area()->associate($area);
-                $tarea->save();
+            foreach ($hoja1 as $key=>$fila) {
+                if(!$key == 0){
+                    $tarea = new Tarea;
+                    $tarea->nombre = $fila->nombre;
+                    $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
+                    $tarea->fecha_termino_original =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
+                    $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();                
+                    $tarea->proyecto()->associate($proyecto);
+                    $tarea->area()->associate($area);
+                    $tarea->save();
+                }
             }            
         });
         flash('Proyecto importado correctamente')->success();
