@@ -5,11 +5,11 @@ html {
   min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
+/*body {
+   Margin bottom by footer height 
   margin-bottom: 60px;
 }
-
+*/
 body > .container {
   padding: 10px 10px 0;
 }
@@ -20,6 +20,14 @@ td{
 
 th{  
   text-align: center;
+}
+
+#logo{
+  padding-right: 5px
+}
+
+#titulo{
+  color: white; font-size: 25px; padding-right: 10px;
 }
 
 .fondo-amarillo{

@@ -66,7 +66,8 @@
 <script src="/js/d3-time-format.v2.min.js"></script>
 <script src="/js/moment.js"></script>
 <script src="/js/dibujarGrafico.js"></script>
-<script type="text/javascript">    
+<script type="text/javascript">
+    $("#barra").hide();
     gantt.config.xml_date = "%Y-%m-%d %H:%i:%s"; 
     gantt.init("gantt_here"); 
     gantt.load("/grafico/{{$proyecto->id}}/");
@@ -74,6 +75,4 @@
         dibujarGrafico({!!$tarea!!});        
     });      
 </script>
-
 @endsection
-@include ('layouts.bottom')

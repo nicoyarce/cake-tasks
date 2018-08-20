@@ -1,11 +1,9 @@
 <!-- Fixed navbar -->
-<nav id="barra" class="navbar navbar-expand-md navbar-dark">
-    <div style="width:40px;height:40px;">
-        <img id="logo" src="/armada.png" width="40px" height="auto">
-    </div>
-    &nbsp;
-    &nbsp;
-    <a class="navbar-brand" style="color: white;">Holistic</a>    
+<nav id="barra" class="navbar navbar-expand-md navbar-dark">    
+    <div id="logo">
+        <img src="/armada.png" width="35px" height="auto">
+    </div>        
+    <a id="titulo" class="navbar-brand">Holistic</a>    
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -15,14 +13,14 @@
                 <a class="nav-link" href="/">Home</a>
             </li>            
             @if(Auth::check())
-            <li class="nav-item">
-                <a class="nav-link" href="/proyectos/">Proyectos</a>
-            </li>
-            @if(Auth::user()->hasRole('Administrador'))
                 <li class="nav-item">
-                    <a class="nav-link" href="/users/">Usuarios</a>
-                </li>                
-            @endif
+                    <a class="nav-link" href="/proyectos/">Proyectos</a>
+                </li>
+                @if(Auth::user()->hasRole('Administrador'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/">Usuarios</a>
+                    </li>                
+                @endif
             @endif
         </ul>
         @if(Auth::check())

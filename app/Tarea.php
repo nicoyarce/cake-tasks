@@ -51,7 +51,7 @@ class Tarea extends Model
         return $this->belongsTo(Area::class);
     }
 
-    public function getAtrasoAttribute($atraso){
+    public function getAtrasoAttribute(){
         $final = Carbon::parse($this->fecha_termino_original);        
         return $final->diffInDays($this->fecha_termino);
     }
@@ -59,6 +59,11 @@ class Tarea extends Model
     public function getNombreAreaAttribute(){
         $nombreArea = Area::where('id',$this->area_id)->pluck('nombrearea');
         return $nombreArea;
+    }
+
+    public function getDuracionAttribute(){
+        $final = Carbon::parse($this->fecha_termino);
+        return $final->diffInDays($this->fecha_inicio);
     }
 
     public function getColorAtrasoAttribute(){
@@ -79,7 +84,7 @@ class Tarea extends Model
         }
         else{
             return "ROJO";
-        }
+        }        
     }
 /*
     public function getFechaInicioAttribute($atraso){

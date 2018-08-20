@@ -8,7 +8,6 @@
         "php": "^7.1.3",
         "barryvdh/laravel-debugbar": "dev-master",
         "barryvdh/laravel-ide-helper": "^2.4",
-        "dhtmlx/connector-php": "^3.0",
         "doctrine/dbal": "^2.8",
         "fideloper/proxy": "^4.0",
         "freshwork/chilean-bundle": "^2.1",

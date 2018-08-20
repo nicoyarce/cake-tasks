@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fcdea989f3f04975ef8abffce1e07dbe",
+    "content-hash": "9a06e0c44696af76fb3ef12a63416197",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -195,47 +195,6 @@
                 }
             ],
             "time": "2016-06-13T19:28:20+00:00"
-        },
-        {
-            "name": "dhtmlx/connector-php",
-            "version": "3.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/DHTMLX/connector-php.git",
-                "reference": "918dcc77e75e44a42ed4570423c7813b264eb5d9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/DHTMLX/connector-php/zipball/918dcc77e75e44a42ed4570423c7813b264eb5d9",
-                "reference": "918dcc77e75e44a42ed4570423c7813b264eb5d9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "yii2": "1.0.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Dhtmlx\\Connector\\": "codebase/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GNU"
-            ],
-            "description": "PHP extension for the DHTMLX library",
-            "homepage": "http://dhtmlx.com/docs/products/dhtmlxConnector/index.shtml",
-            "keywords": [
-                "connector",
-                "connector-php",
-                "dhtmlx"
-            ],
-            "time": "2016-06-10T13:39:04+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

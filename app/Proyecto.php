@@ -46,22 +46,28 @@ class Proyecto extends Model
         return parent::delete();
     }
 
-    public function getAtrasoAttribute($atraso){
+    public function getAtrasoAttribute(){
         $final = Carbon::parse($this->fecha_termino_original);
         return $final->diffInDays($this->fecha_termino);
     }
 
-    public function getAvanceAttribute($avance){
+    public function getAvanceAttribute(){
         $tareas = Tarea::where('proyecto_id',$this->id)->get();
-        $total = 0;
-        foreach ($tareas as $tarea) {
-            $total = $total + $tarea->avance;
-        }
         if(count($tareas) == 0){
             return 0;
         }
         else{
-            return floor($total/count($tareas));
+            $totalDuracion = 0;
+            foreach ($tareas as $tarea) {
+                $totalDuracion = $totalDuracion + $tarea->duracion;
+            } 
+            $tiempoPonderado = 0;
+            $avancePonderado = 0;
+            foreach ($tareas as $tarea) {
+                $tiempoPonderado = $tarea->duracion/$totalDuracion;
+                $avancePonderado = $avancePonderado + ($tarea->avance * $tiempoPonderado);
+            }
+            return floor($avancePonderado);
         }        
     }
 
@@ -70,15 +76,15 @@ class Proyecto extends Model
         $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
         $hoyCarbon = Carbon::today();
         $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);        
-        $mitad = $fechaInicioCarbon->addDays($diferenciaFechas/2);
-        $fechaAdvertencia = Carbon::parse($this->fecha_inicio)->addDays($diferenciaFechas*(3/4));
-        if($hoyCarbon->lte($mitad)){
+        $fechaAdvertencia = $fechaInicioCarbon->addDays(($diferenciaFechas*60)/100); // verde antes de esta fecha
+        $fechaPeligro = Carbon::parse($this->fecha_inicio)->addDays(($diferenciaFechas*90)/100);  // amarillo antes de esta fecha, naranjo despues de fecha 
+        if($hoyCarbon->lte($fechaAdvertencia)){
             return "VERDE";
         }
-        else if($hoyCarbon->gt($mitad) && $hoyCarbon->lte($fechaAdvertencia)){
+        else if($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)){
             return "AMARILLO";
         }
-        else if($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
+        else if($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
             return "NARANJO";
         }
         else{
