@@ -31,7 +31,7 @@ class Tarea extends Model
 {
     use FechasTraducidas;
     protected $table = 'tareas';
-    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance'];
+    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','observaciones'];
     /*protected $casts = [
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_termino_original' => 'date:Y-m-d',

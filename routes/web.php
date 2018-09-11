@@ -23,6 +23,7 @@ Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);   
     Route::get('/grafico/{proyecto}', 'GraficosController@show');
     Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
+    Route::get('/grafico/{proyecto}/detalles','GanttController@get');
 
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 

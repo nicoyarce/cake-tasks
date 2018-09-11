@@ -36,7 +36,7 @@
 			</script>
 		</main>
 		<!-- Begin footer -->
-		<footer class="footer">
+		<footer id="footer" class="footer">
 			<div class="container">
 				<span class="text-muted small">Desarrollado por Nicolás Oyarce</span>
 			</div>

@@ -39,6 +39,12 @@
 			<input class="form-control" type="date" id="fecha_termino" required name="fecha_termino" value="">
 		</div>
 	</div>
+	<div class="form-row">
+		<div class="form-group col-12">
+			<label for="observaciones">Observaciones</label>
+			<textarea class="form-control" id="observaciones" name="observaciones"></textarea>
+		</div>
+	</div>	
 	<div class="form-group">
 		<label for="avance">Porcentaje avance</label>
 		<select class="form-control" id="avance" required name="avance">

@@ -38,6 +38,7 @@ class TareasController extends Controller
         $tarea->fecha_inicio = $request->fecha_inicio;
         $tarea->fecha_termino_original = $request->fecha_termino;
         $tarea->fecha_termino = $request->fecha_termino;
+        $tarea->observaciones = $request->observaciones;
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
@@ -68,7 +69,7 @@ class TareasController extends Controller
         else{            
             $tareanueva->fill($request->all());
         }       
-        $tareanueva->save();
+        $tareanueva->save();        
         flash('Tarea actualizada')->success();
         return redirect()->route('proyectos.show',$tareanueva->proyecto_id)->with('idTareaMod', $tareanueva->id);
     }

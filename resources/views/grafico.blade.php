@@ -34,6 +34,9 @@
                 <li class="list-group-item"><span class="titulospan">Avance [%]:</span><span id="avance"></span></li>
             </ul>
         </div>
+        <div class="row form-group">
+            <img class="mx-auto" src="/simbologia.png" alt="">
+        </div>
     </div>
     <br>    
 </div>
@@ -58,21 +61,23 @@
 </div>
 <link rel="stylesheet" href="/css/estiloGrafico.css">
 <link rel="stylesheet" href="/css/anythingzoomer.css">
-<link href="/dhtmlxGantt/codebase/dhtmlxgantt.css" rel="stylesheet">
-<script src="/dhtmlxGantt/codebase/dhtmlxgantt.js"></script>
-<script src="/js/d3.v3.min.js"></script>
 <script src="/js/jquery.anythingzoomer.min.js"></script>
+<script src="/dhtmlxGantt/codebase/dhtmlxgantt.js"></script>
+<link href="/dhtmlxGantt/codebase/dhtmlxgantt.css" rel="stylesheet">
+<script src="/dhtmlxGantt/codebase/locale/locale_es.js" charset="utf-8"></script>
+<script src="/js/d3.v3.min.js"></script>
 <script src="/js/d3.tip.v0.6.3.js"></script>
 <script src="/js/d3-time-format.v2.min.js"></script>
 <script src="/js/moment.js"></script>
 <script src="/js/dibujarGrafico.js"></script>
-<script type="text/javascript">
-    $("#barra").hide();
+<script type="text/javascript">    
+    $(document).ready(function(){
+        $("#barra").hide();
+        $("#footer").hide();
+        dibujarGrafico({!!$tarea!!});        
+    });
     gantt.config.xml_date = "%Y-%m-%d %H:%i:%s"; 
     gantt.init("gantt_here"); 
-    gantt.load("/grafico/{{$proyecto->id}}/");
-    $(document).ready(function(){
-        dibujarGrafico({!!$tarea!!});        
-    });      
+    gantt.load("/grafico/{{$proyecto->id}}/detalles");       
 </script>
 @endsection

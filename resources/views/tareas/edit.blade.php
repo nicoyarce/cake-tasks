@@ -38,7 +38,7 @@
 	<div class="form-row">
 		<div class="form-group col-4">
 			<label for="fecha_inicio">FIT</label>
-			<input class="form-control" type="date"  readonly value={{$tarea->fecha_inicio}}>	
+			<input class="form-control" type="date" readonly value={{$tarea->fecha_inicio}}>	
 		</div>
 		<div class="form-group col-4">
 			<label>FTT original</label>			
@@ -47,6 +47,12 @@
 		<div class="form-group col-4">
 			<label for="fecha_termino">FTT modificada</label>			
 			<input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>			
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-12">
+			<label for="observaciones">Observaciones</label>
+			<textarea class="form-control" id="observaciones" name="observaciones">{{$tarea->observaciones}}</textarea>
 		</div>
 	</div>	
 	@else
