@@ -15,6 +15,9 @@
     </div>
     <div id="botones" class="col-6">
         <div class="row form-group">
+            <img class="mx-auto" src="/simbologia.jpg" alt="" width="auto" height="100px">
+        </div>
+        <div class="row form-group">
             <label for="opcion">Filtro Área:</label>
             <select data-id="{{$proyecto->id}}" class="form-control" id="opcion" name="opcion">
                 <option selected value="0">Todas</option>
@@ -33,10 +36,7 @@
                 <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
                 <li class="list-group-item"><span class="titulospan">Avance [%]:</span><span id="avance"></span></li>
             </ul>
-        </div>
-        <div class="row form-group">
-            <img class="mx-auto" src="/simbologia.png" alt="">
-        </div>
+        </div>        
     </div>
     <br>    
 </div>

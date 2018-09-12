@@ -14,7 +14,7 @@ class AlterTareasTable extends Migration
     public function up()
     {
         Schema::table('tareas', function (Blueprint $table) {
-            $table->string('observaciones');
+            $table->text('observaciones');
         });
     }
 
