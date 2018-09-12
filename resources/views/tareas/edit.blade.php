@@ -99,7 +99,17 @@
 		</tbody>
 	</table>
 	@endif
-	<div class="form-group" >
+	<div class="form-row">
+		<div class="form-group col-12">
+			<label for="observaciones">Observaciones</label>
+			@if($tarea->observaciones=="")
+			<textarea readonly class="form-control"> - </textarea>
+			@else
+			<textarea readonly class="form-control">{{$tarea->observaciones}}</textarea>
+			@endif
+		</div>
+	</div>
+	<div class="form-group">
 		<label for="avance">Porcentaje avance</label>		
 			<select class="form-control" id="avance" required name="avance" @role('Usuario') onchange="formulario.submit()" @endrole>
 				@foreach($avances as $avance)

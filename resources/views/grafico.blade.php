@@ -26,15 +26,22 @@
                 @endforeach
             </select>
         </div>
-        <div class="row form-group">
-            <ul id="detallesTarea" class="list-group w-100" style="display: none;">
-                <li class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"></span></li>
+        <div class="row">
+            <ul class="detallesTarea list-group w-100" style="display: none;">
+                <li class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"><br></span></li>
+            </ul>
+        </div>
+        <div class="row">
+            <ul class="detallesTarea list-group w-50" style="display: none;">                
                 <li class="list-group-item"><span class="titulospan">Área:</span><span id="area"></span></li>
                 <li class="list-group-item"><span class="titulospan">FIT:</span><span id="fir"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT original:</span><span id="ftro"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT modificada:</span><span id="ftrm"></span></li>
                 <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
                 <li class="list-group-item"><span class="titulospan">Avance [%]:</span><span id="avance"></span></li>
+            </ul>
+            <ul class="detallesTarea list-group w-50" style="display: none;">
+                <li class="list-group-item"><span class="titulospan">Observaciones:</span><span id="observaciones"></span></li>
             </ul>
         </div>        
     </div>

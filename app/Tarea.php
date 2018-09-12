@@ -37,7 +37,7 @@ class Tarea extends Model
         'fecha_termino_original' => 'date:Y-m-d',
         'fecha_termino' => 'date:Y-m-d'
     ];*/
-    protected $appends = ['nombreArea', 'atraso', 'colorAtraso', "open"];    
+    protected $appends = ['nombreArea', 'atraso', 'colorAtraso',"open"];    
     
     public function getOpenAttribute(){
         return true;    

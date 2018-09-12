@@ -49,6 +49,7 @@ function dibujarGrafico(datos) {
             d.fecha_termino.date = d.fecha_termino.date;
             d.atraso = d.atraso;
             d.avance = d.avance;
+            d.observaciones = d.observaciones;
             d.weight = 1;
             d.width = +d.weight;
         });
@@ -67,7 +68,7 @@ function dibujarGrafico(datos) {
         })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
-            $("#detallesTarea").show();
+            $(".detallesTarea").show();
             $("#nombre").text(d.data.nombre);
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
@@ -80,6 +81,7 @@ function dibujarGrafico(datos) {
                 $("#atraso").text(d.data.atraso);
             }  
             $("#avance").text(d.data.avance);
+            $("#observaciones").text(d.data.observaciones);
         });
 
     outerPath.append("path")
@@ -133,6 +135,7 @@ function actualizarGrafico(entrada) {
             d.fecha_termino.date = d.fecha_termino.date;
             d.atraso = d.atraso;
             d.avance = d.avance;
+            d.observaciones = d.observaciones
             d.weight = 1;
             d.width = +d.weight;
         });
@@ -153,7 +156,7 @@ function actualizarGrafico(entrada) {
         .attr("class", "parte")
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
-            $("#detallesTarea").show();
+            $(".detallesTarea").show();
             $("#nombre").text(d.data.nombre);
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
@@ -166,6 +169,7 @@ function actualizarGrafico(entrada) {
                 $("#atraso").text(d.data.atraso);
             }            
             $("#avance").text(d.data.avance);
+            $("#observaciones").text(d.data.observaciones);
         });
     /*.on('mouseover', tip.show)
     .on('mouseout', tip.hide);*/
