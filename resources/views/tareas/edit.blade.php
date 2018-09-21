@@ -20,7 +20,7 @@
 		<div class="form-row">
 			<div class="form-group col-6">
 				<label for="nombre">Nombre</label>
-				<input readonly type="text" class="form-control" value="{{$tarea->nombre}}">
+				<input type="text" class="form-control" id="nombre" name="nombre" value="{{$tarea->nombre}}">
 			</div>
 			<div class="form-group col-6">
 				<label for="area_id">Área</label>
