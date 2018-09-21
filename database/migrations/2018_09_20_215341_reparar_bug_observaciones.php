@@ -14,7 +14,7 @@ class RepararBugObservaciones extends Migration
     public function up()
     {
         Schema::table('tareas', function (Blueprint $table) {
-            $table->text('observaciones')->nullable();
+            $table->text('observaciones')->nullable()->change();
         });
     }
 
