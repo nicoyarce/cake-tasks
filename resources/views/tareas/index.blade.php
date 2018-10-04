@@ -38,9 +38,9 @@
 			@elseif($tarea->colorAtraso == "ROJO")
 				<td class="bg-danger">{{$tarea->nombre}}</td>
 			@endif			
-			<td>{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
-			<td >{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
-			<td>
+			<td style="width: 12%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
+			<td style="width: 12%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
+			<td style="width: 12%">
 				@if($tarea->fecha_termino_original == $tarea->fecha_termino)
 				-
 				@else
