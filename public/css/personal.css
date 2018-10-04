@@ -5,13 +5,9 @@ html {
   min-height: 100%;
 }
 
-/*body {
-   Margin bottom by footer height 
-  margin-bottom: 60px;
-}
-*/
 body > .container {
   padding: 10px 10px 0;
+  margin-bottom: 35px;
 }
 
 td{  
