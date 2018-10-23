@@ -24,7 +24,7 @@
 		</header>
 		<!-- Begin page content -->
 		@include('flash::message')
-		<main role="main" class="container">
+		<main id="main" role="main" class="container">
 			@yield('content')
 			<script>
 				$(document).ajaxStart(function() {

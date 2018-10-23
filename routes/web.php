@@ -17,6 +17,7 @@ Route::group(['middleware' => ['role:Administrador']], function () {
     Route::post('/proyectos/cargarXLS', 'ProyectosController@cargarXLS');    
     Route::resource('users', 'UsersController');
     Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);    
+    Route::view('/visor', 'visor');
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
@@ -53,3 +54,4 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
 Route::get('/login', 'SessionsController@create')->name('login');
 Route::post('/login', 'SessionsController@store');
 Route::get('/logout', 'SessionsController@destroy');
+

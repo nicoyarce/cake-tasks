@@ -51,9 +51,9 @@
 			@elseif($proyecto->colorAtraso == "ROJO")
 			<td class="bg-danger"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a><p/td>
 			@endif
-			<td >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
-			<td >{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
-			<td>
+			<td style="width: 12%" >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
+			<td style="width: 12%">{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
+			<td style="width: 12%">
 				@if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
 				-
 				@else

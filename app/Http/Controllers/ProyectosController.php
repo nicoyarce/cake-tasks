@@ -149,4 +149,8 @@ class ProyectosController extends Controller
         flash('Proyecto importado correctamente')->success();
         return redirect('proyectos');
     }
+
+    public function visor(){
+        
+    }
 }
