@@ -60,11 +60,12 @@ function dibujarGrafico(datos) {
     var outerPath = svg.selectAll(".outlineArc")
         .data(pie(data))
         .enter().append("g")
-        .attr("class", "parte")
-        /*.on('mouseover', tip.show)
-        .on('mouseout', tip.hide)*/
+        .attr("class", "parte")        
+        .on('mouseout', function (d, i){
+            $(".detallesTarea").hide();
+        })
         .on('click', function(d, i) {            
-            $("#modal").modal();
+            window.location = route('visor', d.data.id);         
         })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
@@ -154,6 +155,12 @@ function actualizarGrafico(entrada) {
         .data(pie(data))
         .enter().append("g")
         .attr("class", "parte")
+        .on('mouseout', function (d, i){
+            $(".detallesTarea").hide();
+        })
+        .on('click', function(d, i) {            
+            window.location = route('visor', d.data.id);         
+        })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
             $(".detallesTarea").show();

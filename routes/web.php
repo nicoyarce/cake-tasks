@@ -12,12 +12,12 @@
 */
 Route::get('/', 'HomeController@index');
 
+
 Route::group(['middleware' => ['role:Administrador']], function () {
     Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
     Route::post('/proyectos/cargarXLS', 'ProyectosController@cargarXLS');    
     Route::resource('users', 'UsersController');
-    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);    
-    Route::view('/visor', 'visor');
+    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
@@ -25,7 +25,7 @@ Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::get('/grafico/{proyecto}', 'GraficosController@show');
     Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
     Route::get('/grafico/{proyecto}/detalles','GanttController@get');
-
+    Route::get('/visor', 'ProyectosController@cargarVisor')->name('visor');;
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
     'uses' => 'TareasController@create']);     

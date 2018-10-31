@@ -37,11 +37,7 @@ class Tarea extends Model
         'fecha_termino_original' => 'date:Y-m-d',
         'fecha_termino' => 'date:Y-m-d'
     ];*/
-    protected $appends = ['nombreArea', 'atraso', 'colorAtraso',"open"];    
-    
-    public function getOpenAttribute(){
-        return true;    
-    }
+    protected $appends = ['nombreArea', 'atraso', 'colorAtraso',]; 
 
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);

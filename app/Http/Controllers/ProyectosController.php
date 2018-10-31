@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Tarea;
+use App\TareaHija;
 use App\Area;
 use App\Http\Requests\ProyectosRequest;
 use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class ProyectosController extends Controller
 {
@@ -120,7 +122,7 @@ class ProyectosController extends Controller
     public function cargarXLS(Request $request){        
         $validatedData = $request->validate([
             'archivo' => 'required|file|mimes:xlsx',
-        ]);
+        ]);        
         Excel::load($request->archivo, function($reader) {
             $area = Area::where('nombrearea', 'Otra')->first();
             $hoja1 = $reader->first();
@@ -150,7 +152,22 @@ class ProyectosController extends Controller
         return redirect('proyectos');
     }
 
-    public function visor(){
-        
+    public function cargarVisor(Request $request){        
+        $tarea = Tarea::find($request->all());
+        //dd($tarea);
+        $archivo = storage_path('app/FF. COCHRANE. PID-MOD. DIAGRAMA LÓGICO MOD. avance (03-08-2018).xlsx');
+        // $tareasHijas = new TareaHija;         
+        // Excel::load($archivo, function($reader) {           
+        //     $hoja1 = $reader->first();
+        //     foreach ($hoja1 as $key=>$fila) {
+        //         if(!$key == 0){                    
+        //             //if(similar_text($tareasHijas->nombre, $fila->nombre, 80)>10){
+        //                 $tareasHijas->nombre=$fila->nombre;
+        //             //}                    
+        //         }
+        //     }            
+        // });
+        // $tareasHijas->toJson();
+        return view('visor');        
     }
 }

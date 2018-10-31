@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTareasTable extends Migration
+class CreateTareasHijasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class CreateTareasTable extends Migration
      * @return void
      */
     public function up()
-    {        
-        Schema::create('tareas', function (Blueprint $table) {
+    {
+        Schema::create('tareas_hijas', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->unsignedInteger('id_madre')->nullable();
@@ -34,6 +34,6 @@ class CreateTareasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tareas');
+        Schema::dropIfExists('tareas_hijas');
     }
 }
