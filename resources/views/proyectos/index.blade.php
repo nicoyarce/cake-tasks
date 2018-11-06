@@ -1,10 +1,15 @@
 @extends('layouts.master')
 @section('content')
 <div class="row">
-	<div class="col-8">
+	<div class="col-6">
 		<h1>Proyectos</h1>
 	</div>
-	@can('crear_proyectos')	
+	@can('crear_proyectos')
+	<div class="col-2">
+		<a type="button" class="btn btn-primary" href="/proyectos/cargarHijas" role="button">Cargar tareas hijas
+			<i class="fas fa-upload"></i>
+		</a>
+	</div>	
 	<div class="col-2">
 		<a type="button" class="btn btn-primary" href="/proyectos/cargarXLS" role="button">Cargar archivo XLS
 			<i class="fas fa-upload"></i>

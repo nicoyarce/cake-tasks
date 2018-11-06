@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TareaHija extends Model
 {
-    protected $fillable = ['tarea_id','nombre','fecha_inicio','fecha_termino','avance','observaciones'];
+    protected $table = 'tareas_hijas';
+    protected $fillable = ['id','nombre','fecha_inicio','fecha_termino','nivel','avance'];
 }

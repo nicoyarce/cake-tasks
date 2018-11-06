@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Tarea;
 use App\Proyecto;
 use App\Area;
+use App\TareaHija;
+use App\Http\Resources\TareaHijaResource;
+use App\Http\Resources\TareaHijaCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTareasRequest;
@@ -19,8 +22,9 @@ class TareasController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(){
-        return view('gantt');
+    public function show(TareaHija $tarea){
+        TareaHijaResource::withoutWrapping();
+        return new TareaHijaResource($tarea);
     }
 
     public function create($proyectoId){        
@@ -82,5 +86,37 @@ class TareasController extends Controller
         flash('Tarea eliminada')->success(); 
         return redirect()->route('proyectos.show', $id);
     }
-       
+
+    public function cargarVisor(Request $request){             
+        try{
+            $statusCode = 200;
+            $response = [
+              'tasks'  => []
+            ];
+
+            $tareas = TareaHija::where('proyecto_id',$request->proyectoid)->where('id',$request->tareaid)->get();   
+
+            foreach($tareas as $tarea){
+                $response['tasks'][] = [
+                    'id'            => $tarea->id,
+                    'name'            => $tarea->nombre,
+                    'progress'            => $tarea->avance,
+                    'level'            => $tarea->nivel,
+                    //'depends'            => $tarea->id,
+                    'start'            => $tarea->fecha_inicio,
+                    //'duration'            => (string) "-"+$tarea->id,
+                    'end'            => $tarea->fecha_termino,
+                    'collapsed'            => false,
+                ];
+            }
+
+        }catch (Exception $e){
+            $statusCode = 400;
+        }finally{
+            $response = json_encode($response);
+            //dd($response);
+            return view('visor', compact('response'));
+        }        
+    } 
+      
 }

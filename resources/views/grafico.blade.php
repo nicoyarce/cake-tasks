@@ -50,7 +50,6 @@
 {{-- <div class="row mt-3 col-auto mr-auto">
     <button value="0" id="activar" class="btn btn-primary"> <i class="fas fa-search"></i> <span id="botonZoom">Activar zoom</span></button>
 </div> --}}
-@routes
 <link rel="stylesheet" href="/css/estiloGrafico.css">
 <script src="/js/d3.v3.min.js"></script>
 <script src="/js/d3-time-format.v2.min.js"></script>

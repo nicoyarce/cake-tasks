@@ -152,22 +152,32 @@ class ProyectosController extends Controller
         return redirect('proyectos');
     }
 
-    public function cargarVisor(Request $request){        
-        $tarea = Tarea::find($request->all());
-        //dd($tarea);
-        $archivo = storage_path('app/FF. COCHRANE. PID-MOD. DIAGRAMA LÓGICO MOD. avance (03-08-2018).xlsx');
-        // $tareasHijas = new TareaHija;         
-        // Excel::load($archivo, function($reader) {           
-        //     $hoja1 = $reader->first();
-        //     foreach ($hoja1 as $key=>$fila) {
-        //         if(!$key == 0){                    
-        //             //if(similar_text($tareasHijas->nombre, $fila->nombre, 80)>10){
-        //                 $tareasHijas->nombre=$fila->nombre;
-        //             //}                    
-        //         }
-        //     }            
-        // });
-        // $tareasHijas->toJson();
-        return view('visor');        
+    public function vistaCargarHijas(){
+        $proyectos = Proyecto::all();
+        return view('proyectos.cargarhijas', compact('proyectos'));
+    }
+
+    public function cargarHijas(Request $request){
+        $validatedData = $request->validate([
+            'archivo' => 'required|file|mimes:xlsx',
+        ]);        
+        Excel::load($request->archivo, function($reader) use($request) {            
+            $hoja1 = $reader->first();
+            $fila = $reader->first()->first();
+            //dd($fila);            
+            foreach ($hoja1 as $key=>$fila) {
+                if(!$key == 0){
+                    $tarea = new TareaHija;                    
+                    $tarea->proyecto_id = $request->proyecto_id;
+                    $tarea->nombre = $fila->nombre;
+                    $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
+                    $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
+                    $tarea->nivel = $fila->nivel_de_esquema;
+                    $tarea->save();
+                }
+            }            
+        });
+        flash('Tareas importadas correctamente')->success();
+        return redirect('proyectos');   
     }
 }

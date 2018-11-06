@@ -17,12 +17,11 @@ class CreateTareasHijasTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->unsignedInteger('id_madre')->nullable();
-            $table->unsignedInteger('proyecto_id');
-            $table->unsignedInteger('area_id');
+            $table->unsignedInteger('proyecto_id');            
             $table->string('nombre');
-            $table->date('fecha_inicio');
-            $table->date('fecha_termino_original');
+            $table->date('fecha_inicio');            
             $table->date('fecha_termino');            
+            $table->integer('nivel');
             $table->integer('avance')->default(0);
         });
     }

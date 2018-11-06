@@ -64,8 +64,8 @@ function dibujarGrafico(datos) {
         .on('mouseout', function (d, i){
             $(".detallesTarea").hide();
         })
-        .on('click', function(d, i) {            
-            window.location = route('visor', d.data.id);         
+        .on('click', function(d, i) {                    
+            cargarVistaGantt(d.data.id);         
         })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
@@ -159,7 +159,7 @@ function actualizarGrafico(entrada) {
             $(".detallesTarea").hide();
         })
         .on('click', function(d, i) {            
-            window.location = route('visor', d.data.id);         
+           cargarVistaGantt(d.data.id);         
         })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
@@ -241,6 +241,26 @@ function habilitarZoom() {
     */
 }
 
+function cargarVistaGantt(id_tarea){       
+    var proyectoid = $("#opcion").attr("data-id");
+    var ruta = '/visor';
+    var datos = {
+        "proyectoid": proyectoid,
+        "tareaid": id_tarea,        
+    };
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    })    
+    $.post(ruta, datos, function(html){
+        var w = window.open('about:blank');
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    });
+}
+
 $("#opcion").change(function() {
     var proyectoid = $(this).attr("data-id");
     var areaid = $(this).val();
@@ -262,7 +282,7 @@ $("#opcion").change(function() {
         success: function(response) { // What to do if we succeed            
             $("#detallesTarea").hide();
             actualizarGrafico(response);
-            habilitarZoom();            
+            //habilitarZoom();            
         },
         error: function(jqXHR, textStatus, errorThrown, exception) { // What to do if we fail            
             console.log(JSON.stringify(jqXHR));
@@ -270,6 +290,8 @@ $("#opcion").change(function() {
         }
     });
 })
+
+
 var primeraVez = true;
 $("#activar").click(function() {
     var estado = $("#activar").val(); // 0 o 1   
