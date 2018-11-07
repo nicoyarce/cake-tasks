@@ -15,13 +15,13 @@ Date.$VERSION = 1.02;
 // Utility function to append a 0 to single-digit numbers
 Date.LZ = function(x) {return(x<0||x>9?"":"0")+x};
 // Full month names. Change this for local month names
-Date.monthNames = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+Date.monthNames = new Array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
 // Month abbreviations. Change this for local month names
-Date.monthAbbreviations = new Array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+Date.monthAbbreviations = new Array('Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic');
 // Full day names. Change this for local month names
-Date.dayNames = new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+Date.dayNames = new Array('Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
 // Day abbreviations. Change this for local month names
-Date.dayAbbreviations = new Array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+Date.dayAbbreviations = new Array('Dom','Lun','Mar','Mie','Jue','Vie','Sab');
 // Used for parsing ambiguous dates like 1/2/2000 - default to preferring 'American' format meaning Jan 2.
 // Set to false to prefer 'European' format meaning Feb 1
 Date.preferAmericanFormat = true;

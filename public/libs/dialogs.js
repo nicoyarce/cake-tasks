@@ -26,7 +26,7 @@ function centerPopup(url, target, w, h, scroll, resiz) {
 	var winprops = 'height=' + h + ',width=' + w + ',top=' + wint + ',left=' + winl + ',scrollbars=' + scroll + ',resizable=' + resiz + ', toolbars=false, status=false, menubar=false';
 	var win = window.open(url, target, winprops);
 	if (!win)
-		alert("A popup blocker was detected: please allow them for this application (check out the upper part of the browser window).");
+		alert("Un bloqueador de emergentes ha sido detectado: por favor, permitalos para esta aplicacion (revise la parte superior de la ventana del navegador).");
 	if (parseInt(navigator.appVersion) >= 4) {
 		win.window.focus();
 	}
@@ -54,7 +54,7 @@ function openCenteredWindow(url, target, winprops) {
 	}
 	win = window.open(url, target, winprops);
 	if (!win)
-		alert("A popup blocker was detected: please allow them for this application (check out the upper part of the browser window).");
+		alert("Un bloqueador de emergentes ha sido detectado: por favor, permitalos para esta aplicacion (revise la parte superior de la ventana del navegador).");
 	if (parseInt(navigator.appVersion) >= 4) {
 		win.window.focus();
 	}

@@ -97,13 +97,13 @@ function dateToRelative(localTime){
 
 //override date format i18n
 
-Date.monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+Date.monthNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 // Month abbreviations. Change this for local month names
-Date.monthAbbreviations = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+Date.monthAbbreviations = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 // Full day names. Change this for local month names
-Date.dayNames =["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+Date.dayNames =["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
 // Day abbreviations. Change this for local month names
-Date.dayAbbreviations = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+Date.dayAbbreviations = ["Dom","Lun","Mar","Mie","Jue","Vie","Sab"];
 // Used for parsing ambiguous dates like 1/2/2000 - default to preferring 'American' format meaning Jan 2.
 // Set to false to prefer 'European' format meaning Feb 1
 Date.preferAmericanFormat = false;

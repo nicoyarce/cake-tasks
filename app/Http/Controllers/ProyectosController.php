@@ -134,17 +134,32 @@ class ProyectosController extends Controller
                 'fecha_termino_original' =>  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString(),
                 'fecha_termino' =>  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString()
             ]);
-            $proyecto->save();
-            foreach ($hoja1 as $key=>$fila) {
-                if(!$key == 0){
-                    $tarea = new Tarea;
-                    $tarea->nombre = $fila->nombre;
-                    $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
-                    $tarea->fecha_termino_original =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
-                    $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();                
-                    $tarea->proyecto()->associate($proyecto);
-                    $tarea->area()->associate($area);
-                    $tarea->save();
+            $proyecto->save();            
+            $ultimaTareaMadre = new Tarea;   
+            $primerIndicadorEncontrado = false;                    
+            foreach ($hoja1 as $key=>$fila) {                              
+                if(!$key == 0){                                     
+                    if(!is_null($fila->indicador)){
+                        $primerIndicadorEncontrado = true;
+                        $tarea = new Tarea;
+                        $tarea->nombre = $fila->nombre;
+                        $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
+                        $tarea->fecha_termino_original =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
+                        $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
+                        $tarea->proyecto()->associate($proyecto);
+                        $tarea->area()->associate($area);
+                        $tarea->save();
+                        $ultimaTareaMadre = $tarea;
+                    }
+                    elseif($primerIndicadorEncontrado){
+                        $tareaHija = new TareaHija;
+                        $tareaHija->nombre = $fila->nombre;
+                        $tareaHija->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
+                        $tareaHija->nivel = $fila->nivel_de_esquema;
+                        $tareaHija->tareaMadre()->associate($ultimaTareaMadre);
+                        $tareaHija->save();
+                    }                   
                 }
             }            
         });
@@ -168,7 +183,7 @@ class ProyectosController extends Controller
             foreach ($hoja1 as $key=>$fila) {
                 if(!$key == 0){
                     $tarea = new TareaHija;                    
-                    $tarea->proyecto_id = $request->proyecto_id;
+                    //$tarea->tarea_id = $request->proyecto_id;
                     $tarea->nombre = $fila->nombre;
                     $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
                     $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();

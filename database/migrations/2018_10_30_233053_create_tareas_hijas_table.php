@@ -16,8 +16,7 @@ class CreateTareasHijasTable extends Migration
         Schema::create('tareas_hijas', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->unsignedInteger('id_madre')->nullable();
-            $table->unsignedInteger('proyecto_id');            
+            $table->unsignedInteger('tarea_madre_id')->nullable();                        
             $table->string('nombre');
             $table->date('fecha_inicio');            
             $table->date('fecha_termino');            

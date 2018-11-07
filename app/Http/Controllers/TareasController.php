@@ -6,8 +6,6 @@ use App\Tarea;
 use App\Proyecto;
 use App\Area;
 use App\TareaHija;
-use App\Http\Resources\TareaHijaResource;
-use App\Http\Resources\TareaHijaCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTareasRequest;
@@ -22,9 +20,9 @@ class TareasController extends Controller
         $this->middleware('auth');
     }
     
-    public function show(TareaHija $tarea){
-        TareaHijaResource::withoutWrapping();
-        return new TareaHijaResource($tarea);
+    public function show(Tarea $tarea){
+        $tareasHijas = $tarea->tareasHijas()->get();
+        return view('tareas.show', compact('tarea','tareasHijas'));
     }
 
     public function create($proyectoId){        
@@ -87,36 +85,28 @@ class TareasController extends Controller
         return redirect()->route('proyectos.show', $id);
     }
 
-    public function cargarVisor(Request $request){             
-        try{
-            $statusCode = 200;
-            $response = [
-              'tasks'  => []
+    public function cargarVisor(Request $request){ 
+        $response = [
+          'tasks'  => []
+        ];
+        $tareas = Tarea::find($request->tareaid)->tareasHijas()->get();        
+        foreach($tareas as $tarea){
+            $response['tasks'][] = [
+                'id'            => $tarea->id,
+                'name'            => $tarea->nombre,
+                'progress'            => $tarea->avance,
+                'level'            => $tarea->nivel,
+                //'depends'            => $tarea->id,
+                'start'            => strtotime($tarea->fecha_inicio) * 1000,
+                //'duration'            => (string) "-"+$tarea->id,
+                'end'            => strtotime($tarea->fecha_termino) * 1000,
+                'collapsed'            => false,
             ];
-
-            $tareas = TareaHija::where('proyecto_id',$request->proyectoid)->where('id',$request->tareaid)->get();   
-
-            foreach($tareas as $tarea){
-                $response['tasks'][] = [
-                    'id'            => $tarea->id,
-                    'name'            => $tarea->nombre,
-                    'progress'            => $tarea->avance,
-                    'level'            => $tarea->nivel,
-                    //'depends'            => $tarea->id,
-                    'start'            => $tarea->fecha_inicio,
-                    //'duration'            => (string) "-"+$tarea->id,
-                    'end'            => $tarea->fecha_termino,
-                    'collapsed'            => false,
-                ];
-            }
-
-        }catch (Exception $e){
-            $statusCode = 400;
-        }finally{
-            $response = json_encode($response);
-            //dd($response);
-            return view('visor', compact('response'));
-        }        
+        }    
+    
+        $response = json_encode($response);
+        //dd($response);
+        return view('visor', compact('response'));                
     } 
       
 }

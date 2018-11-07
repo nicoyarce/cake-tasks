@@ -47,6 +47,15 @@ class Tarea extends Model
         return $this->belongsTo(Area::class);
     }
 
+    public function tareasHijas(){
+        return $this->hasMany(TareaHija::class, 'tarea_madre_id');
+    }
+
+    public function delete(){
+        $this->tareasHijas()->delete();
+        return parent::delete();
+    }
+
     public function getAtrasoAttribute(){
         $final = Carbon::parse($this->fecha_termino_original);        
         return $final->diffInDays($this->fecha_termino);
