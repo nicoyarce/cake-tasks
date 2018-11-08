@@ -1,8 +1,11 @@
 @extends('layouts.master')
 @section('content')
 @include('layouts.errors')
-<div class="row">    
-    <h1>{{$tarea->nombre}}</h1>
+<div class="row justify-content-between">
+    <h2 class="col-11">{{$tarea->nombre}}</h1>
+    <div class="col-1">        
+        <a type="button" class="btn btn-primary float-right" href="{{url()->previous()}}">Atrás <i class="fas fa-arrow-left "></i></a>        
+    </div>
 </div>
 <hr>
 <div class="row">

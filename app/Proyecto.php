@@ -41,9 +41,13 @@ class Proyecto extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function delete(){
-        $this->tareas()->delete();
-        return parent::delete();
+    protected static function boot() {
+        parent::boot();
+        static::deleting(function($proyecto) { 
+            foreach($proyecto->tareas as $tarea){
+              $tarea->delete();
+            }
+        });
     }
 
     public function getAtrasoAttribute(){

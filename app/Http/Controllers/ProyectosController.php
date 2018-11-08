@@ -110,7 +110,8 @@ class ProyectosController extends Controller
      */
     public function destroy(Proyecto $proyecto)
     {           
-        $proyecto = Proyecto::find($proyecto)->first()->delete();
+        $proyecto = Proyecto::find($proyecto)->first();
+        $proyecto->delete();
         flash('Proyecto eliminado')->success();        
         return redirect('proyectos');
     }
@@ -179,18 +180,31 @@ class ProyectosController extends Controller
         Excel::load($request->archivo, function($reader) use($request) {            
             $hoja1 = $reader->first();
             $fila = $reader->first()->first();
-            //dd($fila);            
-            foreach ($hoja1 as $key=>$fila) {
+            //dd($fila);
+            $proyecto = Proyecto::find($request->proyecto_id);
+            $ultimaTareaMadre = new Tarea;   
+            $primerIndicadorEncontrado = false;                    
+            foreach ($hoja1 as $key=>$fila) {                              
                 if(!$key == 0){
-                    $tarea = new TareaHija;                    
-                    //$tarea->tarea_id = $request->proyecto_id;
-                    $tarea->nombre = $fila->nombre;
-                    $tarea->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
-                    $tarea->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
-                    $tarea->nivel = $fila->nivel_de_esquema;
-                    $tarea->save();
+                    if(!is_null($fila->indicador)){
+                        $primerIndicadorEncontrado = true;
+                        $tareasProyecto = $proyecto->tareas()->get();
+                        /*$ultimaTareaMadre = $tareasProyecto::where('nombre', 'LIKE', "%{$fila->nombre}%")->get();*/
+                        $ultimaTareaMadre = $tareasProyecto->filter(function ($tarea) use ($fila){
+                            return false !== stristr($tarea->nombre, $fila->nombre);
+                        });                        
+                    }
+                    elseif($primerIndicadorEncontrado){
+                        $tareaHija = new TareaHija;
+                        $tareaHija->nombre = $fila->nombre;
+                        $tareaHija->fecha_inicio = Date::createFromFormat('d M Y H:i', $fila->comienzo, 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_termino =  Date::createFromFormat('d M Y H:i', $fila->fin, 'America/Santiago')->toDateTimeString();
+                        $tareaHija->nivel = $fila->nivel_de_esquema;
+                        $tareaHija->tareaMadre()->associate($ultimaTareaMadre->first());
+                        $tareaHija->save();
+                    }                   
                 }
-            }            
+            }           
         });
         flash('Tareas importadas correctamente')->success();
         return redirect('proyectos');   

@@ -51,9 +51,13 @@ class Tarea extends Model
         return $this->hasMany(TareaHija::class, 'tarea_madre_id');
     }
 
-    public function delete(){
-        $this->tareasHijas()->delete();
-        return parent::delete();
+    protected static function boot() {
+        parent::boot();
+        static::deleting(function($tarea) { 
+            foreach($tarea->tareasHijas as $tareaHija){
+              $tareaHija->delete();
+            }
+        });
     }
 
     public function getAtrasoAttribute(){

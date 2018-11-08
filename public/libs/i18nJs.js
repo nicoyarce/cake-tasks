@@ -109,12 +109,12 @@ Date.dayAbbreviations = ["Dom","Lun","Mar","Mie","Jue","Vie","Sab"];
 Date.preferAmericanFormat = false;
 
 Date.firstDayOfWeek =0;
-Date.defaultFormat = "M/d/yyyy";
+Date.defaultFormat = "dd/MM/yyyy";
 Date.masks = {
   fullDate:       "EEEE, MMMM d, yyyy",
   shortTime:      "h:mm a"
 };
-Date.today="Today";
+Date.today="Hoy";
 
 Number.decimalSeparator = ".";
 Number.groupingSeparator = ",";
@@ -128,7 +128,7 @@ var workingDaysPerWeek =5;
 
 function isHoliday(date) {
   var friIsHoly =false;
-  var satIsHoly =true;
+  var satIsHoly =false;
   var sunIsHoly =true;
 
   var pad = function (val) {
@@ -148,46 +148,46 @@ function isHoliday(date) {
 
 
 var i18n = {
-  YES:                 "Yes",
+  YES:                 "Si",
   NO:                  "No",
-  FLD_CONFIRM_DELETE:  "confirm the deletion?",
-  INVALID_DATA:        "The data inserted are invalid for the field format.",
-  ERROR_ON_FIELD:      "Error on field",
-  OUT_OF_BOUDARIES:      "Out of field admitted values:",
-  CLOSE_ALL_CONTAINERS:"close all?",
-  DO_YOU_CONFIRM:      "Do you confirm?",
-  ERR_FIELD_MAX_SIZE_EXCEEDED:      "Field max size exceeded",
-  WEEK_SHORT:      "W.",
+  FLD_CONFIRM_DELETE:  "Confirmar la eliminacion?",
+  INVALID_DATA:        "La fecha insertada es invalida para el formato del campo.",
+  ERROR_ON_FIELD:      "Error en el campo",
+  OUT_OF_BOUDARIES:      "Fuera del campo de valores admitidos:",
+  CLOSE_ALL_CONTAINERS:"Cerrar todo?",
+  DO_YOU_CONFIRM:      "Confirmar?",
+  ERR_FIELD_MAX_SIZE_EXCEEDED:      "Tamaño maximo del campo excedido",
+  WEEK_SHORT:      "Sem.",
 
-  FILE_TYPE_NOT_ALLOWED:"File type not allowed.",
-  FILE_UPLOAD_COMPLETED:"File upload completed.",
-  UPLOAD_MAX_SIZE_EXCEEDED:"Max file size exceeded",
-  ERROR_UPLOADING:"Error uploading",
-  UPLOAD_ABORTED:"Upload aborted",
-  DROP_HERE:"Drop files here",
+  FILE_TYPE_NOT_ALLOWED:"Tipo de archivo no permitido.",
+  FILE_UPLOAD_COMPLETED:"Carga de archivo completa.",
+  UPLOAD_MAX_SIZE_EXCEEDED:"Tamaño maximo de archivo excedido",
+  ERROR_UPLOADING:"Error al cargar",
+  UPLOAD_ABORTED:"Carga abortada",
+  DROP_HERE:"Arrastre archivos aqui",
 
-  FORM_IS_CHANGED:     "You have some unsaved data on the page!",
+  FORM_IS_CHANGED:     "Tienes datos sin guardar en la pagina!",
 
-  PIN_THIS_MENU: "PIN_THIS_MENU",
-  UNPIN_THIS_MENU: "UNPIN_THIS_MENU",
-  OPEN_THIS_MENU: "OPEN_THIS_MENU",
-  CLOSE_THIS_MENU: "CLOSE_THIS_MENU",
-  PROCEED: "Proceed?",
+  PIN_THIS_MENU: "Anclar este menu",
+  UNPIN_THIS_MENU: "Desanclar este menu",
+  OPEN_THIS_MENU: "Abrir este menu",
+  CLOSE_THIS_MENU: "Cerrar este menu",
+  PROCEED: "Proceder?",
 
-  PREV: "Previous",
-  NEXT: "Next",
-  HINT_SKIP: "Got it, close this hint.",
+  PREV: "Anterior",
+  NEXT: "Siguiente",
+  HINT_SKIP: "Cerrar esta pista.",
 
-  WANT_TO_SAVE_FILTER: "save this filter",
-  NEW_FILTER_NAME: "name of the new filter",
-  SAVE: "Save",
-  DELETE: "Delete",
-  HINT_SKIP: "Got it, close this hint.",
+  WANT_TO_SAVE_FILTER: "Guardar este filtro",
+  NEW_FILTER_NAME: "Nombre del nuevo filtro",
+  SAVE: "Guardar",
+  DELETE: "Eliminar",
+  HINT_SKIP: "Cerrar esta pista.",
 
-  COMBO_NO_VALUES: "no values available...?",
+  COMBO_NO_VALUES: "No hay valores disponibles...?",
 
-  FILTER_UPDATED:"Filter updated.",
-  FILTER_SAVED:"Filter correctly saved."
+  FILTER_UPDATED:"Filtro actualizado.",
+  FILTER_SAVED:"Filtro guardado correctamente."
 
 };
 

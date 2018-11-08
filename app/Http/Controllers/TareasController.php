@@ -77,31 +77,46 @@ class TareasController extends Controller
     }
 
     public function destroy(Tarea $tarea){        
-        $temp = Tarea::where('id', $tarea->id)->first(); 
-        $id = $temp->proyecto_id;      
-        $tarea = Tarea::find($tarea)->first()->delete();
-        $temp->first()->delete();
+        $proyectoId = $tarea->proyecto()->get()->first()->id;        
+        $tarea = Tarea::find($tarea)->first();
+        $tarea->delete();
         flash('Tarea eliminada')->success(); 
-        return redirect()->route('proyectos.show', $id);
+        return redirect()->route('proyectos.show', $proyectoId);
     }
 
     public function cargarVisor(Request $request){ 
         $response = [
           'tasks'  => []
         ];
-        $tareas = Tarea::find($request->tareaid)->tareasHijas()->get();        
-        foreach($tareas as $tarea){
+        $tareaMadre = Tarea::find($request->tareaid);        
+        $tareas = $tareaMadre->tareasHijas()->get();
+        //dd($tareaMadre->fecha_inicio);
+        $response['tasks'][] = [
+            'id'            => $tareaMadre->id,
+            'name'            => $tareaMadre->nombre,
+            'progress'            => $tareaMadre->avance,
+            'level'            => 0,
+            'status' => "STATUS_ACTIVE",
+            //'depends'            => $tareaMadre->id,
+            'start'            => $tareaMadre->fecha_inicio->timestamp * 1000,
+            //'duration'            => (string) "-"+$tareaMadre->id,
+            'end'            => $tareaMadre->fecha_termino->timestamp * 1000,
+            'collapsed'            => false,
+            'hasChild' => true,
+        ];
+        foreach($tareas as $tarea){                    
             $response['tasks'][] = [
                 'id'            => $tarea->id,
                 'name'            => $tarea->nombre,
                 'progress'            => $tarea->avance,
                 'level'            => $tarea->nivel,
-                //'depends'            => $tarea->id,
-                'start'            => strtotime($tarea->fecha_inicio) * 1000,
-                //'duration'            => (string) "-"+$tarea->id,
-                'end'            => strtotime($tarea->fecha_termino) * 1000,
+                'status' => "STATUS_ACTIVE",
+                //'depends'            => $tarea->id,                
+                'start'            => $tarea->fecha_inicio->timestamp * 1000,
+                //'duration'            => (string) "-"+$tareaMadre->id,
+                'end'            => $tarea->fecha_termino->timestamp * 1000,
                 'collapsed'            => false,
-            ];
+            ];                      
         }    
     
         $response = json_encode($response);
