@@ -19,9 +19,11 @@
                 @if(Auth::user()->hasRole('Administrador'))
                     <li class="nav-item">
                         <a class="nav-link" href="/users/">Usuarios</a>
-                    </li>                                     
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/informes/">Informes</a>
+                    </li>
                 @endif
-
             @endif
         </ul>
         @if(Auth::check())

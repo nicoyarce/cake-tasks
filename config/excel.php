@@ -31,7 +31,7 @@ return array(
         */
         'settings' => [
 
-            'memoryCacheSize' => '32MB',
+            'memoryCacheSize' => '64MB',
             'cacheTime'       => 600
 
         ],
@@ -58,15 +58,15 @@ return array(
     ],
 
     'properties' => [
-        'creator'        => 'Maatwebsite',
-        'lastModifiedBy' => 'Maatwebsite',
+        'creator'        => 'Holistic',
+        'lastModifiedBy' => 'Holistic',
         'title'          => 'Spreadsheet',
         'description'    => 'Default spreadsheet export',
-        'subject'        => 'Spreadsheet export',
+        'subject'        => 'Excel',
         'keywords'       => 'maatwebsite, excel, export',
         'category'       => 'Excel',
-        'manager'        => 'Maatwebsite',
-        'company'        => 'Maatwebsite',
+        'manager'        => 'Holistic',
+        'company'        => 'ARMADA DE CHILE',
     ],
 
     /*
@@ -106,7 +106,7 @@ return array(
     |
     */
 
-    'creator'    => 'Maatwebsite',
+    'creator'    => 'Holistic',
 
     'csv'        => [
         /*
