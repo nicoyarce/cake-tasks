@@ -127,9 +127,11 @@
 	    </div>	
     @endif
 </form>
-<script>
-	$("#avance").on('change', function(){
-		$("#carga").show();
-	});
-</script>
+@if(Auth::user()->hasRole('Usuario'))
+	<script>
+		$("#avance").on('change', function(){
+			$("#carga").show();
+		});
+	</script>
+@endif
 @endsection

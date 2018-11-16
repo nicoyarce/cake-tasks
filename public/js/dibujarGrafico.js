@@ -261,13 +261,16 @@ function cargarVistaGantt(id_tarea){
     });
 }
 
-$("#opcion").change(function() {
+$(".form-control").change(function() {
+    //console.log("Cambio en combobox")
     var proyectoid = $(this).attr("data-id");
-    var areaid = $(this).val();
+    var opcionArea = $("#opcionArea").val();
+    var opcionColor = $("#opcionColor").val();
     var ruta = '/grafico/' + proyectoid + '/filtrar';
     var datos = {
         "proyectoid": proyectoid,
-        "areaid": areaid
+        "areaid": opcionArea,
+        "colorAtraso": opcionColor
     };
     $.ajaxSetup({
         headers: {

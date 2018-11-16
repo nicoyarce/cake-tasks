@@ -53,8 +53,8 @@
                     <option value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
                     @endif
                     @endforeach
-                </select>
-                <small id="sugerencia" class="form-text text-muted">Mantenga pulsado Ctrl para seleccionar varios</small>
+                </select>               
+                    <small id="sugerencia" class="form-text text-muted" @if($usuario->hasRole('Usuario')) style="display: none;" @endif>Mantenga pulsado Ctrl para seleccionar varios</small>
             </div>
         </div>
         <div class="form-group text-center">
@@ -63,22 +63,23 @@
     </form>
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script>
+    // Este codigo revisa el combobox con el tipo de usuario para cambiar el tipo de lista de proyectos
     $(document).ready(function(){
     $("#role_id").change(function(){
-    if($(this).val()==1){
-    $("#divProyectos").hide();
-    }
-    else{
-    $("#divProyectos").show();
-    }
-    if($(this).val()==3){
-    $("#listaProyectos").removeAttr('multiple');
-    $("#sugerencia").hide();
-    }
-    else{
-    $("#listaProyectos").attr('multiple', 'multiple');
-    $("#sugerencia").show();
-    }
+        if($(this).val()==1){
+            $("#divProyectos").hide();
+        }
+        else{
+            $("#divProyectos").show();
+        }
+        if($(this).val()==3){
+            $("#listaProyectos").removeAttr('multiple');
+            $("#sugerencia").hide();
+            }
+        else{
+            $("#listaProyectos").attr('multiple', 'multiple');
+            $("#sugerencia").show();
+        }
     });
     });
     </script>

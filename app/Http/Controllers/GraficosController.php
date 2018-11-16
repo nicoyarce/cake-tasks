@@ -14,26 +14,53 @@ class GraficosController extends Controller
         $this->middleware('auth');        
     }
     
-    public function show(Proyecto $proyecto){        
+    public function vistaGrafico(Proyecto $proyecto){        
         $areas = Area::all();  
-        $tarea = Proyecto::find($proyecto->id)->tareas;
-        $tarea = $tarea->makeHidden('created_at');
-        $tarea = $tarea->makeHidden('updated_at');
-        $tarea = $tarea->toJson();        
-        return view('grafico', compact('proyecto','areas','tarea'));
+        $tareas = Proyecto::find($proyecto->id)->tareas
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
+        //dd($tareas);
+        //$tareas = $tareas->makeHidden('created_at');
+        //$tareas = $tareas->makeHidden('updated_at');
+        $tareas = json_encode($tareas);
+        return view('grafico', compact('proyecto','areas','tareas'));
     }
 
     public function filtrar(Request $request){        
         $proyectoid = $request->proyectoid;
         $areaid = $request->areaid;
-        if($areaid == 0){
-            $tarea = Proyecto::find($proyectoid)->tareas;            
+        $opcionColor = $request->colorAtraso;
+        $proyecto = Proyecto::find($proyectoid);        
+        if($areaid == 0 && $opcionColor == "TODAS"){            
+            $tareas = $proyecto->tareas
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
+        }
+        elseif($areaid != 0 && $opcionColor == "TODAS"){
+            $tareas = $proyecto->tareas
+            ->where('area_id', $areaid)
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
+        }
+        elseif($areaid == 0 && $opcionColor != "TODAS"){
+            $tareas = $proyecto->tareas
+            ->where('colorAtraso', $opcionColor)
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
         }
         else{
-            $tarea = Tarea::where('proyecto_id', $proyectoid)
+            $tareas = $proyecto->tareas                        
             ->where('area_id', $areaid)
-            ->get();        
+            ->where('colorAtraso', $opcionColor)
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();            
         }        
-        return $tarea->toJson();        
+        $tareas = json_encode($tareas);
+        return $tareas;        
      }
 }

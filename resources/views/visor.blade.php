@@ -106,20 +106,10 @@ $(function() {
   ge.checkpoint(); //empty the undo stack
 });
 
-function getDemoProject(){
-
-  console.debug("getDemoProject");
+function getDemoProject(){  
   ret= {!!$response!!};
-    
-    /*//actualize data 
-    var offset=new Date().getTime()-ret.tasks[0].start;
-    for (var i=0;i<ret.tasks.length;i++) {
-      ret.tasks[i].start = ret.tasks[i].start + offset;
-    }*/
   return ret;
 }
-
-
 
 function loadGanttFromServer(taskId, callback) {
 

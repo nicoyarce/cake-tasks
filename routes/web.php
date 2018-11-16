@@ -24,8 +24,7 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);   
-    Route::get('/grafico/{proyecto}', 'GraficosController@show');
-    Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
+    
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax
     Route::get('/informes','InformesController@vistaInformes');
     Route::post('/generarInforme','InformesController@generarInforme');
@@ -50,6 +49,10 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
     Route::get('/proyectos/{proyecto}', [
     'as' => 'proyectos.show', 
     'uses' =>'ProyectosController@show']);
+
+    Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico');
+    
+    Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
 });
 
 

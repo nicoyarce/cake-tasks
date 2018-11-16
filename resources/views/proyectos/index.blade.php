@@ -75,7 +75,7 @@
 			<td>{{$proyecto->avance}}</td>
 			@can('ver_graficos')
 			<td>
-				<a href="{{action('GraficosController@show', $proyecto['id'])}}" type="button" class="btn btn-primary" >
+				<a href="{{action('GraficosController@vistaGrafico', $proyecto['id'])}}" type="button" class="btn btn-primary" >
 					<i class="fas fa-chart-pie"></i>
 				</a>
 			</td>

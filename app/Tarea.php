@@ -85,7 +85,7 @@ class Tarea extends Model
         if($hoyCarbon->lte($mitad)){
             return "VERDE";
         }
-        else if($hoyCarbon->gt($mitad) && $hoyCarbon->lte($fechaAdvertencia)){            
+        else if($hoyCarbon->gt($mitad) && $hoyCarbon->lte($fechaAdvertencia)){
             return "AMARILLO";
         }
         else if($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
@@ -94,6 +94,10 @@ class Tarea extends Model
         else{
             return "ROJO";
         }        
+    }
+
+    public function scopeAtrasoVerde($query){
+        return $query->where('colorAtraso','VERDE');
     }
 /*
     public function getFechaInicioAttribute($atraso){
