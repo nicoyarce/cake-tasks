@@ -31,10 +31,11 @@
 			<th>FTR<br>Original</th>
 			<th>FTR<br>Modificada</th>
 			<th>ATRASO<br>[días]</th>
-			<th>AVANCE<br>[%]</th>
+			<th>AVANCE<br>[%]</th>			
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
+			<th>Ver trazabilidad</th>
 			@can('modificar_proyectos')
 			<th>Editar</th>
 			@endcan
@@ -72,7 +73,7 @@
 				{{$proyecto->atraso}}
 				@endif
 			</td>
-			<td>{{$proyecto->avance}}</td>
+			<td>{{$proyecto->avance}}</td>			
 			@can('ver_graficos')
 			<td>
 				<a href="{{action('GraficosController@vistaGrafico', $proyecto['id'])}}" type="button" class="btn btn-primary" >
@@ -80,6 +81,13 @@
 				</a>
 			</td>
 			@endcan
+			{{-- AGREGAR CAN DE VER INFORMES --}}
+			<td>
+				<a href="{{action('InformesController@vistaListaInformes', $proyecto['id'])}}" type="button" class="btn btn-primary" >
+					<i class="fas fa-file-alt"></i>
+				</a>
+			</td>
+			{{-- AGREGAR ENDCAN --}}
 			@can('modificar_proyectos')
 			<td>
 				<a href="{{action('ProyectosController@edit', $proyecto['id'])}}" type="button" class="btn btn-primary" >
@@ -104,6 +112,6 @@
 </table>
 {{$proyectos->links()}}
 @else
-<h1 align="center">No hay proyectos</h1>
+<h3 class="text-center">No hay proyectos</h3>
 @endif
 @endsection

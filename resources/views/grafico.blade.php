@@ -8,18 +8,20 @@
 </div>
 <hr>
 <div class="row" id="graficoBotones">
-    <div id="zoom" class="col-6">
+    <div id="zoom" class="col-6 p-1">
         <div class="small">
             <div id="grafico"></div>
-        </div>
-        {{-- Codigo Zoom --}}
-        {{-- <div class="row mt-3 col-auto mr-auto">
-            <button value="0" id="activar" class="btn btn-primary"> <i class="fas fa-search"></i> <span id="botonZoom">Activar zoom</span></button>
-        </div> --}}
+        </div>        
     </div>
     <div id="botones" class="col-6">
         <div class="row form-group">
-            <img class="mx-auto" src="/simbologia.jpg" alt="" width="auto" height="100px">
+            <div class="col-3">                
+                <p class="m-0 text-center font-weight-bold">PORCENTAJE AVANCE PROYECTO</p>                               
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}</p>                             
+            </div>
+            <div class="col-9">
+                <img class="mx-auto" src="/simbologia.jpg" alt="" width="auto" height="105px">    
+            </div>            
         </div>
         <div class="row">
             <div class="form-group col-6">

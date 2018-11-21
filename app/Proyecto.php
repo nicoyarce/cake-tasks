@@ -7,6 +7,7 @@ use App\FechasTraducidas;
 use Carbon\Carbon;
 use App\Tarea;
 use App\User;
+use App\Informe;
 /**
  * App\Proyecto
  *
@@ -41,11 +42,18 @@ class Proyecto extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function informes(){
+        return $this->hasMany(Informe::class);
+    }
+
     protected static function boot() {
         parent::boot();
         static::deleting(function($proyecto) { 
             foreach($proyecto->tareas as $tarea){
               $tarea->delete();
+            }
+            foreach($proyecto->informes as $informe){
+              $informe->delete();
             }
         });
     }

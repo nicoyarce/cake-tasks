@@ -66,16 +66,16 @@
 				<form method="POST" action="{{action('TareasController@destroy', $tarea)}}">
 					{{csrf_field()}}
 					{{method_field('DELETE')}}
-				<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar la tarea?')"><i class="fas fa-trash-alt"></i></button>
-			</form>
+					<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar la tarea?')"><i class="fas fa-trash-alt"></i></button>
+				</form>				
+			</td>
 			@endcan
-		</td>
-	</tr>
-	@endforeach
-</tbody>
+		</tr>
+		@endforeach
+	</tbody>
 </table>
 @else
-<h4 align="center">No hay tareas</h4>
+<h3 class="text-center">No hay tareas</h3>
 @endif
 {{-- Modal --}}
 {{-- <div class="modal" tabindex="-1" role="dialog">

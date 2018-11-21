@@ -11,7 +11,7 @@
 |
 */
 Route::get('/', 'HomeController@index');
-
+Route::get('/pdf', 'InformesController@test');
 
 Route::group(['middleware' => ['role:Administrador']], function () {
     Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
@@ -23,11 +23,13 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
-    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);   
-    
+    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);    
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax
-    Route::get('/informes','InformesController@vistaInformes');
-    Route::post('/generarInforme','InformesController@generarInforme');
+    Route::get('/generarInforme','InformesController@vistaGenerarInformes');
+    Route::get('/generarInformeManual/{proyecto}','InformesController@generarInformeManual');
+    //----//
+    Route::get('/informes/{proyecto}','InformesController@vistaListaInformes');
+    Route::delete('/informes/destroy/{id}','InformesController@destroy');
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
     'uses' => 'TareasController@create']);     
