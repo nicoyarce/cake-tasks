@@ -35,13 +35,15 @@
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
+			@can('ver_informes')
 			<th>Ver informes</th>
+			@endcan
 			@can('modificar_proyectos')
 			<th>Editar</th>
 			@endcan
-			@can('borrar_proyectos')
-			<th>Borrar</th>
-			@endcan
+			@can('borrar_proyectos')			
+			<th>Borrar</th>		
+			@endcan	
 		</tr>
 	</thead>
 	
@@ -81,34 +83,34 @@
 				</a>
 			</td>
 			@endcan
-			{{-- AGREGAR CAN DE VER INFORMES --}}
+			@can('ver_informes')
 			<td>
 				<a href="{{action('InformesController@vistaListaInformes', $proyecto['id'])}}" type="button" class="btn btn-primary" >
 					<i class="fas fa-file-alt"></i>
 				</a>
 			</td>
-			{{-- AGREGAR ENDCAN --}}
+			@endcan
 			@can('modificar_proyectos')
 			<td>
 				<a href="{{action('ProyectosController@edit', $proyecto['id'])}}" type="button" class="btn btn-primary" >
 					<i class="fas fa-edit"></i>
 				</a>
 			</td>
-			@endcan
-			@can('borrar_proyectos')
+			@endcan	
+			@can('borrar_proyectos')		
 			<td>
 				<form method="POST" action="{{action('ProyectosController@destroy', $proyecto)}}">
 					{{csrf_field()}}
 					{{method_field('DELETE')}}
 					<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el proyecto?. Esto también eliminará todas las tareas del proyecto.')">
-				<i class="fas fa-trash-alt"></i></a>
-				</button>
-			</form>
-		</td>
-		@endcan
-	</tr>
+						<i class="fas fa-trash-alt"></i></a>
+					</button>
+				</form>
+			</td>
+			@endcan		
+		</tr>
 	@endforeach
-</tbody>
+	</tbody>
 </table>
 {{$proyectos->links()}}
 @else

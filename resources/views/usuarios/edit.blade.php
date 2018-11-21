@@ -46,6 +46,9 @@
                 @endif
                 <label for="listaProyectos">Lista de proyectos</label>
                 <select @if(!$usuario->hasRole('Usuario')) multiple @endif class="form-control" id="listaProyectos" name="listaProyectos[]">
+                    @if($usuario->hasRole('Usuario'))
+                    <option value="" disabled selected>Elija una opción</option>
+                    @endif
                     @foreach ($proyectos as $proyecto)
                     @if($usuario->proyectos->contains($proyecto))
                     <option selected value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>

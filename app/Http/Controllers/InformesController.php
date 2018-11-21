@@ -30,7 +30,7 @@ class InformesController extends Controller
         //dd($tareasJSON);
         $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
         $pdf->setOption('encoding', 'UTF-8');
-        $pdf->setOption('javascript-delay', 2500);
+        $pdf->setOption('javascript-delay', 2000);
         $informe = new Informe;
         $informe->fecha = Date::now();        
         $informe->ruta = 'public/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'-'.$informe->fecha->format('H.i.s').'.pdf';

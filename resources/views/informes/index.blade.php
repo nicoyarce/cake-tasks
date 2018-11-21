@@ -24,7 +24,9 @@
             <th>Fecha</th>
             <th>Hora</th>
             <th>Ver</th>
+            @can('borrar_informes')
             <th>Borrar</th>
+            @endcan
         </tr>
     </thead>
     
@@ -38,13 +40,15 @@
                     <i class="fas fa-eye "></i>
                 </a>
             </td>
+            @can('borrar_informes')
             <td>                
                 <form method="POST" action="/informes/destroy/{{$informe->id}}">
                     {{csrf_field()}}
                     {{method_field('DELETE')}}
                     <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el informe?')"><i class="fas fa-trash-alt"></i></button>
                 </form>             
-            </td>            
+            </td> 
+            @endcan           
         </tr>
         @endforeach
     </tbody>

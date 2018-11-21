@@ -32,6 +32,10 @@ class RoleTableSeeder extends Seeder
 
         $gestionar_usuarios = Permission::create(['name' => 'gestionar_usuarios']);
         $ver_graficos = Permission::create(['name' => 'ver_graficos']);
+        
+        $ver_informes = Permission::create(['name' => 'ver_informes']);
+        $borrar_informes = Permission::create(['name' => 'borrar_informes']);
+
 
         
         $roleUser->givePermissionTo(
@@ -39,7 +43,8 @@ class RoleTableSeeder extends Seeder
             'modificar_tareas',
             'indice_proyectos',
             'detalle_proyectos',
-            'ver_graficos');
+            'ver_graficos',
+            'ver_informes');
         
         $roleOCR->givePermissionTo(
             'indice_tareas', 
@@ -48,7 +53,8 @@ class RoleTableSeeder extends Seeder
             'detalle_proyectos',
             'crear_tareas',
             'borrar_tareas',
-            'ver_graficos');
+            'ver_graficos',
+            'ver_informes');
         
         $roleAdmin->givePermissionTo(Permission::all());
 

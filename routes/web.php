@@ -11,25 +11,23 @@
 |
 */
 Route::get('/', 'HomeController@index');
-Route::get('/pdf', 'InformesController@test');
+//Route::get('/pdf', 'InformesController@test'); //test de pdf
 
 Route::group(['middleware' => ['role:Administrador']], function () {
     Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
     Route::post('/proyectos/cargarXLS', 'ProyectosController@cargarXLS');
     Route::get('/proyectos/cargarHijas', 'ProyectosController@vistaCargarHijas');
-    Route::post('/proyectos/cargarHijas', 'ProyectosController@cargarHijas');      
+    Route::post('/proyectos/cargarHijas', 'ProyectosController@cargarHijas');
+
+    Route::delete('/informes/destroy/{id}','InformesController@destroy');
+
     Route::resource('users', 'UsersController');
     Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);    
-    Route::post('/visor', 'TareasController@cargarVisor'); //ajax
-    Route::get('/generarInforme','InformesController@vistaGenerarInformes');
-    Route::get('/generarInformeManual/{proyecto}','InformesController@generarInformeManual');
-    //----//
-    Route::get('/informes/{proyecto}','InformesController@vistaListaInformes');
-    Route::delete('/informes/destroy/{id}','InformesController@destroy');
+    Route::post('/visor', 'TareasController@cargarVisor'); //ajax    
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
     'uses' => 'TareasController@create']);     
@@ -52,12 +50,13 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
     'as' => 'proyectos.show', 
     'uses' =>'ProyectosController@show']);
 
-    Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico');
-    
-    Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');
+    Route::get('/generarInforme','InformesController@vistaGenerarInformes');
+    Route::get('/generarInformeManual/{proyecto}','InformesController@generarInformeManual');    
+    Route::get('/informes/{proyecto}','InformesController@vistaListaInformes');    
+
+    Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico'); //ajax    
+    Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');  //ajax
 });
-
-
 
 Route::get('/login', 'SessionsController@create')->name('login');
 Route::post('/login', 'SessionsController@store');

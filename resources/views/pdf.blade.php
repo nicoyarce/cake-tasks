@@ -2,7 +2,14 @@
     <script src="{{public_path('js/jquery-3.3.1.min.js')}}"></script>
     <link href="{{public_path('css/bootstrap.css')}}" rel="stylesheet">
     <link href="{{public_path('css/personal.css')}}" rel="stylesheet">    
-        
+    <script> 
+
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+    var fn = this;
+    return function () {
+        return fn.apply(thisp, arguments);
+    };
+;</script>    
     {{-- <script src="/js/jquery-3.3.1.min.js"></script>
     <link href="/css/bootstrap.css" rel="stylesheet">
     <link href="/css/personal.css" rel="stylesheet"> --}}
@@ -23,9 +30,9 @@
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s')}}</h3>
 <hr>
 <div class="row" id="graficoBotones">        
-    <div id="zoom" class="col-6 p-1">
+    <div id="zoom" class="col-6 p-1 ml-3 pl-3">
         <div class="small">
-            <div id="grafico"></div>
+            <div id="grafico" style="width: 500px; height: 500px;"></div>
         </div>        
     </div>
     <div id="botones" class="col-6">
