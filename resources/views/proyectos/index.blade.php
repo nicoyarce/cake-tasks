@@ -35,7 +35,7 @@
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
-			<th>Ver trazabilidad</th>
+			<th>Ver informes</th>
 			@can('modificar_proyectos')
 			<th>Editar</th>
 			@endcan

@@ -13,14 +13,14 @@
     </style>
 </head>
 
-<nav id="barra" class="navbar navbar-expand-md navbar-dark">    
-    <div id="logo">
-        {{-- <img src="{{public_path('armada.png')}}" width="35px" height="auto"> --}}
-        <img src="/armada.png" width="35px" height="auto">
-    </div>        
-    <h2 class="text-light text-center" align="center">Holistic</h2>
+<nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">    
+    <div id="logo" class="row">
+        <div class="col-1"><img src="{{public_path('armada.png')}}" width="35px" height="auto"></div>
+        <!-- <img src="/armada.png" width="35px" height="auto"> -->
+        <div class="col-1 ml-3 d-flex align-items-end"><h3 class="text-light">Holistic</h3></div>
+    </div>
 </nav>
-<h3 align="center">Informe - {{Date::now()}}</h3>
+<h3>Informe / {{Date::now()->format('d-M-Y - H:i:s')}}</h3>
 <hr>
 <div class="row" id="graficoBotones">        
     <div id="zoom" class="col-6 p-1">
@@ -29,48 +29,30 @@
         </div>        
     </div>
     <div id="botones" class="col-6">
-        <div class="row form-group">
-            <div class="col-3">                
-                <p class="m-0 text-center font-weight-bold">PORCENTAJE AVANCE PROYECTO</p>                               
-                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}</p>                             
-            </div>                   
+        <div class="row form-group d-flex justify-content-end mr-3">            
+            <ul class="detallesTarea list-group ">
+                <li class="list-group-item">{{ $proyecto->nombre }}</li>
+                <li class="list-group-item"><b>FIT:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
+                <li class="list-group-item"><b>FTT original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
+                <li class="list-group-item"><b>FTT modificada: </b>
+                    @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
+                        -
+                    @else
+                        {{ $proyecto->fecha_termino->format('d-M-Y')}}
+                    @endif
+                </li>
+                <li class="list-group-item"><b>Atraso [días]: </b>
+                    @if($proyecto->fecha_termino_original->gte($proyecto->fecha_termino))
+                        -
+                    @else
+                        {{$proyecto->atraso}}
+                    @endif
+                </li>
+                <li class="list-group-item"><b>Avance [%]: </b>{{$proyecto->avance}}</li>                
+            </ul>                   
         </div>
     </div>        
 </div>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>NOMBRE<br>PROYECTO</th>
-            <th>FIR<br>&nbsp;</th>
-            <th>FTR<br>Original</th>
-            <th>FTR<br>Modificada</th>
-            <th>ATRASO<br>[días]</th>
-            <th>AVANCE<br>[%]</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b>{{ $proyecto->nombre }}</b></td>
-            <td>{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
-            <td>{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
-            <td>
-                @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
-                -
-                @else
-                {{ $proyecto->fecha_termino->format('d-M-Y')}}
-                @endif
-            </td>
-            <td>
-                @if($proyecto->fecha_termino_original->gte($proyecto->fecha_termino))
-                -
-                @else
-                {{$proyecto->atraso}}
-                @endif
-            </td>
-            <td>{{$proyecto->avance}}</td>
-        </tr>
-    </tbody>
-</table>
 <br>
 <div class="row">
     <div class="col-10">
@@ -100,9 +82,9 @@
             @elseif($tarea->colorAtraso == "ROJO")
             <td class="bg-danger"><a class="text-dark" >{{$tarea->nombre}}</a></td>
             @endif
-            <td style="width: 15%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
-            <td style="width: 15%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
-            <td style="width: 15%">
+            <td style="width: 16%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
+            <td style="width: 16%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
+            <td style="width: 16%">
                 @if($tarea->fecha_termino_original == $tarea->fecha_termino)
                 -
                 @else

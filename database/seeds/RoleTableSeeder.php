@@ -38,7 +38,7 @@ class RoleTableSeeder extends Seeder
             'indice_tareas', 
             'modificar_tareas',
             'indice_proyectos',
-            'detalle_proyectos'
+            'detalle_proyectos',
             'ver_graficos');
         
         $roleOCR->givePermissionTo(

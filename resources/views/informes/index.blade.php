@@ -5,8 +5,8 @@
     <div class="col-10">
         <h1>{{$proyecto->nombre}}</h1>
     </div>
-    <div class="col-2">
-        <a type="button" class="btn btn-success" href="{{action('InformesController@generarInformeManual', $proyecto['id'])}}" role="button">Generar informe
+    <div class="col-2 d-flex align-items-center">
+        <a type="button" class="btn btn-success mx-auto" href="{{action('InformesController@generarInformeManual', $proyecto['id'])}}" role="button">Generar informe
             <i class="fas fa-plus"></i>
         </a>
     </div>     

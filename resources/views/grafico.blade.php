@@ -16,8 +16,8 @@
     <div id="botones" class="col-6">
         <div class="row form-group">
             <div class="col-3">                
-                <p class="m-0 text-center font-weight-bold">PORCENTAJE AVANCE PROYECTO</p>                               
-                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}</p>                             
+                <p class="m-0 text-center font-weight-bold">AVANCE PROYECTO</p>                               
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}} %</p>                             
             </div>
             <div class="col-9">
                 <img class="mx-auto" src="/simbologia.jpg" alt="" width="auto" height="105px">    
@@ -25,7 +25,7 @@
         </div>
         <div class="row">
             <div class="form-group col-6">
-                <label for="opcion">Filtro área:</label>
+                <label for="opcion">Filtro cargo:</label>
                 <select data-id="{{$proyecto->id}}" class="form-control" id="opcionArea" name="opcionArea">
                     <option selected value="0">Todas</option>
                     @foreach ($areas as $area)
@@ -34,7 +34,7 @@
                 </select>
             </div>
             <div class="form-group col-6">
-                <label for="opcion">Filtro atraso:</label>
+                <label for="opcion">Filtro color:</label>
                 <select data-id="{{$proyecto->id}}" class="form-control" id="opcionColor" name="opcionColor">
                     <option selected value="TODAS">Todas</option>
                     <option value="VERDE">Verde</option>
