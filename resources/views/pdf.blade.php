@@ -38,7 +38,7 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
     <div id="botones" class="col-6">
         <div class="row form-group d-flex justify-content-end mr-3">            
             <ul class="detallesTarea list-group ">
-                <li class="list-group-item">{{ $proyecto->nombre }}</li>
+                <li class="list-group-item"><b>{{ $proyecto->nombre }}</b></li>
                 <li class="list-group-item"><b>FIT:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
                 <li class="list-group-item"><b>FTT original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
                 <li class="list-group-item"><b>FTT modificada: </b>

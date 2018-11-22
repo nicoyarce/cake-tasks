@@ -66,4 +66,5 @@ class InformesController extends Controller
         $tareasJSON = json_encode($tareasJSON);
         return view('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
     }
+    
 }
