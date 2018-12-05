@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call('InformesController@generarInformeManual')->weeklyOn(5, '17:00');
+        //$schedule->call('')->weeklyOn(5, '17:00');
     }
 
     /**

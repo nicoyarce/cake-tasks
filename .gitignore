@@ -15,3 +15,7 @@ _ide_helper.php
 .phpstorm.meta.php
 .editorconfig
 @php
+/public/appserv
+/public/cgi-bin
+/public/phpMyAdmin
+/config/snappy.php
