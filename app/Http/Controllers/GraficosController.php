@@ -49,6 +49,7 @@ class GraficosController extends Controller
         elseif($areaid == 0 && $opcionColor != "TODAS"){
             $tareas = $proyecto->tareas
             ->where('colorAtraso', $opcionColor)
+            ->where('avance', '<',100)
             ->sortBy(function($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
@@ -57,6 +58,7 @@ class GraficosController extends Controller
             $tareas = $proyecto->tareas                        
             ->where('area_id', $areaid)
             ->where('colorAtraso', $opcionColor)
+            ->where('avance', '<',100)
             ->sortBy(function($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();            

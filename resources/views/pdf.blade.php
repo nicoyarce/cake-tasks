@@ -30,7 +30,7 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s')}}</h3>
 <hr>
 <div class="row" id="graficoBotones">        
-    <div id="zoom" class="col-6 p-1 ml-3 pl-3">
+    <div id="zoom" class="col-6 ml-3 pl-3">
         <div class="small">
             <div id="grafico" style="width: 500px; height: 500px;"></div>
         </div>        
@@ -69,6 +69,7 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 <table id="tablaTareas" class="table table-hover mt-2">
     <thead class="thead-light">
         <tr>
+            <th>#</th>
             <th>NOMBRE<br>TAREA</th>
             <th>FIT<br>&nbsp;</th>
             <th>FTT<br>Original</th>
@@ -78,17 +79,22 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
         </tr>
     </thead>
     <tbody>
-        @foreach ($tareas as $tarea)
+        @foreach ($tareas as $llave=>$tarea)        
         <tr id="{{$tarea->id}}">
+            <td>{{$llave+1}}</td>
             @if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
-            <td class="bg-success"><a class="text-dark" >{{$tarea->nombre}}</a></td>
+            <td class="bg-success"><a class="text-dark" >{{$tarea->nombre}}</a>
             @elseif($tarea->colorAtraso == "AMARILLO")
-            <td class="fondo-amarillo"><a class="text-dark" >{{$tarea->nombre}}</a></td>
+            <td class="fondo-amarillo"><a class="text-dark" >{{$tarea->nombre}}</a>
             @elseif($tarea->colorAtraso == "NARANJO")
-            <td class="fondo-naranjo"><a class="text-dark" >{{$tarea->nombre}}</a></td>
+            <td class="fondo-naranjo"><a class="text-dark" >{{$tarea->nombre}}</a>
             @elseif($tarea->colorAtraso == "ROJO")
-            <td class="bg-danger"><a class="text-dark" >{{$tarea->nombre}}</a></td>
+            <td class="bg-danger"><a class="text-dark" >{{$tarea->nombre}}</a>
             @endif
+            @if($tarea->critica)
+                <span class="badge badge-pill badge-warning">Crítica</span>
+            @endif
+            </td>
             <td style="width: 16%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
             <td style="width: 16%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
             <td style="width: 16%">

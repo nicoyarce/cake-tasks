@@ -32,7 +32,7 @@ class TareasController extends Controller
         return view('tareas.create', compact('proyecto','areas','avances'));
     }
 
-    public function store(StoreTareasRequest $request){        
+    public function store(StoreTareasRequest $request){
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
         $proyecto = Proyecto::find($request->proyecto_id);
@@ -41,6 +41,12 @@ class TareasController extends Controller
         $tarea->fecha_termino_original = $request->fecha_termino;
         $tarea->fecha_termino = $request->fecha_termino;
         $tarea->observaciones = $request->observaciones;
+        if($request->has('critica')){
+            $tarea->critica = true;
+        }
+        else{
+            $tarea->critica = false;
+        }        
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
@@ -67,10 +73,22 @@ class TareasController extends Controller
         else if(is_null($request->fecha_termino)){
             $tareanueva->fill($request->except('fecha_termino'));
             $tareanueva->fecha_termino = $tarea->fecha_termino;
+            if($request->has('critica')){
+                $tareanueva->critica = true;
+            }
+            else{
+                $tareanueva->critica = false;
+            }  
         }
         else{            
             $tareanueva->fill($request->all());
-        }       
+            if($request->has('critica')){
+                $tareanueva->critica = true;
+            }
+            else{
+                $tareanueva->critica = false;
+            }  
+        }               
         $tareanueva->save();        
         flash('Tarea actualizada')->success();
         return redirect()->route('proyectos.show',$tareanueva->proyecto_id)->with('idTareaMod', $tareanueva->id);
@@ -78,8 +96,7 @@ class TareasController extends Controller
 
     public function destroy(Tarea $tarea){        
         $proyectoId = $tarea->proyecto()->get()->first()->id;        
-        $tarea = Tarea::find($tarea)->first();
-        $tarea->delete();
+        $borrar = Tarea::destroy($tarea->id);        
         flash('Tarea eliminada')->success(); 
         return redirect()->route('proyectos.show', $proyectoId);
     }

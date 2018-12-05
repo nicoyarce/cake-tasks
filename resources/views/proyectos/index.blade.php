@@ -2,7 +2,7 @@
 @section('content')
 <div class="row">
 	<div class="col-6">
-		<h1>Proyectos</h1>
+		<h1>Proyectos Activos</h1>
 	</div>
 	@can('crear_proyectos')
 	<div class="col-2">
@@ -42,7 +42,7 @@
 			<th>Editar</th>
 			@endcan
 			@can('borrar_proyectos')			
-			<th>Borrar</th>		
+			<th>Archivar</th>		
 			@endcan	
 		</tr>
 	</thead>
@@ -85,7 +85,7 @@
 			@endcan
 			@can('ver_informes')
 			<td>
-				<a href="{{action('InformesController@vistaListaInformes', $proyecto['id'])}}" type="button" class="btn btn-primary" >
+				<a href="{{action('InformesController@vistaListaInformes', $proyecto['id'])}}" type="button" class="btn btn-info" >
 					<i class="fas fa-file-alt"></i>
 				</a>
 			</td>
@@ -102,8 +102,8 @@
 				<form method="POST" action="{{action('ProyectosController@destroy', $proyecto)}}">
 					{{csrf_field()}}
 					{{method_field('DELETE')}}
-					<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el proyecto?. Esto también eliminará todas las tareas del proyecto.')">
-						<i class="fas fa-trash-alt"></i></a>
+					<button type="submit" class="btn btn-warning" onclick="return confirm('¿Desea archivar el proyecto?. Esto también afectará las tareas del proyecto.')">
+						<i class="fas fa-archive"></i></a>
 					</button>
 				</form>
 			</td>
@@ -114,6 +114,7 @@
 </table>
 {{$proyectos->links()}}
 @else
-<h3 class="text-center">No hay proyectos</h3>
+<hr>
+<h3 class="text-center">No hay proyectos activos</h3>
 @endif
 @endsection

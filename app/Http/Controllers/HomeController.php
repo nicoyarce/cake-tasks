@@ -18,11 +18,12 @@ class HomeController extends Controller
         if(Auth::check()){
             if(Auth::user()->hasRole('Administrador')){
                 $nroProyectos = Proyecto::all()->count();
+                $nroProyectosArch = Proyecto::onlyTrashed()->count();
             }
             else{
                 $nroProyectos = Auth::user()->proyectos->count();            
             }
-            return view('welcome', compact('nroProyectos'));
+            return view('welcome', compact('nroProyectos', 'nroProyectosArch'));
         }
         else{
             return redirect('login');

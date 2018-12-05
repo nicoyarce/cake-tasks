@@ -35,6 +35,16 @@ class ProyectosController extends Controller
         }                      
         return view('proyectos.index', compact('proyectos'));
     }
+    public function indexArchivados()
+    {
+        if(Auth::user()->hasRole('Administrador')){
+            $proyectos = Proyecto::onlyTrashed()->get();            
+        }
+        else{
+            $proyectos = Auth::user()->proyectos()->thrashed()->get();            
+        }                      
+        return view('proyectos.indexarchivados', compact('proyectos'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -72,7 +82,10 @@ class ProyectosController extends Controller
      */
     public function show(Proyecto $proyecto)
     {
-        $tareas = $proyecto->tareas()->get();
+        $tareas = $proyecto->tareas
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
         return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
@@ -110,11 +123,48 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Proyecto $proyecto)
-    {           
-        $proyecto = Proyecto::find($proyecto)->first();
-        $proyecto->delete();
-        flash('Proyecto eliminado')->success();        
+    {        
+        $proyecto = Proyecto::destroy($proyecto->id);        
+        flash('Proyecto archivado')->success();        
         return redirect('proyectos');
+    }
+
+    public function restaurar($id){        
+        $proyecto = Proyecto::withTrashed()
+                ->where('id', '=', $id)
+                ->get()
+                ->first();
+        $proyecto->restore();
+        foreach($proyecto->tareas as $tarea){
+            $tarea->restore();
+            foreach($tarea->tareasHijas as $tareaHija){
+                $tareaHija->restore();
+            }
+        }        
+        foreach($proyecto->informes as $informe){
+            $informe->restore();
+        }
+        flash('Proyecto restaurado')->success();        
+        return redirect('proyectosArchivados');
+    }
+
+    public function eliminarPermanente($id){        
+        $proyecto = Proyecto::withTrashed()
+                ->where('id', '=', $id)
+                ->get()
+                ->first();        
+        $proyecto->forceDelete();
+        foreach($proyecto->tareas as $tarea){
+            $tarea->forceDelete();
+            foreach($tarea->tareasHijas as $tareaHija){
+                $tareaHija->forceDelete();
+            }
+        }        
+        foreach($proyecto->informes as $informe){
+            $informe->forceDelete();
+        }  
+        flash('Proyecto eliminado')->success();        
+        return redirect('proyectosArchivados');
     }
 
     public function vistaCargarXLS(){

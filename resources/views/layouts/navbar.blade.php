@@ -13,9 +13,16 @@
                 <a class="nav-link" href="/">Home</a>
             </li>            
             @if(Auth::check())
-                <li class="nav-item">
-                    <a class="nav-link" href="/proyectos/">Proyectos</a>
-                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Proyectos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="/proyectos/">Activos</a>
+                      {{-- <div class="dropdown-divider"></div> --}}
+                      <a class="dropdown-item" href="/proyectosArchivados">Archivados</a>
+                    </div>
+                </li>                
                 @if(Auth::user()->hasRole('Administrador'))
                     <li class="nav-item">
                         <a class="nav-link" href="/users/">Usuarios</a>

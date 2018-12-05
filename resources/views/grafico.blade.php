@@ -1,27 +1,42 @@
 @extends('layouts.master')
 @section('content')
 <meta name="_token" content="{!! csrf_token() !!}" />
-
 <div class="row justify-content-between">
     <h4>{{$proyecto->nombre}}</h4>
     <a type="button" class="btn btn-primary btn-sm float-right" href="{{url()->previous()}}">Atrás <i class="fas fa-arrow-left "></i></a>
 </div>
 <hr>
 <div class="row" id="graficoBotones">
-    <div id="zoom" class="col-6 p-1">
-        <div class="small">
-            <div id="grafico"></div>
-        </div>        
+    <div id="grafico" class="col-6">
     </div>
+    {{-- <div id="zoom" class="col-6 p-1">
+        <div class="small">
+            
+        </div>
+    </div> --}}
     <div id="botones" class="col-6">
         <div class="row form-group">
-            <div class="col-3">                
-                <p class="m-0 text-center font-weight-bold">AVANCE PROYECTO</p>                               
-                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}} %</p>                             
+            <div class="col-3">
+                <p class="m-0 text-center font-weight-bold">AVANCE PROYECTO</p>
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}%</p>
             </div>
-            <div class="col-9">
-                <img class="mx-auto" src="/simbologia.jpg" alt="" width="auto" height="105px">    
-            </div>            
+            <div class="col-9">                            
+                <svg id="simbologia" class="w-100">
+                    <defs>
+                        <marker
+                        id="arrow"
+                        markerUnits="strokeWidth"
+                        markerWidth="12"
+                        markerHeight="12"
+                        viewBox="0 0 12 12"
+                        refX="6"
+                        refY="6"
+                        orient="auto">
+                        <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #000;"></path>
+                        </marker>
+                    </defs>
+                </svg>                              
+            </div>
         </div>
         <div class="row">
             <div class="form-group col-6">
@@ -40,7 +55,7 @@
                     <option value="VERDE">Verde</option>
                     <option value="AMARILLO">Amarillo</option>
                     <option value="NARANJO">Naranjo</option>
-                    <option value="ROJO">Rojo</option>                
+                    <option value="ROJO">Rojo</option>
                 </select>
             </div>
         </div>
@@ -62,9 +77,9 @@
             <ul class="detallesTarea list-group w-50" style="display: none;">
                 <li class="list-group-item"><span class="titulospan">Observaciones:</span><span id="observaciones"></span></li>
             </ul>
-        </div>        
+        </div>
     </div>
-    <br>    
+<br>
 </div>
 <link rel="stylesheet" href="/css/estiloGrafico.css">
 <script src="/js/d3.v3.min.js"></script>
@@ -72,10 +87,11 @@
 <script src="/js/moment.js"></script>
 <script src="/js/dibujarGrafico.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#barra").hide();
-        $("#footer").hide();
-        dibujarGrafico({!!$tareas!!});              
-    });     
+$(document).ready(function(){
+$("#barra").hide();
+$("#footer").hide();
+dibujarGrafico({!!$tareas!!});
+dibujarSimbologia();
+});
 </script>
 @endsection

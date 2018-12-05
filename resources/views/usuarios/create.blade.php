@@ -41,6 +41,7 @@
         <div class="form-group col-6" id="divProyectos" style="display: none;">
             <label for="listaProyectos">Lista de proyectos</label>
             <select multiple class="form-control" id="listaProyectos" name="listaProyectos[]">
+                <option id="elijaOpcion" value="" disabled selected style="display: none;">Elija una opción</option>                             
                 @foreach ($proyectos as $proyecto)
                 <option value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
                 @endforeach
@@ -55,26 +56,28 @@
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script src="/js/jquery.rut.min.js"></script>
 <script>
-$(document).ready(function(){
-$("#run").rut().on('rutValido', function(e, rut, dv) {
-alert("El run " + rut + "-" + dv + " es correcto");
-}, { minimumLength: 7} );
-$("#role_id").change(function(){
-if($(this).val()==1){
-$("#divProyectos").hide();
-}
-else{
-$("#divProyectos").show();
-}
-if($(this).val()==3){
-$("#listaProyectos").removeAttr('multiple');
-$("#sugerencia").hide();
-}
-else{
-$("#listaProyectos").attr('multiple', 'multiple');
-$("#sugerencia").show();
-}
-});
-});
+    $(document).ready(function(){
+        $("#run").rut().on('rutValido', function(e, rut, dv) {
+            alert("El run " + rut + "-" + dv + " es correcto");
+        }, { minimumLength: 7} );
+        $("#role_id").change(function(){
+            if($(this).val()==1){ //es admin
+                $("#divProyectos").hide();
+            }
+            else{ //es ocr
+                $("#divProyectos").show();
+            }
+            if($(this).val()==3){ //es usuario
+                $("#listaProyectos").removeAttr('multiple');
+                $("#elijaOpcion").show();
+                $("#sugerencia").hide();
+            }
+            else{
+                $("#listaProyectos").attr('multiple', 'multiple');
+                $("#elijaOpcion").hide();
+                $("#sugerencia").show();
+            }
+        });
+    });
 </script>
 @endsection

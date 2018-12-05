@@ -3,20 +3,9 @@ var width = 500,
     radius = Math.min(width, height) / 2,
     innerRadius = 0.10 * radius; //radio circulo interno
 
-var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) {
-        return d.width;
-    });
-
-var formatoFecha = d3.timeFormat("%d-%m-%Y");
-/*var tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([0, 0])
-    .html(function(d) {
-        var fechaFormateada = new Date(d.data.fecha_termino.date);        
-        return d.data.nombre + ": <span style='color:cyan'>" + d.data.avance + "</span>" + "% " + "<br>" + formatoFecha(fechaFormateada);
-    });*/
+var pie = d3.layout.pie()    
+    .value(function(d) { return d.width; })
+    .sort(null);
 
 var arc = d3.svg.arc()
     .innerRadius(innerRadius)
@@ -28,16 +17,25 @@ var outlineArc = d3.svg.arc()
     .innerRadius(innerRadius)
     .outerRadius(radius);
 
-var svg = d3.select("#grafico").append("svg")
+var svgSimbologia = d3.select('#simbologia')
+    .attr('viewBox', "0,0,150,50");
+
+var formatoFecha = d3.timeFormat("%d-%m-%Y");
+/*var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([0, 0])
+    .html(function(d) {
+        var fechaFormateada = new Date(d.data.fecha_termino.date);        
+        return d.data.nombre + ": <span style='color:cyan'>" + d.data.avance + "</span>" + "% " + "<br>" + formatoFecha(fechaFormateada);
+    });*/
+function dibujarGrafico(data) {
+    var svg = d3.select("#grafico").append("svg")
     //.attr("width", width)
     //.attr("height", height)
-    .attr('viewBox', "0 0 " + 500 + " " + 500)
+    .attr('viewBox', "-37 -37 " + 570 + " " + 570)
+    .attr("class", "grafico")
     .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-function dibujarGrafico(datos) {
-    console.log(datos);
-    var data = datos;
+    .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");   
     try {
         data.forEach(function(d) {
             d.id = d.id;
@@ -63,6 +61,7 @@ function dibujarGrafico(datos) {
         .attr("class", "parte")        
         .on('mouseout', function (d, i){
             $(".detallesTarea").hide();
+            svgSimbologia.selectAll("line.flecha").remove();
         })
         .on('click', function(d, i) {                    
             cargarVistaGantt(d.data.id);         
@@ -83,8 +82,9 @@ function dibujarGrafico(datos) {
             }  
             $("#avance").text(d.data.avance);
             $("#observaciones").text(d.data.observaciones);
+            dibujarFlecha(d.data.porcentajeAtraso);
         });
-
+   
     outerPath.append("path")
         .attr("fill", calcularColor)
         .attr("class", "outlineArc")
@@ -96,6 +96,26 @@ function dibujarGrafico(datos) {
         .attr("class", "solidArc")
         /*.attr("stroke", "grey")*/
         .attr("d", arc);
+
+    outerPath.append("svg:text")                             //add a label to each slice
+        .attr("transform", function(d) {                    //set the label's origin to the center of the arc
+        //we have to make sure to set these before calling arc.centroid
+        d.innerRadius = 0;
+        d.outerRadius = radius;
+        var c = outlineArc.centroid(d)
+        return "translate(" + c[0]*1.92 +"," + c[1]*1.92 + ")";        //this gives us a pair of coordinates like [50, 50]
+    })
+    .attr("text-anchor", "middle")                          //center the text on it's origin
+    .text(function (d, i){
+        if(d.data.critica == 1){
+            return i+1;
+        }
+        else{
+            return "";
+        }
+    });        //get the label from our original data array
+        
+    
 
     // calculate the weighted mean avance
     var avance =
@@ -108,101 +128,6 @@ function dibujarGrafico(datos) {
 
     //svg.call(tip);
 
-    if (data.length == 0) {
-        svg.append("svg:text")
-            .attr("class", "nroTareas")
-            .attr("dy", ".35em")
-            .attr("text-anchor", "middle") // text-align: right
-            .text("No hay datos");
-    } else {
-        svg.append("svg:text")
-            .attr("class", "nroTareas")
-            .attr("dy", ".35em")
-            .attr("text-anchor", "middle") // text-align: right
-            .text(data.length);
-    }
-}
-
-function actualizarGrafico(entrada) {
-    var data = entrada;
-    try {
-        data.forEach(function(d) {
-            d.id = d.id;
-            d.proyecto_id = d.proyecto_id;
-            d.area_id = d.area_id;
-            d.nombre = d.nombre;
-            d.fecha_inicio.date = d.fecha_inicio.date;
-            d.fecha_termino_original.date = d.fecha_termino_original.date;
-            d.fecha_termino.date = d.fecha_termino.date;
-            d.atraso = d.atraso;
-            d.avance = d.avance;
-            d.observaciones = d.observaciones
-            d.weight = 1;
-            d.width = +d.weight;
-        });
-    } catch (TypeError) {
-        document.getElementById("titulo").innerHTML = "Error al cargar datos";
-    }
-    d3.select("svg").remove();
-    var svg = d3.select("#grafico").append("svg")
-        //.attr("width", width)
-        //.attr("height", height)
-        .attr('viewBox', "0 0 " + 500 + " " + 500)
-        .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-    var outerPath = svg.selectAll(".outlineArc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "parte")
-        .on('mouseout', function (d, i){
-            $(".detallesTarea").hide();
-        })
-        .on('click', function(d, i) {            
-           cargarVistaGantt(d.data.id);         
-        })
-        .on('mouseover', function(d, i) {
-            //console.log("You clicked", d), i;
-            $(".detallesTarea").show();
-            $("#nombre").text(d.data.nombre);
-            $("#area").text(d.data.nombreArea);
-            $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
-            $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
-            if(d.data.fecha_termino.date == d.data.fecha_termino_original.date){
-                $("#ftrm").text("-");
-                $("#atraso").text("-");
-            }else{
-                $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
-                $("#atraso").text(d.data.atraso);
-            }            
-            $("#avance").text(d.data.avance);
-            $("#observaciones").text(d.data.observaciones);
-        });
-    /*.on('mouseover', tip.show)
-    .on('mouseout', tip.hide);*/
-
-    outerPath.append("path")
-        .attr("fill", calcularColor)
-        .attr("class", "outlineArc")
-        /*.attr("stroke", "grey")*/
-        .attr("d", outlineArc);
-
-    outerPath.append("path")
-        .attr("fill", "#074590")
-        .attr("class", "solidArc")
-        /*.attr("stroke", "grey")*/
-        .attr("d", arc);
-
-    // calculate the weighted mean avance
-    avance =
-        data.reduce(function(a, b) {
-            return a + (b.avance * b.weight);
-        }, 0) /
-        data.reduce(function(a, b) {
-            return a + b.weight;
-        }, 0);
-
-    //svg.call(tip);
     if (data.length == 0) {
         svg.append("svg:text")
             .attr("class", "nroTareas")
@@ -232,14 +157,14 @@ function calcularColor(d) {
     }
 }
 
-function habilitarZoom() {
-    /*
+/*
+function habilitarZoom() {    
     $("#zoom").anythingZoomer({
         clone: true,
         switchEvent : ''
-    });
-    */
+    });    
 }
+*/
 
 function cargarVistaGantt(id_tarea){       
     var proyectoid = $("#opcion").attr("data-id");
@@ -284,7 +209,8 @@ $(".form-control").change(function() {
         dataType: 'json', //tipo de respuesta esperada
         success: function(response) { // What to do if we succeed            
             $("#detallesTarea").hide();
-            actualizarGrafico(response);
+            d3.selectAll("svg.grafico").remove();
+            dibujarGrafico(response);
             //habilitarZoom();            
         },
         error: function(jqXHR, textStatus, errorThrown, exception) { // What to do if we fail            
@@ -293,8 +219,7 @@ $(".form-control").change(function() {
         }
     });
 })
-
-
+/*
 var primeraVez = true;
 $("#activar").click(function() {
     var estado = $("#activar").val(); // 0 o 1   
@@ -318,3 +243,164 @@ $("#activar").click(function() {
         $(this).val(1);
     }
 });
+*/
+var borde = 10;
+var bordeArriba = 20;
+var alturaBarra = 10;
+var largoFlecha = 20;
+var colorBorde = "#385D8A";
+
+function dibujarSimbologia(dato){    
+    /*---LINEAS---*/
+    var lineaVertIzq = svgSimbologia.append("line")
+        .attr("x1",borde)  
+        .attr("y1",bordeArriba)  
+        .attr("x2",borde)  
+        .attr("y2",borde)
+        .attr("stroke","black")  
+        .attr("stroke-width",1);
+    var lineaHorizIzq = svgSimbologia.append("line")
+        .attr("x1",borde)  
+        .attr("y1",(bordeArriba+borde)/2)  
+        .attr("x2",30+borde)  
+        .attr("y2",(bordeArriba+borde)/2)
+        .attr("stroke","black")  
+        .attr("stroke-width",1);
+    var lineaHorizDer = svgSimbologia.append("line")
+        .attr("x1",70+borde)  
+        .attr("y1",(bordeArriba+borde)/2)  
+        .attr("x2",100+borde)  
+        .attr("y2",(bordeArriba+borde)/2)
+        .attr("stroke","black")  
+        .attr("stroke-width",1);
+    var lineaVertDer = svgSimbologia.append("line")
+        .attr("x1",100+borde)  
+        .attr("y1",bordeArriba)  
+        .attr("x2",100+borde)  
+        .attr("y2",borde)
+        .attr("stroke","black")  
+        .attr("stroke-width",1);
+    var lineaFinal1 = svgSimbologia.append("line")
+        .attr("x1",130)  
+        .attr("y1",bordeArriba)  
+        .attr("x2",140)  
+        .attr("y2",bordeArriba+(alturaBarra/2))
+        .attr("stroke",colorBorde)  
+        .attr("stroke-width",1);
+    var lineaFinal2 = svgSimbologia.append("line")
+        .attr("x1",130)  
+        .attr("y1",bordeArriba+alturaBarra)  
+        .attr("x2",140)  
+        .attr("y2",bordeArriba+alturaBarra-(alturaBarra/2))
+        .attr("stroke",colorBorde)  
+        .attr("stroke-width",1);
+
+    /*---TEXTO---*/
+    var fit = svgSimbologia.append("text")
+        .attr("x",borde)
+        .attr("y",borde/2)
+        .text("F.I.T.")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "6px")
+        .attr("fill", "black");
+    var tiempo = svgSimbologia.append("text")
+        .attr("x",50+borde)
+        .attr("y",(bordeArriba+borde)/2)
+        .text("Tiempo")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "6px")
+        .attr("fill", "black");
+    var ftt = svgSimbologia.append("text")
+        .attr("x",100+borde)
+        .attr("y",borde/2)
+        .text("F.T.T.")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "6px")
+        .attr("fill", "black");
+    var cero = svgSimbologia.append("text")
+        .attr("x",borde)
+        .attr("y",bordeArriba+alturaBarra+6)
+        .text("0%")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "4px")
+        .attr("fill", "black");
+    var sesenta = svgSimbologia.append("text")
+        .attr("x",60+borde)
+        .attr("y",bordeArriba+alturaBarra+6)
+        .text("60%")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "4px")
+        .attr("fill", "black");
+    var noventa = svgSimbologia.append("text")
+        .attr("x",90+borde)
+        .attr("y",bordeArriba+alturaBarra+6)
+        .text("90%")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "4px")
+        .attr("fill", "black");
+    var cien = svgSimbologia.append("text")
+        .attr("x",100+borde)
+        .attr("y",bordeArriba+alturaBarra+6)
+        .text("100%")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "4px")
+        .attr("fill", "black");
+
+    /*---BARRA---*/ 
+    var rectangulo1 = svgSimbologia.append("rect")
+        .attr("fill", "#28a745") //verde
+        .attr("x",borde)
+        .attr("y",bordeArriba)
+        .attr("width",60)
+        .attr("height",alturaBarra)
+        .attr("stroke",colorBorde)
+        .attr('stroke-width', '1');
+    var rectangulo2 = svgSimbologia.append("rect")
+        .attr("fill", "#ffff00") //amarillo
+        .attr("x",60+borde)
+        .attr("y",bordeArriba)
+        .attr("width",30)
+        .attr("height",alturaBarra)
+        .attr("stroke",colorBorde)
+        .attr('stroke-width', '1');
+    var rectangulo3 = svgSimbologia.append("rect")
+        .attr("fill", "#f48024") //naranjo
+        .attr("x",90+borde)
+        .attr("y",bordeArriba)
+        .attr("width",10)
+        .attr("height",alturaBarra)
+        .attr("stroke",colorBorde)
+        .attr('stroke-width', '1');
+    var rectangulo4 = svgSimbologia.append("rect")
+        .attr("fill", "#dc3545") //rojo
+        .attr("x",100+borde)
+        .attr("y",bordeArriba)
+        .attr("width",20)
+        .attr("height",alturaBarra)
+        .attr("stroke",colorBorde)
+        .attr('stroke-width', '1');    
+}
+
+function dibujarFlecha(avance){   
+    /*---FLECHA---*/
+    //console.log(avance);
+    var line = svgSimbologia.append("line")
+        //mover coordenadas x para avance  //278 100%        
+        .attr("x1",avance+borde)  
+        .attr("y1",bordeArriba+alturaBarra+largoFlecha)  
+        .attr("x2",avance+borde)  
+        .attr("y2",bordeArriba+alturaBarra+10)
+        .attr("class", "flecha")
+        .attr("stroke","black")  
+        .attr("stroke-width",1)  
+        .attr("marker-end","url(#arrow)");    
+}
+
+

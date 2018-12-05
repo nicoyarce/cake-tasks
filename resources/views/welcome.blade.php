@@ -7,7 +7,9 @@
 <p>Debe iniciar sesión para utilizar el sistema.</p>
 @endif
 @role('Administrador')
-<p>Existe(n)<b> <a href="/proyectos/">{{$nroProyectos}} proyectos</a></b> registrados en el sistema.</p>
+
+<p>Existe(n)<b> <a href="/proyectos/">{{$nroProyectos}} proyecto(s)</a></b> en ejecución.</p>
+<p>Existe(n)<b> <a href="/proyectosArchivados/">{{$nroProyectosArch}} proyecto(s)</a></b> en archivo histórico.</p>
 @endrole
 @hasanyrole('OCR|Usuario')
 <p>Tiene<b> <a href="/proyectos/">{{$nroProyectos}} proyecto(s)</a></b> asociados a su cuenta.</p>

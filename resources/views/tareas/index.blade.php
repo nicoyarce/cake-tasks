@@ -30,14 +30,18 @@
 		@foreach ($tareas as $tarea)
 		<tr id="{{$tarea->id}}">			
 			@if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
-				<td class="bg-success"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a></td>
+				<td class="bg-success"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
 			@elseif($tarea->colorAtraso == "AMARILLO")
-				<td class="fondo-amarillo"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a></td>		
+				<td class="fondo-amarillo"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>		
 			@elseif($tarea->colorAtraso == "NARANJO")
-				<td class="fondo-naranjo"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a></td>
+				<td class="fondo-naranjo"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
 			@elseif($tarea->colorAtraso == "ROJO")
-				<td class="bg-danger"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a></td>
-			@endif								
+				<td class="bg-danger"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
+			@endif
+			@if($tarea->critica)
+				<span class="badge badge-pill badge-warning">Crítica</span>
+			@endif
+			</td>								
 			<td style="width: 12%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
 			<td style="width: 12%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
 			<td style="width: 12%">

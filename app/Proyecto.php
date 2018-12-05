@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\FechasTraducidas;
 use Carbon\Carbon;
 use App\Tarea;
@@ -30,9 +31,11 @@ use App\Informe;
  */
 class Proyecto extends Model
 {
+    use SoftDeletes;
     use FechasTraducidas;
     protected $table = 'proyectos';
     protected $fillable = ['nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance'];
+    protected $dates = ['deleted_at'];
 
     public function tareas(){
         return $this->hasMany(Tarea::class);

@@ -19,10 +19,14 @@ Route::group(['middleware' => ['role:Administrador']], function () {
     Route::get('/proyectos/cargarHijas', 'ProyectosController@vistaCargarHijas');
     Route::post('/proyectos/cargarHijas', 'ProyectosController@cargarHijas');
 
-    Route::delete('/informes/destroy/{id}','InformesController@destroy');
+    Route::delete('/informes/destroy/{id}','InformesController@destroy');    
 
     Route::resource('users', 'UsersController');
-    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);
+    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);    
+    Route::get('proyectosArchivados', 'ProyectosController@indexArchivados');
+    Route::get('proyectosArchivados/restaurar/{id}', 'ProyectosController@restaurar');
+    Route::delete('/proyectosArchivados/eliminarPermanente/{id}','ProyectosController@eliminarPermanente');
+    
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {

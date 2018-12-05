@@ -19,7 +19,7 @@
 			<label for="nombre">Nombre</label>
 			<input type="text" class="form-control" id="nombre" required name="nombre">
 		</div>
-		<div class="form-group col-6">
+		<div class="form-group col-4">
 			<label for="area_id">Área</label>
 			<select class="form-control" id="area_id" required name="area_id">
 				<option value="" disabled selected>Elija una opción</option>
@@ -27,6 +27,14 @@
 				<option value="{{$area->id}}">{{$area->nombrearea}}</option>
 				@endforeach
 			</select>
+		</div>
+		<div class="mx-auto d-flex align-items-center">
+			<div class="form-check ">
+				<input class="form-check-input" type="checkbox" id="critica" name="critica">
+	  			<label class="form-check-label" for="critica">
+	    			¿Es ruta crítica?
+	  			</label>
+  			</div>
 		</div>
 	</div>
 	<div class="form-row">

@@ -22,7 +22,7 @@
 				<label for="nombre">Nombre</label>
 				<input type="text" class="form-control" id="nombre" name="nombre" value="{{$tarea->nombre}}">
 			</div>
-			<div class="form-group col-6">
+			<div class="form-group col-4">
 				<label for="area_id">Área</label>
 				<select class="form-control" id="area_id" name="area_id"">
 					@foreach ($areas as $area)
@@ -33,6 +33,14 @@
 						@endif
 					@endforeach
 				</select>
+			</div>
+			<div class="mx-auto d-flex align-items-center">
+				<div class="form-check ">
+					<input class="form-check-input" type="checkbox" @if($tarea->critica) checked @endif id="critica" name="critica">
+		  			<label class="form-check-label" for="critica">
+		    			¿Es ruta crítica?
+		  			</label>
+	  			</div>
 			</div>
 		</div>
 		<div class="form-row">
