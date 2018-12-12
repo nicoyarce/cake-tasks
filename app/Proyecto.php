@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\FechasTraducidas;
 use Carbon\Carbon;
 use App\Tarea;
+use App\TareaHija;
 use App\User;
 use App\Informe;
 /**
@@ -47,6 +48,10 @@ class Proyecto extends Model
 
     public function informes(){
         return $this->hasMany(Informe::class);
+    }
+
+    public function tareasHijas(){
+        return $this->hasManyThrough(TareaHija::class, Tarea::class, 'proyecto_id', 'tarea_madre_id', 'id', 'id')->withTrashed();
     }
 
     protected static function boot() {

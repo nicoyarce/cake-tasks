@@ -51,7 +51,7 @@ class Tarea extends Model
     }
 
     public function tareasHijas(){
-        return $this->hasMany(TareaHija::class, 'tarea_madre_id');
+        return $this->hasMany(TareaHija::class, 'tarea_madre_id')->withTrashed();
     }
 
     protected static function boot() {

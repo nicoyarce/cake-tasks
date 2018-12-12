@@ -53,6 +53,7 @@
 </table>
 {{$usuarios->links()}}
 @else
+<hr>
 <h3 class="text-center">No hay usuarios</h3>
 @endif
 @endsection

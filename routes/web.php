@@ -14,19 +14,17 @@ Route::get('/', 'HomeController@index');
 //Route::get('/pdf', 'InformesController@test'); //test de pdf
 
 Route::group(['middleware' => ['role:Administrador']], function () {
+    //Cargas masivas
     Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
     Route::post('/proyectos/cargarXLS', 'ProyectosController@cargarXLS');
     Route::get('/proyectos/cargarHijas', 'ProyectosController@vistaCargarHijas');
     Route::post('/proyectos/cargarHijas', 'ProyectosController@cargarHijas');
-
+    //Informes
+    Route::get('/generarInformeManual/{proyecto}','InformesController@generarInformeManual'); 
     Route::delete('/informes/destroy/{id}','InformesController@destroy');    
 
     Route::resource('users', 'UsersController');
-    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);    
-    Route::get('proyectosArchivados', 'ProyectosController@indexArchivados');
-    Route::get('proyectosArchivados/restaurar/{id}', 'ProyectosController@restaurar');
-    Route::delete('/proyectosArchivados/eliminarPermanente/{id}','ProyectosController@eliminarPermanente');
-    
+    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);      
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
@@ -34,7 +32,14 @@ Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax    
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
-    'uses' => 'TareasController@create']);     
+    'uses' => 'TareasController@create']);    
+    //Archivar proyectos terminados
+    Route::get('proyectosArchivados', 'ProyectosController@indexArchivados');
+    Route::get('proyectosArchivados/{id}', 'ProyectosController@showArchivados');
+    Route::get('graficoArchivados/{id}', 'GraficosController@vistaGraficoArchivados');
+    Route::get('informesArchivados/{id}', 'InformesController@vistaListaInformesArchivados');
+    Route::get('proyectosArchivados/restaurar/{id}', 'ProyectosController@restaurar');
+    Route::delete('/proyectosArchivados/eliminarPermanente/{id}','ProyectosController@eliminarPermanente');
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
@@ -54,10 +59,7 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
     'as' => 'proyectos.show', 
     'uses' =>'ProyectosController@show']);
 
-    Route::get('/generarInforme','InformesController@vistaGenerarInformes');
-    Route::get('/generarInformeManual/{proyecto}','InformesController@generarInformeManual');    
-    Route::get('/informes/{proyecto}','InformesController@vistaListaInformes');    
-
+    Route::get('/informes/{proyecto}','InformesController@vistaListaInformes');
     Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico'); //ajax    
     Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');  //ajax
 });

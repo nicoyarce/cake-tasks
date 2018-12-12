@@ -15,18 +15,21 @@ class InformesController extends Controller
         return view('informes.index', compact('proyecto'));
     }
 
-    public function vistaGenerarInformes(){
-        $proyectos = Proyecto::all();
-        return view('generarInformes', compact('proyectos'));
+    public function vistaListaInformesArchivados($id){
+        $proyecto = Proyecto::withTrashed()
+            ->where('id', $id)
+            ->get()
+            ->first();
+        return view('informes.index', compact('proyecto'));
     }
-
+  
     public function generarInformeManual(Proyecto $proyecto){
         $proyecto = Proyecto::find($proyecto->id);        
         $tareas = $proyecto->tareas()->get();
-        $tareasJSON = $tareas->sortBy(function($tarea) {
+        $tareas = $tareas->sortBy(function($tarea) {
                         return [$tarea->fecha_inicio, $tarea->fecha_termino];
                     })->values()->all();
-        $tareasJSON = json_encode($tareasJSON);
+        $tareasJSON = json_encode($tareas);
         //dd($tareasJSON);
         $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
         $pdf->setOption('encoding', 'UTF-8');
@@ -49,22 +52,22 @@ class InformesController extends Controller
         $informe = Informe::find($id);        
         $proyectoId = $informe->proyecto()->get()->first()->id;        
         Storage::delete($informe->ruta);
-        $informe->delete();
+        $informe->forceDelete();
         flash('Informe eliminado')->success(); 
         return redirect()->action(
             'InformesController@vistaListaInformes', ['id' => $proyectoId]
         );
     }
 
-    public function test(){
-        $id = 1;
-        $proyecto = Proyecto::find($id);        
-        $tareas = $proyecto->tareas()->get();
-        $tareasJSON = $tareas->sortBy(function($tarea) {
-                        return [$tarea->fecha_inicio, $tarea->fecha_termino];
-                    })->values()->all();
-        $tareasJSON = json_encode($tareasJSON);
-        return view('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
-    }
+    // public function test(){
+    //     $id = 1;
+    //     $proyecto = Proyecto::find($id);        
+    //     $tareas = $proyecto->tareas()->get();
+    //     $tareasJSON = $tareas->sortBy(function($tarea) {
+    //                     return [$tarea->fecha_inicio, $tarea->fecha_termino];
+    //                 })->values()->all();
+    //     $tareasJSON = json_encode($tareasJSON);
+    //     return view('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
+    // }
     
 }

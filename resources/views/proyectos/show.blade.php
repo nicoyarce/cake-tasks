@@ -10,12 +10,16 @@
             <th>FTR<br>Modificada</th>
             <th>ATRASO<br>[días]</th>
             <th>AVANCE<br>[%]</th>
-            <th><a type="button" class="btn btn-primary float-right" href="/proyectos" title="">Atrás <i class="fas fa-arrow-left "></i></a></th>
+            <th><a type="button" class="btn btn-primary float-right" href="{{url()->previous()}}" title="">Atrás <i class="fas fa-arrow-left "></i></a></th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><b>{{ $proyecto->nombre }}</b></td>
+            <td><b>{{ $proyecto->nombre }}</b>
+                @if(!is_null($proyecto->deleted_at))
+                    <span class="badge badge-pill badge-warning">Archivado</span>
+                @endif
+            </td>
             <td>{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
             <td>{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
             <td>

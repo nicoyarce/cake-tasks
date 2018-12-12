@@ -96,7 +96,7 @@ class TareasController extends Controller
 
     public function destroy(Tarea $tarea){        
         $proyectoId = $tarea->proyecto()->get()->first()->id;        
-        $borrar = Tarea::destroy($tarea->id);        
+        Tarea::find($tarea->id)->forceDelete();        
         flash('Tarea eliminada')->success(); 
         return redirect()->route('proyectos.show', $proyectoId);
     }

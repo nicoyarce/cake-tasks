@@ -13,10 +13,28 @@ class GraficosController extends Controller
     {
         $this->middleware('auth');        
     }
-    
+      
     public function vistaGrafico(Proyecto $proyecto){        
         $areas = Area::all();  
         $tareas = Proyecto::find($proyecto->id)->tareas
+            ->sortBy(function($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
+        //dd($tareas);
+        //$tareas = $tareas->makeHidden('created_at');
+        //$tareas = $tareas->makeHidden('updated_at');
+        $tareas = json_encode($tareas);
+        //dd($tareas);
+        return view('grafico', compact('proyecto','areas','tareas'));
+    }
+
+    public function vistaGraficoArchivados($id){        
+        $areas = Area::all();  
+        $proyecto = Proyecto::withTrashed()
+            ->where('id', $id)
+            ->get()
+            ->first();  
+        $tareas = $proyecto->tareas()->withTrashed()->get()
             ->sortBy(function($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();

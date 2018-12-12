@@ -18,9 +18,11 @@
                       Proyectos
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="/proyectos/">Activos</a>
-                      {{-- <div class="dropdown-divider"></div> --}}
-                      <a class="dropdown-item" href="/proyectosArchivados">Archivados</a>
+                        <a class="dropdown-item" href="/proyectos/">Activos</a>
+                        {{-- <div class="dropdown-divider"></div> --}}
+                        @if(Auth::user()->hasRole('Administrador')||Auth::user()->hasRole('OCR'))
+                            <a class="dropdown-item" href="/proyectosArchivados">Terminados</a>
+                        @endif
                     </div>
                 </li>                
                 @if(Auth::user()->hasRole('Administrador'))
