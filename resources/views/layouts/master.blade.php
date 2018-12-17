@@ -36,11 +36,11 @@
 			</script>
 		</main>
 		<!-- Begin footer -->
-		<footer id="footer" class="footer" style="">
+		{{-- <footer id="footer" class="footer" style="">
 			<div class="container">
 				<span class="text-muted small">Desarrollado por Nicolás Oyarce</span>
 			</div>
-		</footer>
+		</footer> --}}
 		
 		<!--Bootstrap JS -->
 		<script src="/js/bootstrap.min.js" type="text/javascript"></script>

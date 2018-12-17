@@ -32,8 +32,10 @@ class HomeController extends Controller
         else{
             return redirect('login');
         }
-        
-        
+    }
+
+    public function about(){
+        return view('about');
     }
 
     /*public function __construct()

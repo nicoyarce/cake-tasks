@@ -39,9 +39,9 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
         <div class="row form-group d-flex justify-content-end mr-3">            
             <ul class="detallesTarea list-group ">
                 <li class="list-group-item"><b>{{ $proyecto->nombre }}</b></li>
-                <li class="list-group-item"><b>FIT:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
-                <li class="list-group-item"><b>FTT original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
-                <li class="list-group-item"><b>FTT modificada: </b>
+                <li class="list-group-item"><b>FIR:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
+                <li class="list-group-item"><b>FTR original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
+                <li class="list-group-item"><b>FTR modificada: </b>
                     @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
                         -
                     @else

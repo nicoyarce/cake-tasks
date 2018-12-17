@@ -30,6 +30,9 @@
                         <a class="nav-link" href="/users/">Usuarios</a>
                     </li>                   
                 @endif
+                <li class="nav-item">
+                    <a class="nav-link" href="/about/">Acerca de</a>
+                </li>
             @endif
         </ul>
         @if(Auth::check())
