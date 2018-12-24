@@ -248,8 +248,8 @@ var borde = 10;
 var bordeArriba = 20;
 var alturaBarra = 10;
 var largoFlecha = 25;
-var colorBorde = "#385D8A";
-
+var colorBorde = "black";
+var grosorLineaNegra = 0.4;
 function dibujarSimbologia(dato){    
     /*---LINEAS---*/
     var lineaVertIzq = svgSimbologia.append("line")
@@ -257,43 +257,43 @@ function dibujarSimbologia(dato){
         .attr("y1",bordeArriba)  
         .attr("x2",borde)  
         .attr("y2",borde)
-        .attr("stroke","black")  
-        .attr("stroke-width",1);
+        .attr("stroke",colorBorde)  
+        .attr("stroke-width",grosorLineaNegra);
     var lineaHorizIzq = svgSimbologia.append("line")
         .attr("x1",borde)  
         .attr("y1",(bordeArriba+borde)/2)  
         .attr("x2",30+borde)  
         .attr("y2",(bordeArriba+borde)/2)
         .attr("stroke","black")  
-        .attr("stroke-width",1);
+        .attr("stroke-width",grosorLineaNegra);
     var lineaHorizDer = svgSimbologia.append("line")
         .attr("x1",70+borde)  
         .attr("y1",(bordeArriba+borde)/2)  
         .attr("x2",100+borde)  
         .attr("y2",(bordeArriba+borde)/2)
         .attr("stroke","black")  
-        .attr("stroke-width",1);
+        .attr("stroke-width",grosorLineaNegra);
     var lineaVertDer = svgSimbologia.append("line")
         .attr("x1",100+borde)  
         .attr("y1",bordeArriba)  
         .attr("x2",100+borde)  
         .attr("y2",borde)
         .attr("stroke","black")  
-        .attr("stroke-width",1);
+        .attr("stroke-width",grosorLineaNegra);
     var lineaFinal1 = svgSimbologia.append("line")
         .attr("x1",130)  
         .attr("y1",bordeArriba+5)  
         .attr("x2",140)  
         .attr("y2",bordeArriba+(alturaBarra/2)+5)
         .attr("stroke",colorBorde)  
-        .attr("stroke-width",1);
+        .attr("stroke-width",grosorLineaNegra);
     var lineaFinal2 = svgSimbologia.append("line")
         .attr("x1",130)  
         .attr("y1",bordeArriba+alturaBarra+5)  
         .attr("x2",140)  
         .attr("y2",bordeArriba+alturaBarra-(alturaBarra/2)+5)
         .attr("stroke",colorBorde)  
-        .attr("stroke-width",1);
+        .attr("stroke-width",grosorLineaNegra);
 
     /*---TEXTO---*/
     var fit = svgSimbologia.append("text")
@@ -361,7 +361,7 @@ function dibujarSimbologia(dato){
         .attr("width",60)
         .attr("height",alturaBarra)
         .attr("stroke",colorBorde)
-        .attr('stroke-width', '1');
+        .attr("stroke-width",grosorLineaNegra);
     var rectangulo2 = svgSimbologia.append("rect")
         .attr("fill", "#ffff00") //amarillo
         .attr("x",60+borde)
@@ -369,7 +369,7 @@ function dibujarSimbologia(dato){
         .attr("width",30)
         .attr("height",alturaBarra)
         .attr("stroke",colorBorde)
-        .attr('stroke-width', '1');
+        .attr("stroke-width",grosorLineaNegra);
     var rectangulo3 = svgSimbologia.append("rect")
         .attr("fill", "#f48024") //naranjo
         .attr("x",90+borde)
@@ -377,7 +377,7 @@ function dibujarSimbologia(dato){
         .attr("width",10)
         .attr("height",alturaBarra)
         .attr("stroke",colorBorde)
-        .attr('stroke-width', '1');
+        .attr("stroke-width",grosorLineaNegra);
     var rectangulo4 = svgSimbologia.append("rect")
         .attr("fill", "#dc3545") //rojo
         .attr("x",100+borde)
@@ -385,7 +385,7 @@ function dibujarSimbologia(dato){
         .attr("width",20)
         .attr("height",alturaBarra)
         .attr("stroke",colorBorde)
-        .attr('stroke-width', '1');    
+        .attr("stroke-width",grosorLineaNegra);    
 }
 
 function dibujarFlecha(avance){   
