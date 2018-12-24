@@ -52,7 +52,7 @@ class TareasController extends Controller
         $tarea->area()->associate($area);
         $tarea->save();    
         flash('Tarea registrada')->success();        
-        return redirect()->route('proyectos.show',$request->proyecto_id);
+        return redirect()->route('proyectos.show',$request->proyecto_id)->with('idTareaMod', $tarea->id);
     }
 
     public function edit(Tarea $tarea){

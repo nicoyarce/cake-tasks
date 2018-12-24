@@ -24,7 +24,7 @@
             <h2>Informes</h2>
         </div>   
     </div>
-    @if(count($proyecto->informes)>0)
+    @if(count($informes)>0)
         <table class="table table-hover">
             <thead>
                 <tr>            
@@ -38,7 +38,7 @@
             </thead>
             
             <tbody>
-                @foreach ($proyecto->informes as $informe)
+                @foreach ($informes as $informe)
                 <tr>            
                     <td>{{$informe->fecha->format('d-M-Y')}}</td> 
                     <td>{{$informe->created_at->format('H:i:s')}}</td>         
@@ -91,7 +91,7 @@
                 </tr>
             </thead>            
             <tbody>
-                @foreach ($proyecto->informes()->withTrashed()->get() as $informe)
+                @foreach ($informes as $informe)
                 <tr>            
                     <td>{{$informe->fecha->format('d-M-Y')}}</td> 
                     <td>{{$informe->created_at->format('H:i:s')}}</td>         

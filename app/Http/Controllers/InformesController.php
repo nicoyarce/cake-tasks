@@ -12,7 +12,8 @@ use Barryvdh\Snappy\Snappy as PDF;
 class InformesController extends Controller
 {
     public function vistaListaInformes(Proyecto $proyecto){
-        return view('informes.index', compact('proyecto'));
+        $informes = $proyecto->informes->sortByDesc('created_at');
+        return view('informes.index', compact('proyecto','informes'));
     }
 
     public function vistaListaInformesArchivados($id){
@@ -20,7 +21,8 @@ class InformesController extends Controller
             ->where('id', $id)
             ->get()
             ->first();
-        return view('informes.index', compact('proyecto'));
+        $informes = $proyecto->informes()->withTrashed()->get()->sortByDesc('created_at');
+        return view('informes.index', compact('proyecto','informes'));
     }
   
     public function generarInformeManual(Proyecto $proyecto){

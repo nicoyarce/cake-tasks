@@ -1,7 +1,7 @@
 var width = 500,
     height = 500,
     radius = Math.min(width, height) / 2,
-    innerRadius = 0.10 * radius; //radio circulo interno
+    innerRadius = 0.12 * radius; //radio circulo interno
 
 var pie = d3.layout.pie()    
     .value(function(d) { return d.width; })
@@ -61,6 +61,7 @@ function dibujarGrafico(data) {
         .attr("class", "parte")        
         .on('mouseout', function (d, i){
             $(".detallesTarea").hide();
+            $("#critica").hide();
             svgSimbologia.selectAll("line.flecha").remove();
         })
         .on('click', function(d, i) {                    
@@ -82,6 +83,12 @@ function dibujarGrafico(data) {
             }  
             $("#avance").text(d.data.avance);
             $("#observaciones").text(d.data.observaciones);
+            if(d.data.critica == 1){
+                $("#critica").show();
+            }
+            else{
+                $("#critica").hide();
+            }
             dibujarFlecha(d.data.porcentajeAtraso);
         });
    
@@ -323,7 +330,7 @@ function dibujarSimbologia(dato){
     var cero = svgSimbologia.append("text")
         .attr("x",borde)
         .attr("y",bordeArriba+alturaBarra+10)
-        .text("0%")
+        .text("0")
         .attr("text-anchor", "middle")
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
@@ -331,7 +338,7 @@ function dibujarSimbologia(dato){
     var sesenta = svgSimbologia.append("text")
         .attr("x",60+borde)
         .attr("y",bordeArriba+alturaBarra+10)
-        .text("60%")
+        .text("0,6")
         .attr("text-anchor", "middle")
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
@@ -339,7 +346,7 @@ function dibujarSimbologia(dato){
     var noventa = svgSimbologia.append("text")
         .attr("x",90+borde)
         .attr("y",bordeArriba+alturaBarra+10)
-        .text("90%")
+        .text("0,9")
         .attr("text-anchor", "middle")
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
@@ -347,7 +354,7 @@ function dibujarSimbologia(dato){
     var cien = svgSimbologia.append("text")
         .attr("x",100+borde)
         .attr("y",bordeArriba+alturaBarra+10)
-        .text("100%")
+        .text("1")
         .attr("text-anchor", "middle")
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")

@@ -19,6 +19,9 @@
             <div class="col-3">
                 <p class="m-0 text-center font-weight-bold">AVANCE PROYECTO</p>
                 <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}%</p>
+                <div class="text-center">
+                    <span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span>
+                </div>
             </div>
             <div class="col-9">                            
                 <svg id="simbologia" class="w-100">

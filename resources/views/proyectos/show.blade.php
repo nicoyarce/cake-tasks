@@ -10,7 +10,11 @@
             <th>FTR<br>Modificada</th>
             <th>ATRASO<br>[días]</th>
             <th>AVANCE<br>[%]</th>
-            <th><a type="button" class="btn btn-primary float-right" href="{{url()->previous()}}" title="">Atrás <i class="fas fa-arrow-left "></i></a></th>
+            @if(!is_null($proyecto->deleted_at))
+                <th><a type="button" class="btn btn-primary float-right" href="/proyectosArchivados" title="">Atrás <i class="fas fa-arrow-left "></i></a></th>
+            @else
+                <th><a type="button" class="btn btn-primary float-right" href="/proyectos" title="">Atrás <i class="fas fa-arrow-left "></i></a></th>
+            @endif
         </tr>
     </thead>
     <tbody>

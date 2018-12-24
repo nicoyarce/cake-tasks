@@ -15,6 +15,7 @@
             <h4>Nicolas Oyarce Aburto</h4>
             <h5>Contacto: nicoyarce&commat;gmail.com</h5>
             <h5><a href="mailto:nicoyarce@gmail.com?Subject=Holistic" target="_top">Enviar mail</a></h5>
-        </div>   
+            <h5>Se sugiere utilizar una resolución de pantalla superior a 1024 x 768 para visualizar el sitio en forma óptima</h5>
+        </div>
     </div>
 @endsection
