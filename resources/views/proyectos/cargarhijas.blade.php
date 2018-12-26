@@ -8,6 +8,20 @@
 </div>
 <hr>
 @include('layouts.errors')
+<div class="alert alert-info" role="alert">
+  <ul>
+      <li>El archivo debe tener los siguientes encabezados en la primera fila</li>
+      <ul>
+            <li>Indicador</li>
+            <li>Area</li>
+            <li>Nombre</li>
+            <li>Comienzo</li>
+            <li>Fin</li>
+            <li>Duracion</li>
+            <li>Nivel de esquema</li>
+      </ul>      
+  </ul>
+</div>
 <form id="formulario" class="form-horizontal" action="{{action('ProyectosController@cargarHijas')}}" method="POST" enctype="multipart/form-data">
     {{ csrf_field() }}
         <div class="form-group col-8 offset-2">

@@ -20,7 +20,7 @@
                 <p class="m-0 text-center font-weight-bold">AVANCE PROYECTO</p>
                 <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}%</p>
                 <div class="text-center">
-                    <span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span>
+                    <h3><span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span></h3>
                 </div>
             </div>
             <div class="col-9">                            
@@ -70,7 +70,7 @@
         </div>
         <div class="row">
             <ul class="detallesTarea list-group w-50" style="display: none;">
-                <li class="list-group-item"><span class="titulospan">Área:</span><br/><span id="area"></span></li>
+                <li class="list-group-item"><span class="titulospan">Área:</span><br><span id="area"></span></li>
                 <li class="list-group-item"><span class="titulospan">FIT:</span><span id="fir"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT original:</span><span id="ftro"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT modificada:</span><span id="ftrm"></span></li>
@@ -78,7 +78,7 @@
                 <li class="list-group-item"><span class="titulospan">Avance [%]:</span><span id="avance"></span></li>
             </ul>
             <ul class="detallesTarea list-group w-50" style="display: none;">
-                <li class="list-group-item"><span class="titulospan">Observaciones:</span><span id="observaciones"></span></li>
+                <li class="list-group-item"><span class="titulospan">Observaciones:</span><br><span id="observaciones"></span></li>
             </ul>
         </div>
     </div>

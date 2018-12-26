@@ -10,6 +10,7 @@ use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -36,7 +37,7 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
         //         }
         //     ]
         // ])->validate();
-        $area = Area::where('nombrearea', 'Otra')->first();
+        
         $ultimaTareaMadre = new Tarea;   
         $primerIndicadorEncontrado = false;
         DB::beginTransaction();
@@ -55,12 +56,20 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                     if(!is_null($row['indicador'])){
                         $primerIndicadorEncontrado = true;
                         $tarea = new Tarea;
+                        try{
+                            $area = Area::where('nombrearea', $row['area'])->firstOrFail();                            
+                        }                       
+                        catch(ModelNotFoundException $e){
+                            $area = Area::where('nombrearea', 'Otra')->first();                                                        
+                        }
+                        finally{
+                            $tarea->area()->associate($area);
+                        }
                         $tarea->nombre = $row['nombre'];
                         $tarea->fecha_inicio = Date::createFromFormat('d F Y H:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
                         $tarea->fecha_termino_original =  Date::createFromFormat('d F Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString();
                         $tarea->fecha_termino =  Date::createFromFormat('d F Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString();
-                        $tarea->proyecto()->associate($proyecto);
-                        $tarea->area()->associate($area);
+                        $tarea->proyecto()->associate($proyecto);                        
                         $tarea->save();
                         $ultimaTareaMadre = $tarea;
                     }

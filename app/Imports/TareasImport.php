@@ -34,7 +34,7 @@ class TareasImport implements ToCollection, WithHeadingRow
                         //$ultimaTareaMadre = $tareasProyecto::where('nombre', 'LIKE', "%{$row->nombre}%")->get();
                         $ultimaTareaMadre = $tareasProyecto->filter(function ($tarea) use ($row){
                             return false !== stristr($tarea->nombre, $row['nombre']);
-                        });                        
+                        });                    
                     }
                     elseif($primerIndicadorEncontrado){
                         $tareaHija = new TareaHija;
