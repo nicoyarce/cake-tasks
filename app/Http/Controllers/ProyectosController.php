@@ -35,6 +35,7 @@ class ProyectosController extends Controller
         }                      
         return view('proyectos.index', compact('proyectos'));
     }
+    
     public function indexArchivados()
     {
         if(Auth::user()->hasRole('Administrador')){
@@ -203,4 +204,6 @@ class ProyectosController extends Controller
         flash('Tareas importadas correctamente')->success();
         return redirect('proyectos');   
     }
+
+    
 }

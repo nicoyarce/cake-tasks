@@ -3,16 +3,16 @@
 	<div class="row">	
 		<div class="col-10">
 			<h4><b>Tareas</b> - Total: {{count($proyecto->tareas)}}</h4>
-		</div>
+		</div>			
 		@can('crear_tareas')
-			<div class="col-2">		
+			<div class="col-2 p-2">					
 				<a href="{{action('TareasController@create', $proyecto->id)}}" type="submit" class="btn btn-success float-right" role="button">Crear tarea <i class="fas fa-plus"></i></a>	
 			</div>
 		@endcan		
 	</div>
 	@if(count($proyecto->tareas)>0)
 		<table id="tablaTareas" class="table table-hover mt-2">
-			<thead class="thead-light">
+			<thead class="thead-light" style="position: sticky;">
 				<tr>
 					<th>NOMBRE<br>TAREA</th>
 					<th>FIT<br>&nbsp;</th>
@@ -93,7 +93,7 @@
 	</div>
 	@if(count($proyecto->tareas()->withTrashed()->get())>0)
 		<table id="tablaTareas" class="table table-hover mt-2">
-			<thead class="thead-light">
+			<thead class="thead-light" style="position: sticky; top: 0;">
 				<tr>
 					<th>NOMBRE<br>TAREA</th>
 					<th>FIT<br>&nbsp;</th>
@@ -145,10 +145,23 @@
 		<h3 class="text-center">No hay tareas</h3>
 	@endif
 @endif
-
+<link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min">
+<script src="/js/dataTables.fixedHeader.min.js"></script>
 <script src="/js/jquery.stickytableheaders.min.js"></script>
+
 <script>
-	$('#tablaTareas').stickyTableHeaders();
+	$(document).ready(function() {
+		$('#tablaTareas').stickyTableHeaders();
+    	$('#tablaTareas').DataTable( {
+    		//"order": [[ 1, 'asc' ], [ 2, 'asc' ]],
+    		//"fixedHeader": true,
+    		"ordering": false,
+    		"paging":   false,
+	        "language": {
+	            "url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
+	        }
+    	} );
+	} );	
 	@if (session('idTareaMod'))
 		window.scrollTo(0, $("#{{session('idTareaMod')}}").offset().top-100);
 		$(document).ready(function(){

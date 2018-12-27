@@ -155,7 +155,7 @@ return [
         Freshwork\ChileanBundle\Laravel\ChileanBundleServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,        
+        Barryvdh\Snappy\ServiceProvider::class,
 
         /*
          * Application Service Providers...

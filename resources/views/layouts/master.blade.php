@@ -14,6 +14,10 @@
 		<link href="/css/jquery-ui.min.css" rel="stylesheet">
 		<script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
 		<script src="/js/jquery-ui.min.js" type="text/javascript"></script>
+		<!-- Datatables -->
+		<link rel="stylesheet" type="text/css" href="/css/dataTables.bootstrap4.min.css">
+		<script src="/js/jquery.dataTables.min.js" type="text/javascript"></script>
+		<script src="/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="carga">
