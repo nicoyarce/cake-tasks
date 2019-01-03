@@ -63,8 +63,8 @@
             </div>
         </div>
         
-        <div class="row" style="height: 80px" >
-            <ul class="detallesTarea list-group w-100 mb-2" style="display: none;">
+        <div class="row" style="height: 80px">
+            <ul class="detallesTarea list-group w-100 mb-1" style="display: none;">
                 <li  class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"><br></span></li>
             </ul>
         </div>
@@ -77,8 +77,13 @@
                 <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
                 <li class="list-group-item"><span class="titulospan">Avance [%]:</span><span id="avance"></span></li>
             </ul>
-            <ul class="detallesTarea list-group w-50" style="display: none;">
-                <li class="list-group-item"><span class="titulospan">Observaciones:</span><br><span id="observaciones"></span></li>
+            <ul class="detallesTarea list-group w-50 mb-1" style="display: none;">
+                <li class="list-group-item"><p class="titulospan">Observaciones:</p><br></li>
+                <li class="list-group-item" id="listaObservaciones" style="display: none;">
+                    <ul>
+                        <li id="observacion"></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

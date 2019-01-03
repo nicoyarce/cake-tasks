@@ -10,11 +10,12 @@
 <form id="formulario" method="POST" action="{{action('TareasController@update', $tarea)}}">
 	{{csrf_field()}}
 	{{method_field('PUT')}}
+	{{-- Formulario para Admin y OCR --}}
 	@if(!Auth::user()->hasRole('Usuario'))
 		<hr>
 		@foreach ($listaProyectos as $listaProyecto)
 			@if($listaProyecto->id == $tarea->proyecto_id)
-				<p class="alert alert-primary">Pertenece a proyecto: {{$listaProyecto->nombre}}</p>
+				<p class="alert alert-primary">Pertenece a <b>proyecto</b>: {{$listaProyecto->nombre}}</p>
 			@endif
 		@endforeach
 		<div class="form-row">
@@ -34,7 +35,7 @@
 					@endforeach
 				</select>
 			</div>
-			<div class="mx-auto d-flex align-items-center">
+			<div class="col-2 mx-auto d-flex align-items-center">
 				<div class="form-check ">
 					<input class="form-check-input" type="checkbox" @if($tarea->critica) checked @endif id="critica" name="critica">
 		  			<label class="form-check-label" for="critica">
@@ -57,13 +58,24 @@
 				<input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>			
 			</div>
 		</div>
-		<div class="form-row">
+		<div class="form-row">			
 			<div class="form-group col-12">
-				<label for="observaciones">Observaciones</label>
-				<textarea class="form-control" id="observaciones" name="observaciones">{{$tarea->observaciones}}</textarea>
-			</div>
-		</div>	
+					<label for="observaciones">Observaciones</label>
+					<button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
+					<button id="quitaObs" type="button" class="btn btn-danger btn-sm ml-2"><i class="fas fa-minus"></i></button>
+				</div>
+			<div id="listaObservaciones" class="form-group col-12">
+				@if(count($tarea->observaciones)>0)
+					@foreach ($tarea->observaciones as $observacion)
+						<input id="observacion" name="observaciones[]" value="{{$observacion}}" class="form-control">
+					@endforeach
+				@else
+					<input id="observacion" name="observaciones[]" value="" class="form-control">											
+				@endif
+			</div>	
+		</div>
 	@else
+	{{-- Formulario para usuarios --}}
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -109,11 +121,15 @@
 		<div class="form-row">
 			<div class="form-group col-12">
 				<label for="observaciones">Observaciones</label>
-				@if($tarea->observaciones=="")
-				<textarea readonly class="form-control"> - </textarea>
+				<ul>
+				@if(count($tarea->observaciones)>0)					
+					@foreach ($tarea->observaciones as $observacion)
+						<li>{{$observacion}}</li>
+					@endforeach										
 				@else
-				<textarea readonly class="form-control">{{$tarea->observaciones}}</textarea>
+					<li><h5>No hay datos.</h5></li>
 				@endif
+				</ul>	
 			</div>
 		</div>
 	@endif	
@@ -142,4 +158,45 @@
 		});
 	</script>
 @endif
+<script>
+	$(document).ready(function(){
+		var nroObservaciones = $("#listaObservaciones").children().length;
+		console.log(nroObservaciones);
+		if(nroObservaciones<=1){
+			$("#quitaObs").prop('disabled', true);
+		}
+		else{
+			$("#quitaObs").prop('disabled', false);
+		}
+
+		$("#agregaObs").click(function(){							
+			$("#listaObservaciones #observacion:last").clone().appendTo("#listaObservaciones").val("");	
+			var nroObservaciones = $("#listaObservaciones").children().length;
+			console.log(nroObservaciones);
+			if(nroObservaciones<=1){
+				$("#quitaObs").prop('disabled', true);
+			}
+			else{
+				$("#quitaObs").prop('disabled', false);
+			}
+		});
+
+		$("#quitaObs").click(function(){
+			var nroObservaciones = $("#listaObservaciones").children().length;
+			if(nroObservaciones>1){
+				console.log("Quita");
+				$("#listaObservaciones #observacion:last-child").remove();
+				var nroObservaciones = $("#listaObservaciones").children().length;
+			}
+			console.log(nroObservaciones);
+			if(nroObservaciones<=1){
+				$(this).prop('disabled', true);
+			}
+			else{
+				$(this).prop('disabled', false);
+			}
+		});
+	});
+</script>
 @endsection
+

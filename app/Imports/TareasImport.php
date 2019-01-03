@@ -39,8 +39,8 @@ class TareasImport implements ToCollection, WithHeadingRow
                     elseif($primerIndicadorEncontrado){
                         $tareaHija = new TareaHija;
                         $tareaHija->nombre = $row['nombre'];
-                        $tareaHija->fecha_inicio = Date::createFromFormat('d M Y H:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
-                        $tareaHija->fecha_termino =  Date::createFromFormat('d M Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_termino =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
                         $tareaHija->nivel = $row['nivel_de_esquema'];
                         $tareaHija->tareaMadre()->associate($ultimaTareaMadre->first());
                         $tareaHija->save();

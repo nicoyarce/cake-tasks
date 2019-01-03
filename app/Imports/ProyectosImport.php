@@ -46,9 +46,9 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                 if($key == 0){
                     $proyecto = Proyecto::create([
                         'nombre' => $row['nombre'],
-                        'fecha_inicio' => Date::createFromFormat('d F Y H:i', $row['comienzo'], 'America/Santiago')->toDateTimeString(),
-                        'fecha_termino_original' =>  Date::createFromFormat('d F Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString(),
-                        'fecha_termino' =>  Date::createFromFormat('d F Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString()
+                        'fecha_inicio' => Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString(),
+                        'fecha_termino_original' =>  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString(),
+                        'fecha_termino' =>  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString()
                     ]);
                     $proyecto->save();
                 }
@@ -66,9 +66,9 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                             $tarea->area()->associate($area);
                         }
                         $tarea->nombre = $row['nombre'];
-                        $tarea->fecha_inicio = Date::createFromFormat('d F Y H:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
-                        $tarea->fecha_termino_original =  Date::createFromFormat('d F Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString();
-                        $tarea->fecha_termino =  Date::createFromFormat('d F Y H:i', $row['fin'], 'America/Santiago')->toDateTimeString();
+                        $tarea->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
+                        $tarea->fecha_termino_original =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
+                        $tarea->fecha_termino =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
                         $tarea->proyecto()->associate($proyecto);                        
                         $tarea->save();
                         $ultimaTareaMadre = $tarea;
@@ -76,8 +76,8 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                     elseif($primerIndicadorEncontrado){
                         $tareaHija = new TareaHija;
                         $tareaHija->nombre = $row['nombre'];
-                        $tareaHija->fecha_inicio = Date::createFromFormat('d M Y H:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
-                        $tareaHija->fecha_termino =  Date::createFromFormat('d M Y H:i',$row['fin'], 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_termino =  Date::createFromFormat('d-m-y G:i',$row['fin'], 'America/Santiago')->toDateTimeString();
                         $tareaHija->nivel = $row['nivel_de_esquema'];
                         $tareaHija->tareaMadre()->associate($ultimaTareaMadre);
                         $tareaHija->save();

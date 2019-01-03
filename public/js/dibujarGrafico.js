@@ -29,6 +29,7 @@ var formatoFecha = d3.timeFormat("%d-%m-%Y");
         return d.data.nombre + ": <span style='color:cyan'>" + d.data.avance + "</span>" + "% " + "<br>" + formatoFecha(fechaFormateada);
     });*/
 function dibujarGrafico(data) {
+    console.log(data);
     var svg = d3.select("#grafico").append("svg")
     //.attr("width", width)
     //.attr("height", height)
@@ -46,22 +47,22 @@ function dibujarGrafico(data) {
             d.fecha_termino_original.date = d.fecha_termino_original.date;
             d.fecha_termino.date = d.fecha_termino.date;
             d.atraso = d.atraso;
-            d.avance = d.avance;
-            d.observaciones = d.observaciones;
+            d.avance = d.avance;            
             d.weight = 1;
             d.width = +d.weight;
         });
     } catch (TypeError) {
         document.getElementById("titulo").innerHTML = "Error al cargar datos";
-    }
-
+    }    
     var outerPath = svg.selectAll(".outlineArc")
         .data(pie(data))
         .enter().append("g")
         .attr("class", "parte")        
         .on('mouseout', function (d, i){
-            $(".detallesTarea").hide();
+            //$(".detallesTarea").hide();
+            $("#listaObservaciones").hide();
             $("#critica").hide();
+            $("#listaObservaciones").empty();            
             svgSimbologia.selectAll("line.flecha").remove();
         })
         .on('click', function(d, i) {                    
@@ -69,7 +70,7 @@ function dibujarGrafico(data) {
         })
         .on('mouseover', function(d, i) {
             //console.log("You clicked", d), i;
-            $(".detallesTarea").show();
+            $(".detallesTarea").show();            
             $("#nombre").text(d.data.nombre);
             $("#area").text(d.data.nombreArea);
             $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
@@ -81,8 +82,16 @@ function dibujarGrafico(data) {
                 $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
                 $("#atraso").text(d.data.atraso);
             }  
-            $("#avance").text(d.data.avance);
-            $("#observaciones").text(d.data.observaciones);
+            $("#avance").text(d.data.avance);  
+            if(d.data.observaciones.length>0){
+                $("#listaObservaciones").show();
+            }else{
+                $("#listaObservaciones").hide();
+            }
+            $.each(d.data.observaciones, function(indice){
+                console.log(d.data.observaciones[indice]);
+                $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice]);              
+            });
             if(d.data.critica == 1){
                 $("#critica").show();
             }
@@ -121,8 +130,6 @@ function dibujarGrafico(data) {
             return "";
         }
     });        //get the label from our original data array
-        
-    
 
     // calculate the weighted mean avance
     var avance =
@@ -214,7 +221,7 @@ $(".form-control").change(function() {
         url: ruta, // This is the url we gave in the route
         data: datos, // la información a enviar (también es posible utilizar una cadena de datos)
         dataType: 'json', //tipo de respuesta esperada
-        success: function(response) { // What to do if we succeed            
+        success: function(response) { // What to do if we succeed  
             $("#detallesTarea").hide();
             d3.selectAll("svg.grafico").remove();
             dibujarGrafico(response);
@@ -226,7 +233,7 @@ $(".form-control").change(function() {
         }
     });
 })
-/*
+/* Codigo Zoom
 var primeraVez = true;
 $("#activar").click(function() {
     var estado = $("#activar").val(); // 0 o 1   

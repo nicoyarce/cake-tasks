@@ -33,14 +33,14 @@ class Tarea extends Model
     use SoftDeletes;
     use FechasTraducidas;
     protected $table = 'tareas';
-    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','observaciones','critica'];
+    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica'];
     protected $dates = ['deleted_at'];
     /*protected $casts = [
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_termino_original' => 'date:Y-m-d',
         'fecha_termino' => 'date:Y-m-d'
     ];*/
-    protected $appends = ['nombreArea', 'atraso', 'colorAtraso','porcentajeAtraso',]; 
+    protected $appends = ['nombreArea', 'atraso', 'colorAtraso','porcentajeAtraso','observaciones']; 
 
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);
@@ -54,12 +54,19 @@ class Tarea extends Model
         return $this->hasMany(TareaHija::class, 'tarea_madre_id')->withTrashed();
     }
 
+    public function observaciones(){
+        return $this->hasMany(Observacion::class)->withTrashed();
+    }
+
     protected static function boot() {
         //elimina tareas hijas al eliminar tarea madre
         parent::boot();
         static::deleting(function($tarea) { 
             foreach($tarea->tareasHijas as $tareaHija){
               $tareaHija->delete();
+            }
+            foreach($tarea->observaciones as $observacion){
+              $observacion->delete();
             }
         });
     }
@@ -130,6 +137,11 @@ class Tarea extends Model
         }           
         return $porcentajeAtraso;   
     }    
+
+    public function getObservacionesAttribute(){
+        $observaciones = Observacion::where('tarea_id',$this->id)->pluck('contenido');
+        return $observaciones;
+    }
 
     public function scopeAtrasoVerde($query){
         return $query->where('colorAtraso','VERDE');

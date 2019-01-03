@@ -6,6 +6,7 @@ use App\Tarea;
 use App\Proyecto;
 use App\Area;
 use App\TareaHija;
+use App\Observacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTareasRequest;
@@ -32,7 +33,7 @@ class TareasController extends Controller
         return view('tareas.create', compact('proyecto','areas','avances'));
     }
 
-    public function store(StoreTareasRequest $request){
+    public function store(StoreTareasRequest $request){        
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
         $proyecto = Proyecto::find($request->proyecto_id);
@@ -40,17 +41,22 @@ class TareasController extends Controller
         $tarea->fecha_inicio = $request->fecha_inicio;
         $tarea->fecha_termino_original = $request->fecha_termino;
         $tarea->fecha_termino = $request->fecha_termino;
-        $tarea->observaciones = $request->observaciones;
         if($request->has('critica')){
             $tarea->critica = true;
         }
         else{
             $tarea->critica = false;
-        }        
+        }               
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
-        $tarea->save();    
+        $tarea->save();
+        foreach ($request->observaciones as $textoObservacion) {            
+            $observacion = new Observacion();
+            $observacion->contenido = $textoObservacion;
+            $observacion->tarea()->associate($tarea);
+            $observacion->save();            
+        }
         flash('Tarea registrada')->success();        
         return redirect()->route('proyectos.show',$request->proyecto_id)->with('idTareaMod', $tarea->id);
     }
@@ -63,35 +69,39 @@ class TareasController extends Controller
     }
 
     public function update(Request $request, Tarea $tarea){
+        //dd($request);
         $validatedData = $request->validate([
             'fecha_termino' => 'nullable|after:fecha_termino_original',
         ]);
-        $tareanueva = Tarea::find($tarea->id);        
+        $tareaNueva = Tarea::find($tarea->id);        
         if(Auth::user()->hasRole('Usuario')){
-            $tareanueva->fill($request->only('avance'));
+            $tareaNueva->fill($request->only('avance'));
         }
         else if(is_null($request->fecha_termino)){
-            $tareanueva->fill($request->except('fecha_termino'));
-            $tareanueva->fecha_termino = $tarea->fecha_termino;
-            if($request->has('critica')){
-                $tareanueva->critica = true;
-            }
-            else{
-                $tareanueva->critica = false;
-            }  
+            $tareaNueva->fill($request->except('fecha_termino'));
+            $tareaNueva->fecha_termino = $tarea->fecha_termino;            
         }
         else{            
-            $tareanueva->fill($request->all());
-            if($request->has('critica')){
-                $tareanueva->critica = true;
-            }
-            else{
-                $tareanueva->critica = false;
-            }  
-        }               
-        $tareanueva->save();        
+            $tareaNueva->fill($request->all());              
+        } 
+        if($request->has('critica')){
+            $tareaNueva->critica = true;
+        }
+        else{
+            $tareaNueva->critica = false;
+        }
+        $tareaNueva->observaciones()->forceDelete();        
+        foreach ($request->observaciones as $textoObservacion) {
+            if(!is_null($textoObservacion)){
+                $observacion = new Observacion();
+                $observacion->contenido = $textoObservacion;
+                $observacion->tarea()->associate($tareaNueva);
+                $observacion->save();
+            }            
+        }
+        $tareaNueva->save();
         flash('Tarea actualizada')->success();
-        return redirect()->route('proyectos.show',$tareanueva->proyecto_id)->with('idTareaMod', $tareanueva->id);
+        return redirect()->route('proyectos.show',$tareaNueva->proyecto_id)->with('idTareaMod', $tareaNueva->id);
     }
 
     public function destroy(Tarea $tarea){        

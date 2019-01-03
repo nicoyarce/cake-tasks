@@ -29,7 +29,7 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
-    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update']);    
+    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);    
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax    
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
@@ -51,6 +51,10 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
     Route::put('/tareas/{tarea}',[
     'as' => 'tareas.update', 
     'uses' => 'TareasController@update']);
+
+    Route::get('/tareas/{tarea}',[
+    'as' => 'tareas.show', 
+    'uses' => 'TareasController@show']);
 
     Route::get('/proyectos', [
     'as' => 'proyectos.index', 

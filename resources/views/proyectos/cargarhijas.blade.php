@@ -10,16 +10,20 @@
 @include('layouts.errors')
 <div class="alert alert-info" role="alert">
   <ul>
-      <li>El archivo debe tener los siguientes encabezados en la primera fila</li>
+      <li>El archivo debe tener los siguientes encabezados en la primera fila.</li>
       <ul>
-            <li>Indicador</li>
-            <li>Area</li>
-            <li>Nombre</li>
-            <li>Comienzo</li>
-            <li>Fin</li>
-            <li>Duracion</li>
-            <li>Nivel de esquema</li>
-      </ul>      
+            <b>
+            <li class="list-inline-item">Indicador</li>
+            <li class="list-inline-item"> - Area</li>
+            <li class="list-inline-item"> - Nombre</li>
+            <li class="list-inline-item"> - Comienzo</li>
+            <li class="list-inline-item"> - Fin</li>
+            <li class="list-inline-item"> - Duracion</li>
+            <li class="list-inline-item"> - Nivel de esquema</li>
+            </b>
+      </ul>
+      <li>La segunda fila sera considerada como el nombre del proyecto.</li>
+      <li>El formato de fechas aceptado es: dia-mes-año hora:minuto Ej: (20-11-2020 8:00).</li>
   </ul>
 </div>
 <form id="formulario" class="form-horizontal" action="{{action('ProyectosController@cargarHijas')}}" method="POST" enctype="multipart/form-data">
