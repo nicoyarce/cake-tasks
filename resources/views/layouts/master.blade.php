@@ -18,6 +18,9 @@
 		<link rel="stylesheet" type="text/css" href="/css/dataTables.bootstrap4.min.css">
 		<script src="/js/jquery.dataTables.min.js" type="text/javascript"></script>
 		<script src="/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+		{{-- Splashscreen --}}
+		<link rel="stylesheet" href="/css/login.css" type="text/css"/>
+    	<script type="text/javascript" src="/js/login.js"></script>
 	</head>
 	<body>
 		<div id="carga">
@@ -48,11 +51,10 @@
 		
 		<!--Bootstrap JS -->
 		<script src="/js/bootstrap.min.js" type="text/javascript"></script>
-		<script>
-			$('form').submit(function() {
-				console.log("asd");
+		<script>			
+			$('form').submit(function() {				
 				$('#carga').show();
 			});			
-		</script>
+		</script>			
 	</body>
 </html>

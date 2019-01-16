@@ -24,9 +24,9 @@ class ProyectosRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'=>'required|min:4|max:100|unique',
-            'fecha_inicio'=>'required|date|before:fecha_termino',            
-            'fecha_termino'=>'required|date|after:fecha_inicio',           
+            'nombre'=>'min:4|max:100',
+            'fecha_inicio'=>'date|before:fecha_termino',            
+            'fecha_termino'=>'date|after:fecha_inicio',           
         ];
     }
 }

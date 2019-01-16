@@ -23,9 +23,59 @@
             <label for="fecha_termino">FTR</label>
             <input class="form-control" type="date" id="fecha_termino" required name="fecha_termino">
         </div>
+    </div>
+    <div class="form-row">          
+        <div class="form-group col-12">
+                <label for="observaciones">Observaciones</label>
+                <button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
+                <button id="quitaObs" type="button" class="btn btn-danger btn-sm ml-2"><i class="fas fa-minus"></i></button>
+            </div>
+        <div id="listaObservaciones" class="form-group col-12"> 
+            <input id="observacion" name="observaciones[]" value="" class="form-control">                           
+        </div>  
     </div>    
     <div class="form-group text-center">
         <button type="submit" class="btn btn-primary">Guardar</button>
     </div>
 </form>
+<script>
+    $(document).ready(function(){
+        var nroObservaciones = $("#listaObservaciones").children().length;
+        console.log(nroObservaciones);
+        if(nroObservaciones<=1){
+            $("#quitaObs").prop('disabled', true);
+        }
+        else{
+            $("#quitaObs").prop('disabled', false);
+        }
+        
+        $("#agregaObs").click(function(){                           
+            $("#listaObservaciones #observacion:last").clone().appendTo("#listaObservaciones").val(""); 
+            var nroObservaciones = $("#listaObservaciones").children().length;
+            console.log(nroObservaciones);
+            if(nroObservaciones<=1){
+                $("#quitaObs").prop('disabled', true);
+            }
+            else{
+                $("#quitaObs").prop('disabled', false);
+            }
+        });
+
+        $("#quitaObs").click(function(){
+            var nroObservaciones = $("#listaObservaciones").children().length;
+            if(nroObservaciones>1){
+                console.log("Quita");
+                $("#listaObservaciones #observacion:last-child").remove();
+                var nroObservaciones = $("#listaObservaciones").children().length;
+            }
+            console.log(nroObservaciones);
+            if(nroObservaciones<=1){
+                $(this).prop('disabled', true);
+            }
+            else{
+                $(this).prop('disabled', false);
+            }
+        });
+    });
+</script>
 @endsection

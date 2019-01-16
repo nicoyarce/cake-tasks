@@ -17,5 +17,8 @@
 @role('Usuario')
 <p>Tiene<b> <a href="/proyectos/">{{$nroProyectos}} proyecto(s)</a></b> asociados a su cuenta.</p>
 @endrole
-
+<!-- Preloader -->
+<div id="preloader">
+  <div id="status">&nbsp;</div>
+</div>  
 @endsection

@@ -22,7 +22,7 @@ class CreateObservacionesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
+        /*
         $tareas = Tarea::all();
 
         foreach ($tareas as $tarea) {
@@ -33,6 +33,7 @@ class CreateObservacionesTable extends Migration
                 $observacion->save();
             }
         }
+        */
 
         Schema::table('tareas', function (Blueprint $table) {
             $table->dropColumn('observaciones');

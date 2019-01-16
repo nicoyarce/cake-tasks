@@ -10,6 +10,7 @@ use App\Tarea;
 use App\TareaHija;
 use App\User;
 use App\Informe;
+
 /**
  * App\Proyecto
  *
@@ -52,6 +53,10 @@ class Proyecto extends Model
 
     public function tareasHijas(){
         return $this->hasManyThrough(TareaHija::class, Tarea::class, 'proyecto_id', 'tarea_madre_id', 'id', 'id')->withTrashed();
+    }
+
+    public function observaciones(){
+        return $this->hasMany(Observacion::class, 'proyecto_id')->withTrashed();
     }
 
     protected static function boot() {

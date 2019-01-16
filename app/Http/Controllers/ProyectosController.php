@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Tarea;
 use App\TareaHija;
+use App\Observacion;
 use App\Http\Requests\ProyectosRequest;
 use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
@@ -73,6 +74,12 @@ class ProyectosController extends Controller
         $proyecto->fecha_termino_original = $request->fecha_termino;
         $proyecto->fecha_termino = $request->fecha_termino;      
         $proyecto->save();
+        foreach ($request->observaciones as $textoObservacion) {            
+            $observacion = new Observacion();
+            $observacion->contenido = $textoObservacion;
+            $observacion->proyecto()->associate($proyecto);
+            $observacion->save();            
+        }
         flash('Proyecto registrado')->success();
         return redirect('proyectos');
     }
@@ -112,9 +119,18 @@ class ProyectosController extends Controller
      */
     public function update(ProyectosRequest $request, Proyecto $proyecto)
     { 
-        $proyectonuevo = Proyecto::find($proyecto->id);
-        $proyectonuevo->fill($request->all());
-        $proyectonuevo->save();
+        $proyectoNuevo = Proyecto::find($proyecto->id);
+        $proyectoNuevo->fill($request->all());
+        $proyectoNuevo->observaciones()->forceDelete();        
+        foreach ($request->observaciones as $textoObservacion) {
+            if(!is_null($textoObservacion)){
+                $observacion = new Observacion();
+                $observacion->contenido = $textoObservacion;
+                $observacion->proyecto()->associate($proyectoNuevo);
+                $observacion->save();
+            }            
+        }        
+        $proyectoNuevo->save();
         flash('Proyecto actualizado')->success();
         return redirect('proyectos');
     }

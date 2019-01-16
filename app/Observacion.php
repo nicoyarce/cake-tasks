@@ -16,4 +16,8 @@ class Observacion extends Model
         return $this->belongsTo(Tarea::class);
     }
 
+    public function proyecto(){
+        return $this->belongsTo(Proyecto::class);
+    }
+
 }
