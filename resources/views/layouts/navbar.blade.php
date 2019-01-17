@@ -1,7 +1,7 @@
 <!-- Fixed navbar -->
 <nav id="barra" class="navbar navbar-expand-md navbar-dark">    
     <div id="logo">
-        <img src="/holistic.png" width="150px" height="auto">
+        <img src="/holistic_sinLetras.png" width="150px" height="auto">
     </div>        
     <a id="titulo" class="navbar-brand">Holistic</a>    
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
