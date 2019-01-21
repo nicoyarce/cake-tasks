@@ -64,6 +64,20 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'ftp' => [
+            'driver'   => 'ftp',
+            'host'     => 'ftp.bluewatersurveyors.cl',
+            'username' => 'bluewate',
+            'password' => '00W7bouLu6',
+
+            // Optional FTP Settings...
+            // 'port'     => 21,
+            // 'root'     => '',
+            // 'passive'  => true,
+            // 'ssl'      => true,
+            // 'timeout'  => 30,
+        ],
+
     ],
 
 ];
