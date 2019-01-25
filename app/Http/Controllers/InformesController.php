@@ -43,7 +43,7 @@ class InformesController extends Controller
         //dd($informe->ruta);
         $informe->proyecto()->associate($proyecto);
         $informe->save();
-        Storage::disk('sftp')->put($informe->ruta, $pdf->output());
+        Storage::disk('local')->put($informe->ruta, $pdf->output());
         flash('Informe generado')->success(); 
         return redirect()->action(
             'InformesController@vistaListaInformes', ['id' => $proyecto->id]

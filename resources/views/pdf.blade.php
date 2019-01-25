@@ -22,9 +22,9 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 
 <nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">    
     <div id="logo" class="row">
-        <div class="col-1"><img src="{{public_path('armada.png')}}" width="35px" height="auto"></div>
+        <div class="col-6"><img src="{{public_path('holistic_sinLetras.png')}}" width="150px" height="auto"></div>
         <!-- <img src="/armada.png" width="35px" height="auto"> -->
-        <div class="col-1 ml-3 d-flex align-items-end"><h3 class="text-light">Holistic</h3></div>
+        <div class="col-6 ml-6 d-flex align-items-end"><h3 class="text-light">Holistic</h3></div>
     </div>
 </nav>
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s')}}</h3>
