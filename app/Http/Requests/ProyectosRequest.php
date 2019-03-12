@@ -27,6 +27,7 @@ class ProyectosRequest extends FormRequest
             'nombre'=>'min:4|max:100',
             'fecha_inicio'=>'date|before:fecha_termino',            
             'fecha_termino'=>'date|after:fecha_inicio',           
+            'fecha_termino_nueva'=>'' 
         ];
     }
 }
