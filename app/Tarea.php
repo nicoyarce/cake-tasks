@@ -62,11 +62,11 @@ class Tarea extends Model
         //elimina tareas hijas al eliminar tarea madre
         parent::boot();
         static::deleting(function($tarea) { 
-            foreach($tarea->tareasHijas as $tareaHija){
-              $tareaHija->delete();
+            if(!is_null(($tarea->tareasHijas()))){
+                $tarea->tareasHijas()->delete();
             }
-            foreach($tarea->observaciones as $observacion){
-              $observacion->delete();
+            if(!is_null(($tarea->observaciones()))){
+                $tarea->observaciones()->delete();
             }
         });
     }
