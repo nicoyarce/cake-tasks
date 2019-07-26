@@ -61,7 +61,7 @@ class Proyecto extends Model
 
     protected static function boot() {
         parent::boot();
-        static::deleting(function($proyecto) { 
+        static::deleting(function($proyecto) {
             foreach($proyecto->tareas as $tarea){
               $tarea->delete();
             }
@@ -84,8 +84,8 @@ class Proyecto extends Model
         else{
             $totalDuracion = 0;
             foreach ($tareas as $tarea) {
-                $totalDuracion = $totalDuracion + $tarea->duracion;
-            } 
+                $totalDuracion = $totalDuracion + $tarea->duracion; //dias duracion
+            }
             $tiempoPonderado = 0;
             $avancePonderado = 0;
             foreach ($tareas as $tarea) {
@@ -93,16 +93,16 @@ class Proyecto extends Model
                 $avancePonderado = $avancePonderado + ($tarea->avance * $tiempoPonderado);
             }
             return floor($avancePonderado);
-        }        
+        }
     }
 
     public function getColorAtrasoAttribute(){
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
         $hoyCarbon = Carbon::today();
-        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);        
+        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);
         $fechaAdvertencia = $fechaInicioCarbon->addDays(($diferenciaFechas*60)/100); // verde antes de esta fecha
-        $fechaPeligro = Carbon::parse($this->fecha_inicio)->addDays(($diferenciaFechas*90)/100);  // amarillo antes de esta fecha, naranjo despues de fecha 
+        $fechaPeligro = Carbon::parse($this->fecha_inicio)->addDays(($diferenciaFechas*90)/100);  // amarillo antes de esta fecha, naranjo despues de fecha
         if($hoyCarbon->lte($fechaAdvertencia)){
             return "VERDE";
         }
@@ -114,6 +114,25 @@ class Proyecto extends Model
         }
         else{
             return "ROJO";
+        }
+    }
+
+    public function getPorcentajeAtrasoAttribute(){
+        $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
+        $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
+        $hoyCarbon = Carbon::today();
+        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);
+        $tareas = Tarea::where('proyecto_id',$this->id)->get();
+        if(count($tareas) == 0){
+            return 0;
+        }
+        else{
+            $totalPorcentajeAtraso = 0;
+            foreach ($tareas as $tarea) {
+                $totalPorcentajeAtraso = $totalPorcentajeAtraso + $tarea->porcentajeAtraso; //dias duracion
+            }
+            $porcentajeAtraso = round(($totalPorcentajeAtraso*100)/$diferenciaFechas); //regla de 3 para saber que porcentaje de atraso hay
+            return floor($porcentajeAtraso);
         }
     }
 }

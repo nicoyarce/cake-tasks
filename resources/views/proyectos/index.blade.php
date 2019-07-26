@@ -9,7 +9,7 @@
 		<a type="button" class="btn btn-primary" href="/proyectos/cargarHijas" role="button">Cargar tareas hijas
 			<i class="fas fa-upload"></i>
 		</a>
-	</div>	
+	</div>
 	<div class="col-2">
 		<a type="button" class="btn btn-primary" href="/proyectos/cargarXLS" role="button">Cargar archivo XLS
 			<i class="fas fa-upload"></i>
@@ -31,7 +31,8 @@
 			<th>FTR<br>Original</th>
 			<th>FTR<br>Modificada</th>
 			<th>ATRASO<br>[días]</th>
-			<th>AVANCE<br>[%]</th>			
+			<th>AVANCE<br>[%]</th>
+            <th>AVANCE<br>LINEAL[%] (RECALCULAR)</th>
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
@@ -41,12 +42,12 @@
 			@can('modificar_proyectos')
 			<th>Editar</th>
 			@endcan
-			@can('borrar_proyectos')			
-			<th>Archivar</th>		
-			@endcan	
+			@can('borrar_proyectos')
+			<th>Archivar</th>
+			@endcan
 		</tr>
 	</thead>
-	
+
 	<tbody>
 		@foreach ($proyectos as $proyecto)
 		<tr>
@@ -75,7 +76,8 @@
 				{{$proyecto->atraso}}
 				@endif
 			</td>
-			<td>{{$proyecto->avance}}</td>			
+			<td>{{$proyecto->avance}}</td>
+            <td>{{$proyecto->porcentajeAtraso}}</td>
 			@can('ver_graficos')
 			<td>
 				<a href="{{action('GraficosController@vistaGrafico', $proyecto['id'])}}" type="button" class="btn btn-primary" >
@@ -96,8 +98,8 @@
 					<i class="fas fa-edit"></i>
 				</a>
 			</td>
-			@endcan	
-			@can('borrar_proyectos')		
+			@endcan
+			@can('borrar_proyectos')
 			<td>
 				<form method="POST" action="{{action('ProyectosController@destroy', $proyecto)}}">
 					{{csrf_field()}}
@@ -107,7 +109,7 @@
 					</button>
 				</form>
 			</td>
-			@endcan		
+			@endcan
 		</tr>
 	@endforeach
 	</tbody>
