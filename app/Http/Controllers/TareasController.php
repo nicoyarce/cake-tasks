@@ -7,6 +7,8 @@ use App\Proyecto;
 use App\Area;
 use App\TareaHija;
 use App\Observacion;
+use App\User;
+use Jenssegers\Date\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTareasRequest;
@@ -98,6 +100,14 @@ class TareasController extends Controller
                 $observacion->tarea()->associate($tareaNueva);
                 $observacion->save();
             }            
+        }        
+        if($request->has('fecha_termino') && $request->fecha_termino != $tarea->fecha_termino) {
+            $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id))->save();
+            $tareaNueva->fecha_ultimo_cambio_ftt = Date::now();
+        }
+        if($request->has('avance') && $request->avance != $tarea->avance) {
+            $tareaNueva->autorUltimoCambioAvance()->associate(User::find(Auth::user()->id))->save();
+            $tareaNueva->fecha_ultimo_cambio_avance = Date::now();
         }
         $tareaNueva->save();
         flash('Tarea actualizada')->success();

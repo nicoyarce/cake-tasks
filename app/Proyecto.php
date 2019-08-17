@@ -59,6 +59,10 @@ class Proyecto extends Model
         return $this->hasMany(Observacion::class, 'proyecto_id')->withTrashed();
     }
 
+    public function autorUltimoCambioFtr(){
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftr_id');
+    }
+
     protected static function boot() {
         parent::boot();
         static::deleting(function($proyecto) {
@@ -119,20 +123,19 @@ class Proyecto extends Model
 
     public function getPorcentajeAtrasoAttribute(){
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
-        $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
+        $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
         $hoyCarbon = Carbon::today();
-        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);
-        $tareas = Tarea::where('proyecto_id',$this->id)->get();
-        if(count($tareas) == 0){
-            return 0;
+        $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon);
+        if($hoyCarbon->lte($fechaInicioCarbon)){
+            $porcentajeAtraso = 0;
+        }
+        else if($hoyCarbon->gt($fechaInicioCarbon) && $hoyCarbon->lt($fechaTerminoCarbon)){
+            $diasHastaHoy = $fechaInicioCarbon->diffInDays($hoyCarbon);
+            $porcentajeAtraso = round(($diasHastaHoy*100)/$diasDeEjecucion); //regla de 3 para saber que porcentaje de atraso hay
         }
         else{
-            $totalPorcentajeAtraso = 0;
-            foreach ($tareas as $tarea) {
-                $totalPorcentajeAtraso = $totalPorcentajeAtraso + $tarea->porcentajeAtraso; //dias duracion
-            }
-            $porcentajeAtraso = round(($totalPorcentajeAtraso*100)/$diferenciaFechas); //regla de 3 para saber que porcentaje de atraso hay
-            return floor($porcentajeAtraso);
+            $porcentajeAtraso = 100;
         }
+        return $porcentajeAtraso;
     }
 }

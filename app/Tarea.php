@@ -58,15 +58,23 @@ class Tarea extends Model
         return $this->hasMany(Observacion::class)->withTrashed();
     }
 
+    public function autorUltimoCambioFtt(){
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftt_id');
+    }
+
+    public function autorUltimoCambioAvance(){
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_avance_id');
+    }
+
     protected static function boot() {
         //elimina tareas hijas al eliminar tarea madre
         parent::boot();
         static::deleting(function($tarea) {
-            foreach($tarea->tareasHijas as $tareaHija){
-              $tareaHija->delete();
+            if(!is_null($tarea->tareasHijas())){
+              $tarea->tareasHijas()->delete();
             }
-            foreach($tarea->observaciones as $observacion){
-              $observacion->delete();
+            if(!is_null($tarea->observaciones())){
+              $tarea->observaciones()->delete();
             }
         });
     }

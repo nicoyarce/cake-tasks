@@ -32,7 +32,7 @@
 			<th>FTR<br>Modificada</th>
 			<th>ATRASO<br>[días]</th>
 			<th>AVANCE<br>[%]</th>
-            <th>AVANCE<br>LINEAL[%] (RECALCULAR)</th>
+            <th>AVANCE<br>PROYECTADO[%]</th>
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
@@ -62,11 +62,18 @@
 			@endif
 			<td style="width: 12%" >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
 			<td style="width: 12%">{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
-			<td style="width: 12%">
+			<td style="width: 12%">				
 				@if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
 				-
 				@else
-				{{ $proyecto->fecha_termino->format('d-M-Y')}}
+					@if(empty($proyecto->autorUltimoCambioFtr))
+						{{ $proyecto->fecha_termino->format('d-M-Y')}}
+					@else					
+						<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
+							title="Autor ultimo cambio: {{$proyecto->autorUltimoCambioFtr->nombre}} <br> Fecha ultimo cambio: <br> {{$proyecto->fecha_ultimo_cambio_ftr->format('d-M-Y H:i:s')}}">
+							{{ $proyecto->fecha_termino->format('d-M-Y')}}
+						</a>
+					@endif
 				@endif
 			</td>
 			<td>

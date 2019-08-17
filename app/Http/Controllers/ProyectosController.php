@@ -8,6 +8,7 @@ use App\Proyecto;
 use App\Tarea;
 use App\TareaHija;
 use App\Observacion;
+use App\User;
 use App\Http\Requests\ProyectosRequest;
 use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
@@ -74,11 +75,13 @@ class ProyectosController extends Controller
         $proyecto->fecha_termino_original = $request->fecha_termino;
         $proyecto->fecha_termino = $request->fecha_termino;      
         $proyecto->save();
-        foreach ($request->observaciones as $textoObservacion) {            
-            $observacion = new Observacion();
-            $observacion->contenido = $textoObservacion;
-            $observacion->proyecto()->associate($proyecto);
-            $observacion->save();            
+        foreach ($request->observaciones as $textoObservacion) {   
+            if(!is_null($textoObservacion)){         
+                $observacion = new Observacion();
+                $observacion->contenido = $textoObservacion;
+                $observacion->proyecto()->associate($proyecto);
+                $observacion->save();
+            }        
         }
         flash('Proyecto registrado')->success();
         return redirect('proyectos');
@@ -106,7 +109,7 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Proyecto $proyecto)
-    {   
+    {
         return view('proyectos.edit', compact('proyecto'));
     }
 
@@ -120,7 +123,8 @@ class ProyectosController extends Controller
     public function update(ProyectosRequest $request, Proyecto $proyecto)
     { 
         $proyectoNuevo = Proyecto::find($proyecto->id);
-        $proyectoNuevo->fill($request->all());
+        $proyectoNuevo->nombre = $request->nombre;
+        $proyectoNuevo->fecha_termino = $request->fecha_termino;        
         $proyectoNuevo->observaciones()->forceDelete();        
         foreach ($request->observaciones as $textoObservacion) {
             if(!is_null($textoObservacion)){
@@ -129,7 +133,11 @@ class ProyectosController extends Controller
                 $observacion->proyecto()->associate($proyectoNuevo);
                 $observacion->save();
             }            
-        }        
+        }
+        if($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {            
+            $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
+            $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
+        }
         $proyectoNuevo->save();
         flash('Proyecto actualizado')->success();
         return redirect('proyectos');
