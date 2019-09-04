@@ -32,7 +32,8 @@
 		<!-- Begin page content -->
 		@include('flash::message')
 		<main id="main" role="main" class="container">
-			@yield('content')			
+			@yield('content')	
+			@include('layouts.modal')
 		</main>
 		<!-- Begin footer -->
 		{{-- <footer id="footer" class="footer" style="">

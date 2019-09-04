@@ -32,5 +32,9 @@ trait FechasTraducidas{
 
     public function getFechaUltimoCambioAvanceAttribute($date){
         return new Date($date);
-    }    
+    }
+
+    public function getCreatedAtAttribute($date){
+        return new Date($date);
+    }
 }

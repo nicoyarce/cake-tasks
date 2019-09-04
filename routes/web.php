@@ -26,6 +26,9 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 
     Route::resource('users', 'UsersController');
     Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);      
+
+    Route::get('areas/crear', 'AreasController@indexConModal');
+    Route::resource('areas', 'AreasController');
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {

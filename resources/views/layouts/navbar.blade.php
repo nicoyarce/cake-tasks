@@ -29,7 +29,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/users/">Usuarios</a>
                     </li>
-                @endif
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Configuraciones
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
+                        </div>
+                    </li>
+                @endif                
                 <li class="nav-item">
                     <a class="nav-link" href="/about/">Acerca de</a>
                 </li>
