@@ -29,6 +29,9 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 
     Route::get('areas/crear', 'AreasController@indexConModal');
     Route::resource('areas', 'AreasController');
+
+    Route::get('avances/crear', 'NomenclaturaAvancesController@indexConModal');
+    Route::resource('avances', 'NomenclaturaAvancesController');
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {

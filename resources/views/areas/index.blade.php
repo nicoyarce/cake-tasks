@@ -50,6 +50,7 @@
 				@endforeach
 			</tbody>
 		</table>
+	{{$areas->links()}}
 	@else
 		<hr>
 		<h3 class="text-center">No hay áreas</h3>

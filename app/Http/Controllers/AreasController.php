@@ -23,17 +23,7 @@ class AreasController extends Controller
         $abrir_modal = 1;
         $areas = Area::paginate(10);
         return view('areas.index', compact('areas', 'abrir_modal'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('areas.create');
-    }
+    }    
 
     /**
      * Store a newly created resource in storage.

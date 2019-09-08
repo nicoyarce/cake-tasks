@@ -65,42 +65,53 @@ function dibujarGrafico(data) {
             $("#listaObservaciones").empty();            
             svgSimbologia.selectAll("line.flecha").remove();
         })
-        .on('click', function(d, i) {                    
+        .on('dblclick', function(d, i) {                    
             cargarVistaGantt(d.data.id);         
         })
-        .on('mouseover', function(d, i) {
-            //console.log("You clicked", d), i;
-            $(".detallesTarea").show();            
-            $("#nombre").text(d.data.nombre);
-            $("#area").text(d.data.nombreArea);
-            $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
-            $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
-            if(d.data.fecha_termino.date == d.data.fecha_termino_original.date){                
-                $("#ftrm").text("-");
-                $("#atraso").text("-");
-            }else{                
-                $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
-                $("#atraso").text(d.data.atraso);
-            }  
-            $("#avance").text(d.data.avance);  
-            if(d.data.observaciones.length>0){
-                $("#listaObservaciones").show();
-            }else{
-                $("#listaObservaciones").hide();
-            }
-            $.each(d.data.observaciones, function(indice){
-                console.log(d.data.observaciones[indice]);
-                $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice]);              
-            });
-            if(d.data.critica == 1){
-                $("#critica").show();
-            }
-            else{
-                $("#critica").hide();
-            }
-            dibujarFlecha(d.data.porcentajeAtraso);
+        .on('mouseover', function(d, i){
+            muestraDatosGrafico(d, i)
+        })
+        .on('click', function(d, i){
+            if (outerPath.on('mouseover') == undefined){               
+                outerPath.on('mouseover',  muestraDatosGrafico(d, i));
+            } else {
+                outerPath.on('mouseover', null);
+            }                                   
         });
-   
+        
+    function muestraDatosGrafico(d, i) {
+        //console.log("You clicked", d), i;
+        $(".detallesTarea").show();            
+        $("#nombre").text(d.data.nombre);
+        $("#area").text(d.data.nombreArea);
+        $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
+        $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
+        if(d.data.fecha_termino.date == d.data.fecha_termino_original.date){                
+            $("#ftrm").text("-");
+            $("#atraso").text("-");
+        }else{                
+            $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
+            $("#atraso").text(d.data.atraso);
+        }  
+        $("#avance").text(d.data.avance);  
+        if(d.data.observaciones.length>0){
+            $("#listaObservaciones").show();
+        }else{
+            $("#listaObservaciones").hide();
+        }
+        $.each(d.data.observaciones, function(indice){
+            console.log(d.data.observaciones[indice]);
+            $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice]);              
+        });
+        if(d.data.critica == 1){
+            $("#critica").show();
+        }
+        else{
+            $("#critica").hide();
+        }
+        dibujarFlecha(d.data.porcentajeAtraso);
+    }
+
     outerPath.append("path")
         .attr("fill", calcularColor)
         .attr("class", "outlineArc")

@@ -1,0 +1,20 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class NomenclaturaAvance extends Model
+{
+    use FechasTraducidas;
+    protected $table = 'nomenclaturasAvance';
+
+    public function getHabilitaBorradoAttribute(){
+    	if (Tarea::where('avance', '=', $this->porcentaje)->exists()) {
+		   return false;
+		}
+		else {
+			return true;
+		}
+    }
+}

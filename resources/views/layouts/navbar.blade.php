@@ -35,7 +35,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
-                        </div>
+                            <a class="dropdown-item" href="/avances/">Gestionar etiquetas avance</a>
+                        </div>                        
                     </li>
                 @endif                
                 <li class="nav-item">
