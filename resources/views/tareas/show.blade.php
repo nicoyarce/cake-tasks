@@ -13,37 +13,38 @@
 </div>
 <hr>
 <div class="row">
-    <ul class="list-inline">        
-        <li class="list-inline-item"><h4>Area:</h4></li>
-        <li class="list-inline-item"><p>{{$tarea->area->nombrearea}}</p></li>
-    </ul>
-</div>
-<div class="row">
-    <div class="form-group">        
-            <h4>Observaciones:</h4>
-            <ul>
-                @if(count($tarea->observaciones)>0)
-                @foreach ($tarea->observaciones as $observacion)
-                    <li>{{$observacion}}</li>
-                @endforeach
-                @else
-                    <li><h5>No hay datos.</h5></li>
-                @endif
-            </ul>         
-    </div>    
-</div>
-<div class="row">
-    <div class="form-group">
-        <h4>Tareas hijas:</h4>        
-        <ul>
-            @if(count($tareasHijas)>0)
-            @foreach ($tareasHijas as $tareaHija)
-                <li>{{$tareaHija->nombre}}</li>
-            @endforeach         
-            @else
-                <li><h5>No hay datos.</h5></li>
-            @endif
-        </ul>
+    <div class="form-group col-6 pt-5">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Área</h5>    
+            <p class="card-text">{{$tarea->area->nombrearea}}</p>
+          </div>
+        </div>
     </div>
+    <div class="form-group col-6">
+        <h4>Observaciones</h4>
+        <div class="list-group">        
+            @if(count($tarea->observaciones)>0)
+                @foreach ($tarea->observaciones()->get() as $observaciones)
+                <div class="list-group-item flex-column align-items-start">
+                    <p class="mb-1">{{$observaciones->contenido}}</p>
+                    <small>{{$observaciones->created_at->format('d-M-Y H:m')}}</small>
+                </div>
+                @endforeach
+            @else
+            <div class="list-group-item ">
+                <p class="mb-1">No hay datos.</p>
+            </div>
+            @endif        
+        </div>      
+    </div>
+</div>
+
+<div class="row">     
+    <h4>Carta gantt detalle</h4>   
+</div>
+<hr>
+<div class="row">    
+    
 </div>
 @endsection
