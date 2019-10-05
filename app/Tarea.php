@@ -40,7 +40,7 @@ class Tarea extends Model
         'fecha_termino_original' => 'date:Y-m-d',
         'fecha_termino' => 'date:Y-m-d'
     ];*/
-    protected $appends = ['nombreArea', 'atraso', 'colorAtraso','porcentajeAtraso','observaciones'];
+    protected $appends = ['nombreArea', 'atraso', 'colorAtraso','porcentajeAtraso','observaciones']; 
 
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);
@@ -62,17 +62,17 @@ class Tarea extends Model
         //elimina tareas hijas al eliminar tarea madre
         parent::boot();
         static::deleting(function($tarea) {
-            foreach($tarea->tareasHijas as $tareaHija){
-              $tareaHija->delete();
+            if(!is_null($tarea->tareasHijas())){
+                $tarea->tareasHijas()->delete();    
             }
-            foreach($tarea->observaciones as $observacion){
-              $observacion->delete();
+            if(!is_null($tarea->observaciones())){
+                $tarea->observaciones()->delete();                       
             }
         });
     }
 
     public function getAtrasoAttribute(){
-        $final = Carbon::parse($this->fecha_termino_original);
+        $final = Carbon::parse($this->fecha_termino_original);        
         return $final->diffInDays($this->fecha_termino);
     }
 
@@ -92,7 +92,7 @@ class Tarea extends Model
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
         $hoyCarbon = Carbon::today();
-        $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon); //indica la diferencia de dias entre el inicio y termino de la tarea
+        $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon); //indica la diferencia de dias entre el inicio y termino de la tarea    
         $fechaAdvertencia = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion*(3/5))); //indica la fecha en que se cumple un 60% del tiempo
         $fechaPeligro = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion*(9/10))); //indica la fecha en que se cumple un 90% del tiempo
         if($hoyCarbon->lte($fechaAdvertencia)){
@@ -115,7 +115,7 @@ class Tarea extends Model
                 return "VERDE";
             }
             return "ROJO";
-        }
+        }        
     }
 
     /*Se usa para dibujar la linea en la flecha de avance del grafico*/
@@ -135,7 +135,7 @@ class Tarea extends Model
             $porcentajeAtraso = 100;
         }
         return $porcentajeAtraso;
-    }
+    }   
 
     public function getObservacionesAttribute(){
         $observaciones = Observacion::where('tarea_id',$this->id)->pluck('contenido');
@@ -151,12 +151,12 @@ class Tarea extends Model
     }
 /*
     public function getFechaInicioAttribute($atraso){
-        return $this->fecha_inicio->toDateTimeString();
+        return $this->fecha_inicio->toDateTimeString(); 
     }
-    public function getFechaTerminoOriginalAttribute($atraso){
+    public function getFechaTerminoOriginalAttribute($atraso){    
         return $this->fecha_termino_original->toDateTimeString();
     }
     public function getFechaTerminoAttribute($atraso){
-        return $this->fecha_termino->toDateTimeString();
+        return $this->fecha_termino->toDateTimeString(); 
     }*/
 }

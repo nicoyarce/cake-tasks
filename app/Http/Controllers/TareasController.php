@@ -89,16 +89,18 @@ class TareasController extends Controller
         }
         else{
             $tareaNueva->critica = false;
-        }
-        $tareaNueva->observaciones()->forceDelete();        
-        foreach ($request->observaciones as $textoObservacion) {
-            if(!is_null($textoObservacion)){
-                $observacion = new Observacion();
-                $observacion->contenido = $textoObservacion;
-                $observacion->tarea()->associate($tareaNueva);
-                $observacion->save();
-            }            
-        }
+        }        
+        if($request->has('observaciones')){
+            $tareaNueva->observaciones()->forceDelete();
+            foreach ($request->observaciones as $textoObservacion) {
+                if(!is_null($textoObservacion)){
+                    $observacion = new Observacion();
+                    $observacion->contenido = $textoObservacion;
+                    $observacion->tarea()->associate($tareaNueva);
+                    $observacion->save();
+                }            
+            }
+        }        
         $tareaNueva->save();
         flash('Tarea actualizada')->success();
         return redirect()->route('proyectos.show',$tareaNueva->proyecto_id)->with('idTareaMod', $tareaNueva->id);

@@ -31,8 +31,8 @@
 			<th>FTR<br>Original</th>
 			<th>FTR<br>Modificada</th>
 			<th>ATRASO<br>[días]</th>
-			<th>AVANCE<br>[%]</th>
-            <th>AVANCE<br>LINEAL[%] (RECALCULAR)</th>
+			<th>AVANCE<br>REAL[%]</th>
+            <th>AVANCE<br>PROYECTADO[%]</th>
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan

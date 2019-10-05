@@ -118,21 +118,22 @@ class Proyecto extends Model
     }
 
     public function getPorcentajeAtrasoAttribute(){
-        $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
-        $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
-        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);
         $tareas = Tarea::where('proyecto_id',$this->id)->get();
         if(count($tareas) == 0){
             return 0;
         }
         else{
-            $totalPorcentajeAtraso = 0;
+            $totalDuracion = 0;
             foreach ($tareas as $tarea) {
-                $totalPorcentajeAtraso = $totalPorcentajeAtraso + $tarea->porcentajeAtraso; //dias duracion
+                $totalDuracion = $totalDuracion + $tarea->duracion; //dias duracion
             }
-            $porcentajeAtraso = round(($totalPorcentajeAtraso*100)/$diferenciaFechas); //regla de 3 para saber que porcentaje de atraso hay
-            return floor($porcentajeAtraso);
+            $tiempoPonderado = 0;
+            $avanceProyectado = 0;
+            foreach ($tareas as $tarea) {
+                $tiempoPonderado = $tarea->duracion/$totalDuracion;
+                $avanceProyectado = $avanceProyectado + ($tarea->porcentajeAtraso * $tiempoPonderado);
+            }
+            return floor($avanceProyectado);
         }
     }
 }
