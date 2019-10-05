@@ -92,14 +92,16 @@ class TareasController extends Controller
         else{
             $tareaNueva->critica = false;
         }
-        $tareaNueva->observaciones()->forceDelete();        
-        foreach ($request->observaciones as $textoObservacion) {
-            if(!is_null($textoObservacion)){
-                $observacion = new Observacion();
-                $observacion->contenido = $textoObservacion;
-                $observacion->tarea()->associate($tareaNueva);
-                $observacion->save();
-            }            
+        if($request->has('observaciones')){
+            $tareaNueva->observaciones()->forceDelete();
+            foreach ($request->observaciones as $textoObservacion) {
+                if(!is_null($textoObservacion)){
+                    $observacion = new Observacion();
+                    $observacion->contenido = $textoObservacion;
+                    $observacion->tarea()->associate($tareaNueva);
+                    $observacion->save();
+                }            
+            }
         }        
         if($request->has('fecha_termino') && $request->fecha_termino != $tarea->fecha_termino) {
             $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id))->save();

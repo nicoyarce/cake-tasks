@@ -19,7 +19,7 @@
 					<th>FTT<br>Original</th>
 					<th>FTT<br>Modificada</th>
 					<th>ATRASO<br>[días]</th>
-					<th>AVANCE<br>[%]</th>
+					<th>AVANCE<br>REAL[%]</th>
                     <th>AVANCE<br>PROYECTADO[%]</th>
 					@can('modificar_tareas')
 					<th>Editar</th>

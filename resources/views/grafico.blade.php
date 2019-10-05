@@ -2,8 +2,42 @@
 @section('content')
 <meta name="_token" content="{!! csrf_token() !!}" />
 <div class="row justify-content-between">
-    <h4>{{$proyecto->nombre}}</h4>
-    <a type="button" class="btn btn-primary btn-sm float-right" href="{{url()->previous()}}">Atrás <i class="fas fa-arrow-left "></i></a>
+    <div class="col-4">
+        <h4>{{$proyecto->nombre}} 
+            @if(!is_null($proyecto->deleted_at))
+                <span class="badge badge-pill badge-warning">Archivado</span>
+            @endif
+        </h4>
+    </div>
+    <div class="col-7">
+        <table class="table table-sm table-borderless">
+            <thead>
+                <tr>                    
+                    <th>FIR</th>
+                    <th>FTR Original</th>
+                    <th>FTR Modificada</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>                    
+                    <td>{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
+                    <td>{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
+                    <td>
+                        @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
+                        -
+                        @else
+                        {{ $proyecto->fecha_termino->format('d-M-Y')}}
+                        @endif
+                    </td>                                      
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-1">
+        <a type="button" class="btn btn-primary btn-sm float-right" href="{{url()->previous()}}">Atrás 
+            <i class="fas fa-arrow-left "></i>
+        </a>
+    </div>
 </div>
 <hr>
 <div class="row" id="graficoBotones">
@@ -16,14 +50,20 @@
     </div> --}}
     <div id="botones" class="col-6">
         <div class="row form-group">
-            <div class="col-3">
-                <p class="m-0 text-center font-weight-bold">AVANCE PROYECTO</p>
-                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:30px">{{$proyecto->avance}}%</p>
+            <div class="col-2">
+                <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE REAL</p>
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->avance}}%</p>
+            </div>
+            <div class="col-2">
+                <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE PROYECTADO</p>
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->porcentajeAtraso}}%</p>
+            </div>    
+            <div class="col-1">                            
                 <div class="text-center">
                     <h3><span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span></h3>
                 </div>
             </div>
-            <div class="col-9">                            
+            <div class="col-">                            
                 <svg id="simbologia" class="w-100">
                     <defs>
                         <marker
