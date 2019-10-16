@@ -53,11 +53,14 @@ class TareasController extends Controller
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
         $tarea->save();
-        foreach ($request->observaciones as $textoObservacion) {            
-            $observacion = new Observacion();
-            $observacion->contenido = $textoObservacion;
-            $observacion->tarea()->associate($tarea);
-            $observacion->save();            
+        foreach ($request->observaciones as $textoObservacion) {   
+            if(!is_null($textoObservacion)){         
+                $observacion = new Observacion();
+                $observacion->contenido = $textoObservacion;
+                $observacion->proyecto()->associate($proyecto);
+                $observacion->user()->associate(User::find(Auth::user()->id))->save();
+                $observacion->save();
+            }        
         }
         flash('Tarea registrada')->success();        
         return redirect()->route('proyectos.show',$request->proyecto_id)->with('idTareaMod', $tarea->id);
@@ -67,7 +70,8 @@ class TareasController extends Controller
         $listaProyectos = Proyecto::all();
         $areas = Area::all();
         $avances = \DB::table('nomenclaturasAvance')->get();
-        return view('tareas.edit', compact('tarea','listaProyectos','areas','avances'));
+        $observaciones = $tarea->observaciones()->get();
+        return view('tareas.edit', compact('tarea','listaProyectos','areas','avances', 'observaciones'));
     }
 
     public function update(Request $request, Tarea $tarea){
@@ -93,14 +97,17 @@ class TareasController extends Controller
             $tareaNueva->critica = false;
         }
         if($request->has('observaciones')){
-            $tareaNueva->observaciones()->forceDelete();
-            foreach ($request->observaciones as $textoObservacion) {
-                if(!is_null($textoObservacion)){
+            $ids_observaciones = collect($request->ids_observaciones);            
+            Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
+            $observacionesRestantes = $tareaNueva->observaciones()->get()->pluck('contenido');
+            foreach ($request->observaciones as $n => $textoObservacion) {                                
+                if(!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)){
                     $observacion = new Observacion();
                     $observacion->contenido = $textoObservacion;
                     $observacion->tarea()->associate($tareaNueva);
+                    $observacion->autor()->associate(User::find(Auth::user()->id));
                     $observacion->save();
-                }            
+                }                
             }
         }        
         if($request->has('fecha_termino') && $request->fecha_termino != $tarea->fecha_termino) {

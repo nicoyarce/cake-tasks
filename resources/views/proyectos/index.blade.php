@@ -31,8 +31,8 @@
 			<th>FTR<br>Original</th>
 			<th>FTR<br>Modificada</th>
 			<th>ATRASO<br>[días]</th>
-			<th>AVANCE<br>REAL[%]</th>
-            <th>AVANCE<br>PROYECTADO[%]</th>
+			<th class="text-center">AVANCE<br>REAL[%]</th>
+			<th class="text-center">AVANCE<br>PROGRAMADO[%]</th>
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
@@ -70,7 +70,7 @@
 						{{ $proyecto->fecha_termino->format('d-M-Y')}}
 					@else					
 						<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
-							title="Autor ultimo cambio: {{$proyecto->autorUltimoCambioFtr->nombre}} <br> Fecha ultimo cambio: <br> {{$proyecto->fecha_ultimo_cambio_ftr->format('d-M-Y H:i:s')}}">
+							title="Modificado por: {{$proyecto->autorUltimoCambioFtr->nombre}} <br> Fecha: <br> {{$proyecto->fecha_ultimo_cambio_ftr->format('d-M-Y H:i:s')}}">
 							{{ $proyecto->fecha_termino->format('d-M-Y')}}
 						</a>
 					@endif

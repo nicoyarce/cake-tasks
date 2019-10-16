@@ -26,6 +26,9 @@ class AgregarObservacionProyecto extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('observaciones', function (Blueprint $table) {
+            $table->dropColumn('tarea_id');
+            $table->dropColumn('proyecto_id');
+        });
     }
 }

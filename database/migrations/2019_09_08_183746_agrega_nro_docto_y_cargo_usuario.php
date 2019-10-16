@@ -28,6 +28,11 @@ class AgregaNroDoctoYCargoUsuario extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tareas', function (Blueprint $table) {
+            $table->dropColumn('nro_documento');            
+        });
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('cargo')->nullable();
+        });
     }
 }

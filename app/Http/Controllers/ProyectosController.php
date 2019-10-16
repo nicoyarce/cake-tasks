@@ -80,6 +80,7 @@ class ProyectosController extends Controller
                 $observacion = new Observacion();
                 $observacion->contenido = $textoObservacion;
                 $observacion->proyecto()->associate($proyecto);
+                $observacion->user()->associate(User::find(Auth::user()->id))->save();
                 $observacion->save();
             }        
         }
@@ -120,25 +121,31 @@ class ProyectosController extends Controller
      * @param  \App\Proyecto  $proyecto
      * @return \Illuminate\Http\Response
      */
+
     public function update(ProyectosRequest $request, Proyecto $proyecto)
-    { 
-        $proyectoNuevo = Proyecto::find($proyecto->id);
+    {   
+        $proyectoNuevo = Proyecto::find($proyecto->id);       
         $proyectoNuevo->nombre = $request->nombre;
-        $proyectoNuevo->fecha_termino = $request->fecha_termino;        
-        $proyectoNuevo->observaciones()->forceDelete();        
-        foreach ($request->observaciones as $textoObservacion) {
-            if(!is_null($textoObservacion)){
-                $observacion = new Observacion();
-                $observacion->contenido = $textoObservacion;
-                $observacion->proyecto()->associate($proyectoNuevo);
-                $observacion->save();
-            }            
-        }
+        $proyectoNuevo->fecha_termino = $request->fecha_termino;
         if($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {            
             $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
             $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
         }
-        $proyectoNuevo->save();
+        if($request->has('observaciones')){
+            $ids_observaciones = collect($request->ids_observaciones);            
+            Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
+            $observacionesRestantes = $proyectoNuevo->observaciones()->get()->pluck('contenido');
+            foreach ($request->observaciones as $n => $textoObservacion) {                                
+                if(!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)){
+                    $observacion = new Observacion();
+                    $observacion->contenido = $textoObservacion;
+                    $observacion->proyecto()->associate($proyectoNuevo);
+                    $observacion->autor()->associate(User::find(Auth::user()->id));
+                    $observacion->save();
+                }                
+            }
+        }
+        $proyectoNuevo->save();        
         flash('Proyecto actualizado')->success();
         return redirect('proyectos');
     }

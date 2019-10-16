@@ -25,7 +25,7 @@
 			</div>
 			<div class="form-group col-4">
 				<label for="area_id">Área</label>
-				<select class="form-control" id="area_id" name="area_id"">
+				<select class="form-control" id="area_id" name="area_id">
 					@foreach ($areas as $area)
 						@if($area->id == $tarea->area->id)
 							<option selected value="{{$area->id}}">{{$area->nombrearea}}</option>
@@ -58,22 +58,34 @@
 				<input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>			
 			</div>
 		</div>
-		<div class="form-row">			
-			<div class="form-group col-12">
-					<label for="observaciones">Observaciones</label>
-					<button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
-					<button id="quitaObs" type="button" class="btn btn-danger btn-sm ml-2"><i class="fas fa-minus"></i></button>
-				</div>
-			<div id="listaObservaciones" class="form-group col-12">
-				@if(count($tarea->observaciones)>0)
-					@foreach ($tarea->observaciones as $observacion)
-						<input id="observacion" name="observaciones[]" value="{{$observacion}}" class="form-control">
-					@endforeach
-				@else
-					<input id="observacion" name="observaciones[]" value="" class="form-control">											
-				@endif
-			</div>	
-		</div>
+		<div class="form-row">
+	        <div class="form-group col-4 offset-8">
+	            <label for="observaciones">Observaciones</label>
+	            <button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
+	            <div id="listaObservaciones" class="form-group">
+	                @if(count($observaciones)>0)
+	                    @foreach ($observaciones as $n => $observacion)
+	                        <div id="fila_{{$n}}" class="fila col-12 row form-group pr-0">
+	                            <input id="observacion_{{$n}}" name="observaciones[]" value="{{$observacion->contenido}}" class="texto form-control col-10 col-sm-10 col-xs-10 mr-1">
+	                            <input type="hidden" id="id_observacion_{{$n}}" name="ids_observaciones[]" value="{{$observacion->id}}" class="form-control">
+	                            <button id="quitaObs_{{$n}}" type="button" class="quitar btn btn-danger btn-sm pull-right"><i class="fas fa-minus"></i></button>
+	                        </div>                      
+	                    @endforeach
+	                @else
+	                    <div id="fila_0" class="fila col-12 row form-group pr-0">
+	                        <input id="observacion_" name="observaciones[]" value="" class="texto form-control col-10 col-sm-10 col-xs-10 mr-1">
+	                        <button disabled="true" id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm pull-right"><i class="fas fa-minus" ></i></button>
+	                    </div>
+	                @endif
+	            </div>
+	            {{-- Fila dummy --}}
+	            <div id="fila_" class="fila col-12 row form-group pr-0" style="display: none;">
+	                <input disabled="true" id="observacion_" name="observaciones[]" value="" class="form-control col-10 col-sm-10 col-xs-10 mr-1">
+	                <input disabled="true" type="hidden" id="id_observacion_" name="ids_observaciones[]" value="" class="form-control">
+	                <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm pull-right"><i class="fas fa-minus"></i></button>
+	            </div>                  
+	        </div>          
+	    </div>
 	@else
 	{{-- Formulario para usuarios --}}
 		<table class="table table-hover">
@@ -160,43 +172,47 @@
 @endif
 <script>
 	$(document).ready(function(){
-		var nroObservaciones = $("#listaObservaciones").children().length;
-		console.log(nroObservaciones);
-		if(nroObservaciones<=1){
-			$("#quitaObs").prop('disabled', true);
-		}
-		else{
-			$("#quitaObs").prop('disabled', false);
-		}
+        var nroObservaciones = $("#listaObservaciones").children().length;
+        console.log(nroObservaciones);
+        if(nroObservaciones<=1){
+            $("#quitaObs").prop('disabled', true);
+        }
+        else{
+            $("#quitaObs").prop('disabled', false);
+        }       
+    });
+    $("#agregaObs").click(function(){
+        var nroObservaciones = $("#listaObservaciones").children().length;
+        let fila_dummy = $("#fila_").clone(true, true);
+        let id_original = fila_dummy.attr('id');
+        fila_dummy.attr('id',id_original+nroObservaciones); 
+        fila_dummy.removeAttr('style'); 
+        fila_dummy.children().prop('disabled', false);
+        fila_dummy.children().each(function(){          
+            $(this).attr('id',$(this).attr('id')+nroObservaciones);
+        });
+        fila_dummy.appendTo("#listaObservaciones")
+        nroObservaciones = $("#listaObservaciones").children().length;
+        console.log(nroObservaciones);
+        if(nroObservaciones<=1){
+            $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', true);
+        }
+        else{
+            $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', false);
+        }       
+    });
 
-		$("#agregaObs").click(function(){							
-			$("#listaObservaciones #observacion:last").clone().appendTo("#listaObservaciones").val("");	
-			var nroObservaciones = $("#listaObservaciones").children().length;
-			console.log(nroObservaciones);
-			if(nroObservaciones<=1){
-				$("#quitaObs").prop('disabled', true);
-			}
-			else{
-				$("#quitaObs").prop('disabled', false);
-			}
-		});
-
-		$("#quitaObs").click(function(){
-			var nroObservaciones = $("#listaObservaciones").children().length;
-			if(nroObservaciones>1){
-				console.log("Quita");
-				$("#listaObservaciones #observacion:last-child").remove();
-				var nroObservaciones = $("#listaObservaciones").children().length;
-			}
-			console.log(nroObservaciones);
-			if(nroObservaciones<=1){
-				$(this).prop('disabled', true);
-			}
-			else{
-				$(this).prop('disabled', false);
-			}
-		});
-	});
+    $(".quitar").click(function(){
+        $(this).parent().remove();
+        var nroObservaciones = $("#listaObservaciones").children().length;
+        console.log(nroObservaciones);
+        if(nroObservaciones<=1){
+            $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', true);
+        }
+        else{
+            $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', false);
+        }
+    });
 </script>
 @endsection
 

@@ -32,6 +32,15 @@ class AgregaFechasUltimoCambio extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('proyectos', function (Blueprint $table) {
+            $table->dropColumn('autor_ultimo_cambio_ftr_id');
+            $table->dropColumn('fecha_ultimo_cambio_ftr');
+        });
+        Schema::table('tareas', function (Blueprint $table) {
+            $table->dropColumn('autor_ultimo_cambio_ftt_id');
+            $table->dropColumn('autor_ultimo_cambio_avance_id');
+            $table->dropColumn('fecha_ultimo_cambio_ftt');
+            $table->dropColumn('fecha_ultimo_cambio_avance');
+        });
     }
 }

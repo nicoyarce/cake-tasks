@@ -55,8 +55,8 @@ class Tarea extends Model
     }
 
     public function observaciones(){
-        return $this->hasMany(Observacion::class)->withTrashed();
-    }
+        return $this->hasMany(Observacion::class, 'tarea_id')->withTrashed();
+    }    
 
     public function autorUltimoCambioFtt(){
         return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftt_id');
