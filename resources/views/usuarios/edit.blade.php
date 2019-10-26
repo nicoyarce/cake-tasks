@@ -17,7 +17,7 @@
             <input type="text" id="nombre" name="nombre" class="form-control" value="{{$usuario->nombre}}">
         </div>
         <div class="form-group col-4">
-            <label for="nombre">Cargo</label>
+            <label for="nombre">UU.RR.</label>
             <input type="text" id="cargo" name="cargo" class="form-control" value="{{$usuario->cargo}}">
         </div>
         <div class="form-group col-4">
