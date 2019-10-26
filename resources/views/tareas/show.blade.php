@@ -100,7 +100,13 @@
                 @foreach ($tarea->observaciones()->get() as $observaciones)
                 <div class="list-group-item flex-column align-items-start">
                     <p class="mb-1">{{$observaciones->contenido}}</p>
-                    <small>{{$observaciones->created_at->format('d-M-Y H:m')}} - {{$observaciones->autor->nombre}}</small>
+                    <small>{{$observaciones->created_at->format('d-M-Y H:m')}} - 
+                        @if($observaciones->autor == null)
+                        Sin autor
+                        @else
+                        {{$observaciones->autor->nombre}}
+                        @endif
+                    </small>
                 </div>
                 @endforeach
             @else
