@@ -16,7 +16,7 @@
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Cargo</th>
+            <th>UU.RR.</th>
             <th>RUN</th>
             <th>Rol</th>
             <th>Editar</th>
@@ -29,13 +29,13 @@
             <td>{{$usuario->nombre}}</td>
             <td>{{$usuario->cargo}}</td>
         <td>{{$usuario->run}}</td>
-        <td>{{$usuario->getRoleNames()->first()}}</td>
-        @if(Auth::user()->id != $usuario->id)            
+        <td>{{$usuario->getRoleNames()->first()}}</td>                    
         <td> 
             <a href="{{action('UsersController@edit', $usuario['id'])}}" type="button" class="btn btn-primary" >
                 <i class="fas fa-edit"></i>
             </a>
         </td>
+        @if(Auth::user()->id != $usuario->id)
         <td>
             <form method="POST" action="{{route('users.destroy', $usuario->id)}}">
                 {{csrf_field()}}
@@ -44,10 +44,7 @@
             </button>
             </form>
         </td>
-        @else
-            <td>
-                <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede editarse a si mismo" class="btn btn-primary" disabled="true"><i class="fas fa-edit"></i></button>
-            </td>
+        @else            
             <td>
                 <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede eliminarse a si mismo" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
             </td>
