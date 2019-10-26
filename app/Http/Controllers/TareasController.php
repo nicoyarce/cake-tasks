@@ -43,6 +43,7 @@ class TareasController extends Controller
         $tarea->fecha_inicio = $request->fecha_inicio;
         $tarea->fecha_termino_original = $request->fecha_termino;
         $tarea->fecha_termino = $request->fecha_termino;
+        $tarea->nro_documento = $request->nro_documento;
         if($request->has('critica')){
             $tarea->critica = true;
         }
@@ -87,8 +88,8 @@ class TareasController extends Controller
             $tareaNueva->fill($request->except('fecha_termino'));
             $tareaNueva->fecha_termino = $tarea->fecha_termino;            
         }
-        else{            
-            $tareaNueva->fill($request->all());              
+        else{
+            $tareaNueva->fill($request->all());
         } 
         if($request->has('critica')){
             $tareaNueva->critica = true;

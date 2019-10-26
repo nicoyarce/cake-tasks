@@ -52,14 +52,16 @@
 		@foreach ($proyectos as $proyecto)
 		<tr>
 			@if($proyecto->colorAtraso == "VERDE" || $proyecto->avance == 100)
-			<td class="bg-success"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="bg-success">
 			@elseif($proyecto->colorAtraso == "AMARILLO")
-			<td class="fondo-amarillo"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="fondo-amarillo">
 			@elseif($proyecto->colorAtraso == "NARANJO")
-			<td class="fondo-naranjo"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="fondo-naranjo">
 			@elseif($proyecto->colorAtraso == "ROJO")
-			<td class="bg-danger"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="bg-danger">
 			@endif
+			<a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a>
+			</td>
 			<td style="width: 12%" >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
 			<td style="width: 12%">{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
 			<td style="width: 12%">				

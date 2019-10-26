@@ -13,20 +13,23 @@
 </div>
 @if(count($usuarios)>0)
 <table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>RUN</th>
-            <th>Rol</th>            
-            <th>Editar</th>
-            <th>Borrar</th>
-        </tr>
-    </thead>
-    
-    <tbody>
-        @foreach ($usuarios as $usuario)
-        <tr>
-            <td>{{$usuario->nombre}}</td>
+    <table id="tablaUsuarios" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cargo</th>
+                <th>RUN</th>
+                <th>Rol</th>
+                <th>Editar</th>
+                <th colspan="2">Borrar</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach ($usuarios as $usuario)
+            <tr id="{{$usuario->id}}">
+                <td>{{$usuario->nombre}}</td>
+                <td>{{$usuario->cargo}}</td>
             <td>{{$usuario->run}}</td>
             <td>{{$usuario->getRoleNames()->first()}}</td>
             @if(Auth::user()->id != $usuario->id)            
@@ -44,8 +47,12 @@
                 </form>
             </td>
             @else
-            <td>-</td>
-            <td>-</td>
+                <td>
+                    <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede editarse a si mismo" class="btn btn-primary" disabled="true"><i class="fas fa-edit"></i></button>
+                </td>
+                <td>
+                    <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede eliminarse a si mismo" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
+                </td>
             @endif
         </tr>
         @endforeach
@@ -56,4 +63,36 @@
 <hr>
 <h3 class="text-center">No hay usuarios</h3>
 @endif
+<link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min">
+<script src="/js/dataTables.fixedHeader.min.js"></script>
+<script src="/js/jquery.stickytableheaders.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tablaUsuarios').stickyTableHeaders();
+        $('#tablaUsuarios').DataTable( {
+            //"order": [[ 1, 'asc' ], [ 2, 'asc' ]],
+            //"fixedHeader": true,
+            "ordering": false,
+            "paging":   false,
+            "language": {
+                "url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
+            }
+        } );        
+    } );
+    $('.form-check-input').click(function() {       
+        $('.form-check-input').each(function (i, element){
+            if(element.prop('checked')){
+                $('#borraSelec').prop("disabled", false);
+            } else {
+                $('#borraSelec').prop("disabled", true);
+            }
+        });
+    });
+    @if (session('idUserMod'))
+        window.scrollTo(0, $("#{{session('idUserMod')}}").offset().top-100);
+        $(document).ready(function(){
+            $("#{{session('idUserMod')}}").effect("highlight", {}, 3000);
+        });
+    @endif
+</script>
 @endsection

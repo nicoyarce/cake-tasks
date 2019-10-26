@@ -83,7 +83,7 @@
         </div>
         <div class="row">
             <div class="form-group col-6">
-                <label for="opcion">Filtro cargo:</label>
+                <label for="opcion">Filtro área:</label>
                 <select data-id="{{$proyecto->id}}" class="form-control" id="opcionArea" name="opcionArea">
                     <option selected value="0">Todas</option>
                     @foreach ($areas as $area)

@@ -65,7 +65,7 @@ class AreasController extends Controller
         $areaNueva = Area::find($id);
         $areaNueva->nombrearea = $request->nombre;
         $areaNueva->save();             
-        flash('Area actualizada')->success();
+        flash('Área actualizada')->success();
         return redirect('areas');
     }
 
@@ -78,7 +78,7 @@ class AreasController extends Controller
     public function destroy($id)
     {
         $temp = Area::where('id', $id)->first()->delete();        
-        flash('Area eliminada')->success(); 
+        flash('Área eliminada')->success(); 
         return redirect('areas');
     }
 }

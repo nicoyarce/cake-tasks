@@ -37,6 +37,7 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);    
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax    
+    Route::get('/visor', 'TareasController@cargarVisor'); //ajax
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
     'uses' => 'TareasController@create']);    

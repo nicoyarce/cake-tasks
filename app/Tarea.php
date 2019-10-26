@@ -33,7 +33,7 @@ class Tarea extends Model
     use SoftDeletes;
     use FechasTraducidas;
     protected $table = 'tareas';
-    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica'];
+    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica','nro_documento'];
     protected $dates = ['deleted_at'];
     /*protected $casts = [
         'fecha_inicio' => 'date:Y-m-d',

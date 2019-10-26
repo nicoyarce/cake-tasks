@@ -10,32 +10,34 @@
 @include('layouts.errors')
 <form class="form-horizontal" method="POST" action="/tareas">
 	<div class="form-group">
-		<input type="hidden" id="proyecto_id" name="proyecto_id" value="{{$proyecto->id}}">
-	</div>
-	{{csrf_field()}}
-	<p class="alert alert-primary">Pertenece a proyecto: {{$proyecto->nombre}}</p>
-	<div class="form-row">
-		<div class="form-group col-6">
-			<label for="nombre">Nombre</label>
-			<input type="text" class="form-control" id="nombre" required name="nombre">
-		</div>
-		<div class="form-group col-4">
-			<label for="area_id">Área</label>
-			<select class="form-control" id="area_id" required name="area_id">
+        <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{$proyecto->id}}">
+    </div>
+    {{csrf_field()}}
+    <p class="alert alert-primary">Pertenece a <b>proyecto</b>: {{$proyecto->nombre}}</p>
+    <div class="form-row">
+        <div class="form-group col-5">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" required name="nombre">
+        </div>        
+        <div class="form-group col-2">
+            <label for="area_id">Nro. Documento</label>
+            <input type="text" class="form-control" id="nro_documento" name="nro_documento" value="">
+        </div>
+        <div class="form-group col-3">
+            <label for="area_id">Área</label>
+            <select class="form-control" id="area_id" required name="area_id">
 				<option value="" disabled selected>Elija una opción</option>
 				@foreach ($areas as $area)
 				<option value="{{$area->id}}">{{$area->nombrearea}}</option>
 				@endforeach
-			</select>
-		</div>
-		<div class="mx-auto d-flex align-items-center">
-			<div class="form-check ">
-				<input class="form-check-input" type="checkbox" id="critica" name="critica">
-	  			<label class="form-check-label" for="critica">
-	    			¿Es ruta crítica?
-	  			</label>
-  			</div>
-		</div>
+            </select>
+        </div>
+        <div class="mx-auto d-flex align-items-center">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="critica" name="critica">
+                <label class="custom-control-label" for="critica">¿Es ruta crítica?</label>
+            </div>
+        </div>
 	</div>
 	<div class="form-row">
 		<div class="form-group col-6">
@@ -51,21 +53,33 @@
 		<div class="form-group col-12">
 				<label for="observaciones">Observaciones</label>
 				<button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
-				<button id="quitaObs" type="button" class="btn btn-danger btn-sm ml-2"><i class="fas fa-minus"></i></button>
+            <div id="listaObservaciones" class="form-group">                
+                <div id="fila_0" class="fila col-12 row form-group pr-0">
+                    <input id="observacion_" name="observaciones[]" value="" class="texto form-control col-11 mr-1">
+                    <button disabled="true" id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus" ></i></button>
+                </div>                
 			</div>
 		<div id="listaObservaciones" class="form-group col-12">	
-			<input id="observacion" name="observaciones[]" value="" class="form-control">							
+            {{-- Fila dummy --}}
+            <div id="fila_" class="fila col-12 row form-group pr-0" style="display: none;">
+                <input disabled="true" id="observacion_" name="observaciones[]" value="" class="form-control col-11 mr-1">
+                <input disabled="true" type="hidden" id="id_observacion_" name="ids_observaciones[]" value="" class="form-control">
+                <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus"></i></button>
+            </div>                  
 		</div>	
 	</div>	
 	<div class="form-group">
-		<label for="avance">Porcentaje avance</label>
-		<select class="form-control" id="avance" required name="avance">
-			{{-- <option value="" disabled selected>Elija una opción</option> --}}
-			@foreach($avances as $avance)
-			<option value="{{$avance->porcentaje}}">{{$avance->porcentaje}}% - {{$avance->glosa}}</option>
-			@endforeach
-		</select>
-	</div>
+    <div class="form-row">
+        <div class="form-group col-12">
+            <label for="avance">Porcentaje avance</label>
+            <select class="form-control" id="avance" required name="avance">
+                {{-- <option value="" disabled selected>Elija una opción</option> --}}
+                @foreach($avances as $avance)
+                <option value="{{$avance->porcentaje}}">{{$avance->porcentaje}}% - {{$avance->glosa}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 	<div class="form-group text-center">
 		<button type="submit" class="btn btn-primary">Guardar</button>
 	</div>
@@ -79,35 +93,40 @@
 		}
 		else{
 			$("#quitaObs").prop('disabled', false);
-		}
-		
-		$("#agregaObs").click(function(){							
-			$("#listaObservaciones #observacion:last").clone().appendTo("#listaObservaciones").val("");	
-			var nroObservaciones = $("#listaObservaciones").children().length;
-			console.log(nroObservaciones);
-			if(nroObservaciones<=1){
-				$("#quitaObs").prop('disabled', true);
-			}
-			else{
-				$("#quitaObs").prop('disabled', false);
-			}
-		});
+        }       
+    
+        $("#agregaObs").click(function(){
+            var nroObservaciones = $("#listaObservaciones").children().length;
+            let fila_dummy = $("#fila_").clone(true, true);
+            let id_original = fila_dummy.attr('id');
+            fila_dummy.attr('id',id_original+nroObservaciones); 
+            fila_dummy.removeAttr('style'); 
+            fila_dummy.children().prop('disabled', false);
+            fila_dummy.children().each(function(){          
+                $(this).attr('id',$(this).attr('id')+nroObservaciones);
+            });
+            fila_dummy.appendTo("#listaObservaciones")
+            nroObservaciones = $("#listaObservaciones").children().length;
+            console.log(nroObservaciones);
+            if(nroObservaciones<=1){
+                $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', true);
+            }
+            else{
+                $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', false);
+            }       
+        });
 
-		$("#quitaObs").click(function(){
-			var nroObservaciones = $("#listaObservaciones").children().length;
-			if(nroObservaciones>1){
-				console.log("Quita");
-				$("#listaObservaciones #observacion:last-child").remove();
-				var nroObservaciones = $("#listaObservaciones").children().length;
-			}
-			console.log(nroObservaciones);
-			if(nroObservaciones<=1){
-				$(this).prop('disabled', true);
-			}
-			else{
-				$(this).prop('disabled', false);
-			}
-		});
+        $(".quitar").click(function(){
+            $(this).parent().remove();
+            var nroObservaciones = $("#listaObservaciones").children().length;
+            console.log(nroObservaciones);
+            if(nroObservaciones<=1){
+                $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', true);
+            }
+            else{
+                $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', false);
+            }
+        });
 	});
 </script>
 @endsection
