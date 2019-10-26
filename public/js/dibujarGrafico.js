@@ -93,8 +93,7 @@ function dibujarGrafico(data) {
             $("#listaObservaciones").hide();
         }
         $.each(d.data.observaciones, function(indice){
-            console.log(d.data.observaciones[indice]);
-            $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice]);              
+            $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice].contenido+ " - " +formatoFecha(new Date(d.data.observaciones[indice].created_at)));              
         });
         if(d.data.critica == 1){
             $("#critica").show();

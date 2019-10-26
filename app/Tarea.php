@@ -146,8 +146,8 @@ class Tarea extends Model
     }   
 
     public function getObservacionesAttribute(){
-        $observaciones = Observacion::where('tarea_id',$this->id)->pluck('contenido');
-        return $observaciones;
+        $observaciones = Observacion::where('tarea_id',$this->id)->get();
+        return $observaciones->toArray();
     }
 
     public function scopeAtrasoVerde($query){
