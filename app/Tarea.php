@@ -33,7 +33,7 @@ class Tarea extends Model
     use SoftDeletes;
     use FechasTraducidas;
     protected $table = 'tareas';
-    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica'];
+    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica','nro_documento'];
     protected $dates = ['deleted_at'];
     /*protected $casts = [
         'fecha_inicio' => 'date:Y-m-d',
@@ -55,7 +55,15 @@ class Tarea extends Model
     }
 
     public function observaciones(){
-        return $this->hasMany(Observacion::class)->withTrashed();
+        return $this->hasMany(Observacion::class, 'tarea_id')->withTrashed();
+    }    
+
+    public function autorUltimoCambioFtt(){
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftt_id');
+    }
+
+    public function autorUltimoCambioAvance(){
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_avance_id');
     }
 
     protected static function boot() {
@@ -63,10 +71,10 @@ class Tarea extends Model
         parent::boot();
         static::deleting(function($tarea) {
             if(!is_null($tarea->tareasHijas())){
-                $tarea->tareasHijas()->delete();    
+              $tarea->tareasHijas()->delete();
             }
             if(!is_null($tarea->observaciones())){
-                $tarea->observaciones()->delete();                       
+              $tarea->observaciones()->delete();
             }
         });
     }
@@ -138,8 +146,8 @@ class Tarea extends Model
     }   
 
     public function getObservacionesAttribute(){
-        $observaciones = Observacion::where('tarea_id',$this->id)->pluck('contenido');
-        return $observaciones;
+        $observaciones = Observacion::where('tarea_id',$this->id)->get();
+        return $observaciones->toArray();
     }
 
     public function scopeAtrasoVerde($query){

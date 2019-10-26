@@ -50,40 +50,40 @@
     </div> --}}
     <div id="botones" class="col-6">
         <div class="row form-group">
-            <div class="col-2">
-                <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE REAL</p>
-                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->avance}}%</p>
-            </div>
-            <div class="col-2">
-                <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE PROYECTADO</p>
-                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->porcentajeAtraso}}%</p>
-            </div>    
-            <div class="col-1">                            
+            <div class="col-2">                            
                 <div class="text-center">
                     <h3><span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span></h3>
                 </div>
             </div>
-            <div class="col-">                            
-                <svg id="simbologia" class="w-100">
-                    <defs>
-                        <marker
-                        id="arrow"
-                        markerUnits="strokeWidth"
-                        markerWidth="12"
-                        markerHeight="12"
-                        viewBox="0 0 12 12"
-                        refX="6"
-                        refY="6"
-                        orient="auto">
-                        <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #000;"></path>
-                        </marker>
-                    </defs>
-                </svg>                              
+            <div class="col-5">
+                <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE REAL</p>
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->avance}}%</p>
             </div>
+            <div class="col-5">
+                <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE PROYECTADO</p>
+                <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->porcentajeAtraso}}%</p>
+            </div>            
+        </div>
+        <div class="row col-12">                            
+            <svg id="simbologia" class="w-100">
+                <defs>
+                    <marker
+                    id="arrow"
+                    markerUnits="strokeWidth"
+                    markerWidth="12"
+                    markerHeight="12"
+                    viewBox="0 0 12 12"
+                    refX="6"
+                    refY="6"
+                    orient="auto">
+                    <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #000;"></path>
+                    </marker>
+                </defs>
+            </svg>                              
         </div>
         <div class="row">
             <div class="form-group col-6">
-                <label for="opcion">Filtro cargo:</label>
+                <label for="opcion">Filtro área:</label>
                 <select data-id="{{$proyecto->id}}" class="form-control" id="opcionArea" name="opcionArea">
                     <option selected value="0">Todas</option>
                     @foreach ($areas as $area)
@@ -103,7 +103,7 @@
             </div>
         </div>
         
-        <div class="row" style="height: 80px">
+        <div class="row" style="height: 50px">
             <ul class="detallesTarea list-group w-100 mb-1" style="display: none;">
                 <li  class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"><br></span></li>
             </ul>

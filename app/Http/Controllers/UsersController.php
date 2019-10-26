@@ -41,14 +41,15 @@ class UsersController extends Controller
         ]);
         $rol = Role::find($request->role_id);
         $user = new User;
-        $user->nombre = $request->nombre;        
+        $user->nombre = $request->nombre;
+        $user->cargo = $request->cargo;
         $user->run = Rut::parse($request->run)->format(Rut::FORMAT_COMPLETE);
         $user->password = bcrypt($request->password);       
         $user->save();
         $user->assignRole($rol->name);
         $user->proyectos()->attach($request->listaProyectos);        
         flash('Registrado correctamente')->success();
-        return redirect('users');
+        return redirect('users')->with('idUserMod', $user->id);
     }
 
     /**
@@ -84,10 +85,11 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $idUsuario){        
-        $rol = Role::find($request->role_id);               
+        $rol = Role::find($request->role_id);
         $usuarioNuevo = User::find($idUsuario);
 
-        $usuarioNuevo->nombre = $request->nombre;        
+        $usuarioNuevo->nombre = $request->nombre;
+        $usuarioNuevo->cargo = $request->cargo;      
         $usuarioNuevo->run = Rut::parse($request->run)->format(Rut::FORMAT_COMPLETE);
         if(!is_null($request->password)){
             $usuarioNuevo->password = bcrypt($request->password);
@@ -96,7 +98,7 @@ class UsersController extends Controller
         $usuarioNuevo->syncRoles($rol->name);
         $usuarioNuevo->proyectos()->sync($request->listaProyectos);       
         flash('Usuario actualizado')->success();
-        return redirect('users');
+        return redirect('users')->with('idUserMod', $usuarioNuevo->id);
     }    
 
     /**

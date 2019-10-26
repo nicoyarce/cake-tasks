@@ -31,8 +31,8 @@
 			<th>FTR<br>Original</th>
 			<th>FTR<br>Modificada</th>
 			<th>ATRASO<br>[días]</th>
-			<th>AVANCE<br>REAL[%]</th>
-            <th>AVANCE<br>PROYECTADO[%]</th>
+			<th class="text-center">AVANCE<br>REAL[%]</th>
+			<th class="text-center">AVANCE<br>PROGRAMADO[%]</th>
 			@can('ver_graficos')
 			<th>Ver gráfico</th>
 			@endcan
@@ -52,21 +52,30 @@
 		@foreach ($proyectos as $proyecto)
 		<tr>
 			@if($proyecto->colorAtraso == "VERDE" || $proyecto->avance == 100)
-			<td class="bg-success"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="bg-success">
 			@elseif($proyecto->colorAtraso == "AMARILLO")
-			<td class="fondo-amarillo"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="fondo-amarillo">
 			@elseif($proyecto->colorAtraso == "NARANJO")
-			<td class="fondo-naranjo"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="fondo-naranjo">
 			@elseif($proyecto->colorAtraso == "ROJO")
-			<td class="bg-danger"><a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a></td>
+			<td class="bg-danger">
 			@endif
+			<a class="text-dark" href="{{action('ProyectosController@show', $proyecto['id'])}}">{{$proyecto->nombre}}</a>
+			</td>
 			<td style="width: 12%" >{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
 			<td style="width: 12%">{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
-			<td style="width: 12%">
+			<td style="width: 12%">				
 				@if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
 				-
 				@else
-				{{ $proyecto->fecha_termino->format('d-M-Y')}}
+					@if(empty($proyecto->autorUltimoCambioFtr))
+						{{ $proyecto->fecha_termino->format('d-M-Y')}}
+					@else					
+						<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
+							title="Modificado por: {{$proyecto->autorUltimoCambioFtr->nombre}} <br> Fecha: <br> {{$proyecto->fecha_ultimo_cambio_ftr->format('d-M-Y H:i:s')}}">
+							{{ $proyecto->fecha_termino->format('d-M-Y')}}
+						</a>
+					@endif
 				@endif
 			</td>
 			<td>

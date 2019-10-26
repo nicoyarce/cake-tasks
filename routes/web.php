@@ -26,11 +26,18 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 
     Route::resource('users', 'UsersController');
     Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);      
+
+    Route::get('areas/crear', 'AreasController@indexConModal');
+    Route::resource('areas', 'AreasController');
+
+    Route::get('avances/crear', 'NomenclaturaAvancesController@indexConModal');
+    Route::resource('avances', 'NomenclaturaAvancesController');
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);    
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax    
+    Route::get('/visor', 'TareasController@cargarVisor'); //ajax
     Route::get('/tareas/create/{proyectoId}',[
     'as' => 'tareas.create', 
     'uses' => 'TareasController@create']);    

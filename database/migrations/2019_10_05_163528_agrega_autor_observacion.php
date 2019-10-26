@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AgregarObservacionProyecto extends Migration
+class AgregaAutorObservacion extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AgregarObservacionProyecto extends Migration
     public function up()
     {
         Schema::table('observaciones', function (Blueprint $table) {
-            $table->unsignedInteger('tarea_id')->nullable()->change();
-            $table->unsignedInteger('proyecto_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
         });
     }
 
@@ -27,8 +26,7 @@ class AgregarObservacionProyecto extends Migration
     public function down()
     {
         Schema::table('observaciones', function (Blueprint $table) {
-            $table->dropColumn('tarea_id');
-            $table->dropColumn('proyecto_id');
+            $table->dropColumn('user_id');
         });
     }
 }

@@ -32,28 +32,30 @@
 		<!-- Begin page content -->
 		@include('flash::message')
 		<main id="main" role="main" class="container">
-			@yield('content')
-			<script>
-				$(document).ajaxStart(function() {
-					$("#carga").show();
-				});
-				$(document).ajaxStop(function() {
-					$("#carga").hide();
-				});
-			</script>
+			@yield('content')	
+			@include('layouts.modal')
 		</main>
 		<!-- Begin footer -->
 		{{-- <footer id="footer" class="footer" style="">
 			<div class="container">
 				<span class="text-muted small">Desarrollado por Nicolás Oyarce</span>
 			</div>
-		</footer> --}}
-		
+		</footer> --}}		
 		<!--Bootstrap JS -->
+		<script src="/js/popper.min.js" type="text/javascript"></script>
 		<script src="/js/bootstrap.min.js" type="text/javascript"></script>
 		<script>			
 			$('form').submit(function() {				
 				$('#carga').show();
+			});
+			$(function () {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
+			$(document).ajaxStart(function() {
+				$("#carga").show();
+			});
+			$(document).ajaxStop(function() {
+				$("#carga").hide();
 			});			
 		</script>			
 	</body>

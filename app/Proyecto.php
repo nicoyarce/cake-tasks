@@ -59,6 +59,10 @@ class Proyecto extends Model
         return $this->hasMany(Observacion::class, 'proyecto_id')->withTrashed();
     }
 
+    public function autorUltimoCambioFtr(){
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftr_id');
+    }
+
     protected static function boot() {
         parent::boot();
         static::deleting(function($proyecto) {

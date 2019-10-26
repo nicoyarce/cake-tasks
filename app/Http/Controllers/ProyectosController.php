@@ -8,6 +8,7 @@ use App\Proyecto;
 use App\Tarea;
 use App\TareaHija;
 use App\Observacion;
+use App\User;
 use App\Http\Requests\ProyectosRequest;
 use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
@@ -74,11 +75,14 @@ class ProyectosController extends Controller
         $proyecto->fecha_termino_original = $request->fecha_termino;
         $proyecto->fecha_termino = $request->fecha_termino;      
         $proyecto->save();
-        foreach ($request->observaciones as $textoObservacion) {            
-            $observacion = new Observacion();
-            $observacion->contenido = $textoObservacion;
-            $observacion->proyecto()->associate($proyecto);
-            $observacion->save();            
+        foreach ($request->observaciones as $textoObservacion) {   
+            if(!is_null($textoObservacion)){         
+                $observacion = new Observacion();
+                $observacion->contenido = $textoObservacion;
+                $observacion->proyecto()->associate($proyecto);
+                $observacion->user()->associate(User::find(Auth::user()->id))->save();
+                $observacion->save();
+            }        
         }
         flash('Proyecto registrado')->success();
         return redirect('proyectos');
@@ -106,7 +110,7 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Proyecto $proyecto)
-    {   
+    {
         return view('proyectos.edit', compact('proyecto'));
     }
 
@@ -117,20 +121,31 @@ class ProyectosController extends Controller
      * @param  \App\Proyecto  $proyecto
      * @return \Illuminate\Http\Response
      */
+
     public function update(ProyectosRequest $request, Proyecto $proyecto)
-    { 
-        $proyectoNuevo = Proyecto::find($proyecto->id);
-        $proyectoNuevo->fill($request->all());
-        $proyectoNuevo->observaciones()->forceDelete();        
-        foreach ($request->observaciones as $textoObservacion) {
-            if(!is_null($textoObservacion)){
-                $observacion = new Observacion();
-                $observacion->contenido = $textoObservacion;
-                $observacion->proyecto()->associate($proyectoNuevo);
-                $observacion->save();
-            }            
-        }        
-        $proyectoNuevo->save();
+    {   
+        $proyectoNuevo = Proyecto::find($proyecto->id);       
+        $proyectoNuevo->nombre = $request->nombre;
+        $proyectoNuevo->fecha_termino = $request->fecha_termino;
+        if($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {            
+            $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
+            $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
+        }
+        if($request->has('observaciones')){
+            $ids_observaciones = collect($request->ids_observaciones);            
+            Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
+            $observacionesRestantes = $proyectoNuevo->observaciones()->get()->pluck('contenido');
+            foreach ($request->observaciones as $n => $textoObservacion) {                                
+                if(!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)){
+                    $observacion = new Observacion();
+                    $observacion->contenido = $textoObservacion;
+                    $observacion->proyecto()->associate($proyectoNuevo);
+                    $observacion->autor()->associate(User::find(Auth::user()->id));
+                    $observacion->save();
+                }                
+            }
+        }
+        $proyectoNuevo->save();        
         flash('Proyecto actualizado')->success();
         return redirect('proyectos');
     }

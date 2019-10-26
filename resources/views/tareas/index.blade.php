@@ -19,8 +19,8 @@
 					<th>FTT<br>Original</th>
 					<th>FTT<br>Modificada</th>
 					<th>ATRASO<br>[días]</th>
-					<th>AVANCE<br>REAL[%]</th>
-                    <th>AVANCE<br>PROYECTADO[%]</th>
+					<th class="text-center">AVANCE<br>REAL<br>[%]</th>
+                    <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>
 					@can('modificar_tareas')
 					<th>Editar</th>
 					@endcan
@@ -51,7 +51,14 @@
 						@if($tarea->fecha_termino_original == $tarea->fecha_termino)
 						-
 						@else
-						{{ $tarea->fecha_termino->format('d-M-Y')}}
+							@if(empty($tarea->autorUltimoCambioFtt))
+								{{ $tarea->fecha_termino->format('d-M-Y')}}
+							@else
+								<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
+									title="Modificado por: {{$tarea->autorUltimoCambioFtt->nombre}} <br> Fecha: <br> {{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
+									{{ $tarea->fecha_termino->format('d-M-Y')}}
+								</a>
+							@endif
 						@endif
 					</td>
 					<td>
@@ -61,11 +68,20 @@
 						{{$tarea->atraso}}
 						@endif
 					</td>
-					<td>{{$tarea->avance}}</td>
+					<td>
+						@if(empty($tarea->autorUltimoCambioAvance))
+							{{$tarea->avance}}
+						@else
+							<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
+							title="Autor ultimo cambio: {{$tarea->autorUltimoCambioAvance->nombre}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
+								{{$tarea->avance}}
+							</a>
+						@endif
+					</td>
                     <td>{{$tarea->porcentajeAtraso}}</td>
 					@can('modificar_tareas')
 					<td>
-						<a href="{{action('TareasController@edit', $tarea['id'])}} "type="button" class="btn btn-primary">
+						<a href="{{action('TareasController@edit', $tarea)}} "type="button" class="btn btn-primary">
 						<i class="fas fa-pen"></i></a>
 					</td>
 					@endcan

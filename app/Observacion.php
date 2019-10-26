@@ -20,4 +20,8 @@ class Observacion extends Model
         return $this->belongsTo(Proyecto::class);
     }
 
+    public function autor(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }
