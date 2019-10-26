@@ -70,14 +70,7 @@ function dibujarGrafico(data) {
         })
         .on('mouseover', function(d, i){
             muestraDatosGrafico(d, i)
-        })
-        .on('click', function(d, i){
-            if (outerPath.on('mouseover') == undefined){               
-                outerPath.on('mouseover',  muestraDatosGrafico(d, i));
-            } else {
-                outerPath.on('mouseover', null);
-            }                                   
-        });
+    });
         
     function muestraDatosGrafico(d, i) {
         //console.log("You clicked", d), i;

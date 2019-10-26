@@ -36,7 +36,6 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
                             <a class="dropdown-item" href="/avances/">Gestionar nomenclaturas avance</a>
-                            <a class="dropdown-item" href="/tipostarea/">Gestionar tipos de tarea</a>
                         </div>                        
                     </li>
                 @endif                

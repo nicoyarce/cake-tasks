@@ -12,48 +12,46 @@
     </div>
 </div>
 @if(count($usuarios)>0)
-<table class="table table-hover">
-    <table id="tablaUsuarios" class="table table-hover">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Cargo</th>
-                <th>RUN</th>
-                <th>Rol</th>
-                <th>Editar</th>
-                <th colspan="2">Borrar</th>
-            </tr>
-        </thead>
-        
-        <tbody>
-            @foreach ($usuarios as $usuario)
-            <tr id="{{$usuario->id}}">
-                <td>{{$usuario->nombre}}</td>
-                <td>{{$usuario->cargo}}</td>
-            <td>{{$usuario->run}}</td>
-            <td>{{$usuario->getRoleNames()->first()}}</td>
-            @if(Auth::user()->id != $usuario->id)            
-            <td> 
-                <a href="{{action('UsersController@edit', $usuario['id'])}}" type="button" class="btn btn-primary" >
-                    <i class="fas fa-edit"></i>
-                </a>
+<table id="tablaUsuarios" class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cargo</th>
+            <th>RUN</th>
+            <th>Rol</th>
+            <th>Editar</th>
+            <th>Borrar</th>
+        </tr>
+    </thead>    
+    <tbody>
+        @foreach ($usuarios as $usuario)
+        <tr id="{{$usuario->id}}">
+            <td>{{$usuario->nombre}}</td>
+            <td>{{$usuario->cargo}}</td>
+        <td>{{$usuario->run}}</td>
+        <td>{{$usuario->getRoleNames()->first()}}</td>
+        @if(Auth::user()->id != $usuario->id)            
+        <td> 
+            <a href="{{action('UsersController@edit', $usuario['id'])}}" type="button" class="btn btn-primary" >
+                <i class="fas fa-edit"></i>
+            </a>
+        </td>
+        <td>
+            <form method="POST" action="{{route('users.destroy', $usuario->id)}}">
+                {{csrf_field()}}
+                {{method_field('DELETE')}}
+                <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el usuario?')"><i class="fas fa-trash-alt"></i></button>
+            </button>
+            </form>
+        </td>
+        @else
+            <td>
+                <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede editarse a si mismo" class="btn btn-primary" disabled="true"><i class="fas fa-edit"></i></button>
             </td>
             <td>
-                <form method="POST" action="{{route('users.destroy', $usuario->id)}}">
-                    {{csrf_field()}}
-                    {{method_field('DELETE')}}
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el usuario?')"><i class="fas fa-trash-alt"></i></button>
-                </button>
-                </form>
+                <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede eliminarse a si mismo" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
             </td>
-            @else
-                <td>
-                    <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede editarse a si mismo" class="btn btn-primary" disabled="true"><i class="fas fa-edit"></i></button>
-                </td>
-                <td>
-                    <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede eliminarse a si mismo" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            @endif
+        @endif
         </tr>
         @endforeach
     </tbody>
@@ -71,23 +69,14 @@
         $('#tablaUsuarios').stickyTableHeaders();
         $('#tablaUsuarios').DataTable( {
             //"order": [[ 1, 'asc' ], [ 2, 'asc' ]],
-            //"fixedHeader": true,
+            "fixedHeader": false,
             "ordering": false,
             "paging":   false,
             "language": {
                 "url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
             }
-        } );        
-    } );
-    $('.form-check-input').click(function() {       
-        $('.form-check-input').each(function (i, element){
-            if(element.prop('checked')){
-                $('#borraSelec').prop("disabled", false);
-            } else {
-                $('#borraSelec').prop("disabled", true);
-            }
-        });
-    });
+        } );
+    } );    
     @if (session('idUserMod'))
         window.scrollTo(0, $("#{{session('idUserMod')}}").offset().top-100);
         $(document).ready(function(){
