@@ -2,85 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\NomenclaturaAvance;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Validator;
+use App\Http\Controllers\Controller;
+use App\NomenclaturaAvance;
+use App\TipoTarea;
 
 class NomenclaturaAvancesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {   
-        $tipos_avance = NomenclaturaAvance::paginate(10);
-        return view('avances.index')->with('tipos_avance', $tipos_avance);
+
+    public function index(Request $request)
+    {
+        $tipo_tarea = $request->id;
+        $tipo_tarea = TipoTarea::find($tipo_tarea);        
+        $tipos_avance = $tipo_tarea->nomenclaturasAvances()->get()->sortBy('porcentaje');
+        return view('avances.index', compact('tipo_tarea', 'tipos_avance'));
     }
 
-    public function indexConModal()
+    public function indexConModal(Request $request)
     {   
         $abrir_modal = 1;
-        $tipos_avance = NomenclaturaAvance::paginate(10);
-        return view('avances.index', compact('tipos_avance', 'abrir_modal'));
+        $tipo_tarea = $request->id;
+        $tipo_tarea = TipoTarea::find($tipo_tarea);
+        $tipos_avance = $tipo_tarea->nomenclaturasAvances()->get()->sortBy('porcentaje');
+        return view('avances.index', compact('tipo_tarea', 'tipos_avance'));
     }    
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
-    {
+    {   
+        $tipo_tarea_id = $request->tipo_tarea_id;
+        $porcentaje = $request->porcentaje;
+        $validatedData = Validator::make($request->all(), [
+            'glosa' => 'string',            
+            'porcentaje' =>'required|unique:nomenclaturasAvance,porcentaje,'.$porcentaje.'|unique:nomenclaturasAvance,tipo_tarea,'.$tipo_tarea_id.'|numeric|required|min:1|max:100',
+        ], [
+            'porcentaje.unique' => 'El número del porcenaje no puede repetirse'
+        ])->validate();
+        $tipo_tarea = TipoTarea::find($request->tipo_tarea_id);
         $tipo_avance = new NomenclaturaAvance;
         $tipo_avance->glosa = $request->glosa;
         $tipo_avance->porcentaje = $request->porcentaje;
+        $tipo_avance->tipoTarea()->associate($tipo_tarea);
         $tipo_avance->save();
-        flash('Nomenclatura registrada')->success();
-        return redirect('avances');
+        flash('Nomenclatura avance registrada')->success();
+        return redirect()->route('avances.index', ['id' => $request->tipo_tarea_id]);
     }
     
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Area  $area
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
-    {   
-        $tipos_avance = NomenclaturaAvance::paginate(10);
+    {           
         $editar = NomenclaturaAvance::find($id);
-        return view('avances.index', compact('tipos_avance', 'editar'));
+        $tipo_tarea = $editar->tipoTarea()->get()->first();
+        $tipos_avance = $tipo_tarea->nomenclaturasAvances()->get()->sortBy('porcentaje');               
+        return view('avances.index', compact('tipos_avance', 'editar', 'tipo_tarea'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Area  $area
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
-    {                   
+    {
+        $tipo_tarea_id = $request->tipo_tarea_id;
+        $porcentaje = $request->porcentaje;
+        $validatedData = Validator::make($request->all(), [
+            'glosa' => 'string',            
+            'porcentaje' =>'required|unique:nomenclaturasAvance,porcentaje,'.$porcentaje.'|unique:nomenclaturasAvance,tipo_tarea,'.$tipo_tarea_id.'|numeric|required|min:1|max:100',
+        ], [
+            'porcentaje.unique' => 'El número del porcenaje no puede repetirse'
+        ])->validate();   
+        $tipo_tarea = TipoTarea::find($request->tipo_tarea_id);         
         $tipo_avance_nuevo = NomenclaturaAvance::find($id);
         $tipo_avance_nuevo->glosa = $request->glosa;
         $tipo_avance_nuevo->porcentaje = $request->porcentaje;
-        $tipo_avance_nuevo->save();             
-        flash('Nomenclatura actualizada')->success();
-        return redirect('avances');
+        $tipo_avance_nuevo->tipoTarea()->associate($tipo_tarea);
+        $tipo_avance_nuevo->save();              
+        flash('Nomenclatura avance actualizada')->success();
+        return redirect()->route('avances.index', ['id' => $request->tipo_tarea_id]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Area  $area
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $temp = NomenclaturaAvance::where('id', $id)->first()->delete();        
-        flash('Nomenclatura eliminada')->success(); 
-        return redirect('areas');
+        $eliminar = NomenclaturaAvance::find($id);        
+        $tipo_tarea = $eliminar->tipoTarea()->get()->first()->id;
+        NomenclaturaAvance::find($id)->delete();        
+        flash('Nomenclatura avance eliminada')->success(); 
+        return redirect()->route('avances.index', ['id' => $tipo_tarea]);
+    }
+
+    public function avances(Request $request) {
+        $tipo_tarea = TipoTarea::find($request->tipo_tarea);
+        $tipos_avance = $tipo_tarea->nomenclaturasAvances()->get()->sortBy('porcentaje')->toArray();
+        return response()->json(array_values($tipos_avance));
     }
 }
+

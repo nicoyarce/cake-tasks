@@ -8,6 +8,8 @@ use App\Area;
 use App\TareaHija;
 use App\Observacion;
 use App\User;
+use App\TipoTarea;
+use App\NomenclaturaAvance;
 use Jenssegers\Date\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,14 +33,15 @@ class TareasController extends Controller
     public function create($proyectoId){        
         $proyecto = Proyecto::find($proyectoId);
         $areas = Area::all();
-        $avances = \DB::table('nomenclaturasAvance')->get();
-        return view('tareas.create', compact('proyecto','areas','avances'));
+        $tipo_tareas = TipoTarea::all();
+        return view('tareas.create', compact('proyecto', 'areas', 'tipo_tareas'));
     }
 
     public function store(StoreTareasRequest $request){        
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
         $proyecto = Proyecto::find($request->proyecto_id);
+        $tipo_tarea = TipoTarea::find($request->tipo_tarea);
         $tarea->nombre = $request->nombre;
         $tarea->fecha_inicio = $request->fecha_inicio;
         $tarea->fecha_termino_original = $request->fecha_termino;
@@ -53,6 +56,7 @@ class TareasController extends Controller
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
+        $tarea->tipoTarea()->associate($tipo_tarea);
         $tarea->save();
         foreach ($request->observaciones as $textoObservacion) {   
             if(!is_null($textoObservacion)){         
@@ -70,17 +74,25 @@ class TareasController extends Controller
     public function edit(Tarea $tarea){
         $listaProyectos = Proyecto::all();
         $areas = Area::all();
-        $avances = \DB::table('nomenclaturasAvance')->get();
-        $observaciones = $tarea->observaciones()->get();
-        return view('tareas.edit', compact('tarea','listaProyectos','areas','avances', 'observaciones'));
+        $tipo_tareas = TipoTarea::all();
+        if(!is_null($tarea->tipo_tarea)){
+            $avances = TipoTarea::find($tarea->tipo_tarea)->nomenclaturasAvances()->get()->sortBy('porcentaje');
+        } else {
+            $avances = [];
+        }
+        $observaciones = $tarea->observaciones()->get();        
+        return view('tareas.edit', compact('tarea', 'listaProyectos', 'areas', 'tipo_tareas', 'avances', 'observaciones'));
     }
 
     public function update(Request $request, Tarea $tarea){
         //dd($request);
         $validatedData = $request->validate([
             'fecha_termino' => 'nullable|after:fecha_termino_original',
+            'avance' => 'required',
+            'tipo_tarea' => 'required'
         ]);
-        $tareaNueva = Tarea::find($tarea->id);        
+        $tareaNueva = Tarea::find($tarea->id);
+        $tipo_tarea = TipoTarea::find($request->tipo_tarea);       
         if(Auth::user()->hasRole('Usuario')){
             $tareaNueva->fill($request->only('avance'));
         }
@@ -119,6 +131,7 @@ class TareasController extends Controller
             $tareaNueva->autorUltimoCambioAvance()->associate(User::find(Auth::user()->id))->save();
             $tareaNueva->fecha_ultimo_cambio_avance = Date::now();
         }
+        $tarea->tipoTarea()->associate($tipo_tarea);
         $tareaNueva->save();
         flash('Tarea actualizada')->success();
         return redirect()->route('proyectos.show',$tareaNueva->proyecto_id)->with('idTareaMod', $tareaNueva->id);

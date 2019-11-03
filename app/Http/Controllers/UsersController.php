@@ -22,7 +22,7 @@ class UsersController extends Controller
      */  
     public function index()
     {
-        $usuarios = User::paginate(10);
+        $usuarios = User::all();
         return view('usuarios.index', compact('usuarios'));
     }
     
@@ -35,10 +35,11 @@ class UsersController extends Controller
     public function store(Request $request){ 
         $this->validate($request, [
             'nombre' => 'required|min:2',
-            'run' => 'unique:users,run|cl_rut',
+            'run' => 'required|unique:users,run|cl_rut',
             'password' => 'required|confirmed',
             'role_id' => 'required'
-        ]);
+        ],
+        ['cl_rut' => 'El RUN ingresado no es valido']);
         $rol = Role::find($request->role_id);
         $user = new User;
         $user->nombre = $request->nombre;
@@ -113,4 +114,12 @@ class UsersController extends Controller
         flash('Usuario eliminado')->success(); 
         return redirect('users');
     }
+
+    public function destroySelected(Request $request)
+    {              
+        User::destroy($request->eliminar);        
+        flash('Usuarios eliminados')->success(); 
+        return redirect('users');
+    }
+
 }

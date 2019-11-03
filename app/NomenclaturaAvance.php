@@ -9,6 +9,10 @@ class NomenclaturaAvance extends Model
     use FechasTraducidas;
     protected $table = 'nomenclaturasAvance';
 
+    public function tipoTarea(){
+        return $this->belongsTo(TipoTarea::class, 'tipo_tarea');
+    }
+
     public function getHabilitaBorradoAttribute(){
     	if (Tarea::where('avance', '=', $this->porcentaje)->exists()) {
 		   return false;

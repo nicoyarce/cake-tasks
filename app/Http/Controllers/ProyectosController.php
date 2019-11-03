@@ -157,8 +157,10 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Proyecto $proyecto)
-    {        
-        $proyecto = Proyecto::destroy($proyecto->id);        
+    {   
+        $string = 'command:generaInforme';
+        \Artisan::call($string, ['proyecto' => $proyecto->id]);
+        $proyecto = Proyecto::destroy($proyecto->id);
         flash('Proyecto archivado')->success();        
         return redirect('proyectos');
     }

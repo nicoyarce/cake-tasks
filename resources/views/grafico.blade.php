@@ -103,9 +103,10 @@
             </div>
         </div>
         
-        <div class="row" style="height: 50px">
+        <div class="row">
             <ul class="detallesTarea list-group w-100 mb-1" style="display: none;">
-                <li  class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"><br></span></li>
+                <li class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"><br></span></li>
+                <li class="list-group-item"><span class="titulospan">Avance:</span><span id="avance"></span></li>
             </ul>
         </div>
         <div class="row">
@@ -114,16 +115,12 @@
                 <li class="list-group-item"><span class="titulospan">FIT:</span><span id="fir"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT original:</span><span id="ftro"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT modificada:</span><span id="ftrm"></span></li>
-                <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
-                <li class="list-group-item"><span class="titulospan">Avance [%]:</span><span id="avance"></span></li>
+                <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>                
             </ul>
             <ul class="detallesTarea list-group w-50 mb-1" style="display: none;">
-                <li class="list-group-item"><p class="titulospan">Observaciones:</p><br></li>
-                <li class="list-group-item" id="listaObservaciones" style="display: none;">
-                    <ul>
-                        <li id="observacion"></li>
-                    </ul>
-                </li>
+                <li class="list-group-item"><p class="titulospan">Observaciones:</p></li>
+                <div id="listaObservaciones" style="display: none;">                    
+                </div>
             </ul>
         </div>
     </div>

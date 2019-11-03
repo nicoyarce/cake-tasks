@@ -85,35 +85,70 @@
     </table>
 </div>
 <div class="row">
-    <div class="form-group col-6 pt-5">
+    <div class="form-group col-6">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Área</h5>    
-            <p class="card-text">{{$tarea->area->nombrearea}}</p>
+            <h5 class="card-title">Tipo Tarea</h5>            
+            <p class="card-text">{{$tarea->tipoTarea->descripcion or '-'}}</p>            
           </div>
         </div>
     </div>
     <div class="form-group col-6">
-        <h4>Observaciones</h4>
-        <div class="list-group">        
-            @if(count($tarea->observaciones)>0)
-                @foreach ($tarea->observaciones()->get() as $observaciones)
-                <div class="list-group-item flex-column align-items-start">
-                    <p class="mb-1">{{$observaciones->contenido}}</p>
-                    <small>{{$observaciones->created_at->format('d-M-Y H:m')}} - 
-                        @if($observaciones->autor == null)
-                        Sin autor
-                        @else
-                        {{$observaciones->autor->nombre}}
-                        @endif
-                    </small>
-                </div>
-                @endforeach
-            @else
-            <div class="list-group-item ">
-                <p class="mb-1">No hay datos.</p>
-            </div>
-            @endif        
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Área</h5>    
+            <p class="card-text">{{$tarea->area->nombrearea or '-'}}</p>
+          </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-6">
+        <div class="card">
+            <div class="card-body"> 
+                <h5 class="card-title">Observaciones</h5>         
+                <div class="list-group">        
+                    @if(count($tarea->observaciones)>0)
+                        @foreach ($tarea->observaciones()->get() as $observacion)
+                            <div class="list-group-item flex-column align-items-start">
+                                <p class="card-text">{{$observacion->contenido}}</p>
+                            <small>{{$observacion->created_at->format('d-M-Y H:m')}} - 
+                            @if($observacion->autor == null)
+                                Sin autor
+                            @else
+                                {{$observacion->autor[0]}}
+                            @endif
+                            </small>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="list-group-item ">
+                            <p class="mb-1">No hay datos.</p>
+                        </div>
+                    @endif 
+                </div>   
+            </div>               
+        </div>      
+    </div>
+    <div class="form-group col-6">
+        <div class="card">
+            <div class="card-body"> 
+                <h5 class="card-title">Tareas Hijas</h5>         
+                <div class="list-group">        
+                    @if(count($tarea->tareasHijas)>0)
+                        @foreach ($tarea->tareasHijas()->get() as $tareahija)
+                            <div class="list-group-item flex-column align-items-start">
+                                <p class="card-text">{{$tareahija->nombre}}</p>
+                            <small>{{$tareahija->fecha_inicio->format('d-M-Y')}} - {{$tareahija->fecha_termino->format('d-M-Y')}}</small>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="list-group-item ">
+                            <p class="mb-1">No hay datos.</p>
+                        </div>
+                    @endif 
+                </div>   
+            </div>               
         </div>      
     </div>
 </div>   

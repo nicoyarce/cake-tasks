@@ -33,14 +33,14 @@ class Tarea extends Model
     use SoftDeletes;
     use FechasTraducidas;
     protected $table = 'tareas';
-    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica','nro_documento'];
+    protected $fillable = ['proyecto_id','area_id','nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance','critica','nro_documento','tipo_tarea'];
     protected $dates = ['deleted_at'];
     /*protected $casts = [
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_termino_original' => 'date:Y-m-d',
         'fecha_termino' => 'date:Y-m-d'
     ];*/
-    protected $appends = ['nombreArea', 'atraso', 'colorAtraso','porcentajeAtraso','observaciones']; 
+    protected $appends = ['nombreArea', 'atraso', 'colorAtraso', 'porcentajeAtraso', 'observaciones', 'glosaAvance']; 
 
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);
@@ -65,6 +65,10 @@ class Tarea extends Model
     public function autorUltimoCambioAvance(){
         return $this->belongsTo(User::class, 'autor_ultimo_cambio_avance_id');
     }
+
+    public function tipoTarea(){
+        return $this->belongsTo(TipoTarea::class, 'tipo_tarea');
+    }  
 
     protected static function boot() {
         //elimina tareas hijas al eliminar tarea madre
@@ -148,6 +152,11 @@ class Tarea extends Model
     public function getObservacionesAttribute(){
         $observaciones = Observacion::where('tarea_id',$this->id)->get();
         return $observaciones->toArray();
+    }
+
+    public function getGlosaAvanceAttribute(){
+        $glosa = NomenclaturaAvance::where('porcentaje',$this->avance)->pluck('glosa');
+        return $glosa;
     }
 
     public function scopeAtrasoVerde($query){

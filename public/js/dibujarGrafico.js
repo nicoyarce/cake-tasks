@@ -57,7 +57,7 @@ function dibujarGrafico(data) {
     var outerPath = svg.selectAll(".outlineArc")
         .data(pie(data))
         .enter().append("g")
-        .attr("class", "parte")        
+        .attr("class", "parte")
         .on('mouseout', function (d, i){
             //$(".detallesTarea").hide();
             $("#listaObservaciones").hide();
@@ -86,14 +86,15 @@ function dibujarGrafico(data) {
             $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
             $("#atraso").text(d.data.atraso);
         }  
-        $("#avance").text(d.data.avance);  
+        $("#avance").text(d.data.avance+'% - '+d.data.glosaAvance); 
         if(d.data.observaciones.length>0){
             $("#listaObservaciones").show();
         }else{
             $("#listaObservaciones").hide();
         }
         $.each(d.data.observaciones, function(indice){
-            $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice].contenido+ " - " +formatoFecha(new Date(d.data.observaciones[indice].created_at)));              
+            let string = d.data.observaciones[indice].contenido+" - "+formatoFecha(new Date(d.data.observaciones[indice].created_at))+" - "+d.data.observaciones[indice].autor[0];
+            $('<div class="list-group-item flex-column align-items-start"></div>').appendTo("#listaObservaciones").text(string);              
         });
         if(d.data.critica == 1){
             $("#critica").show();

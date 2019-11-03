@@ -3,12 +3,12 @@
     <div id="logo">
         <img src="/armada.png" width="35px" height="auto">
     </div>
-    <a id="titulo" class="navbar-brand">Holistic</a>
+    <a id="titulo" class="navbar-brand" href="/">Holistic</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
             <li class="nav-item">
                 <a class="nav-link" href="/">Inicio</a>
             </li>
@@ -35,7 +35,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
-                            <a class="dropdown-item" href="/avances/">Gestionar nomenclaturas avance</a>
+                            <a class="dropdown-item" href="/tipotareas/">Gestionar tipos de tarea</a>
                         </div>                        
                     </li>
                 @endif                
@@ -44,17 +44,27 @@
                 </li>
             @endif
         </ul>
+        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         @if(Auth::check())
-            <span class="navbar-text" href="">
-                @if(Auth::user()->hasRole('Administrador'))
-                    <b>Administrador: </b>{{Auth::user()->nombre}}
-                @elseif(Auth::user()->hasRole('OCR'))
-                    <b>OCR: </b>{{Auth::user()->nombre}}
-                @elseif(Auth::user()->hasRole('Usuario'))
-                    <b>Usuario: </b>{{Auth::user()->nombre}}
-                @endif
-            </span>
-            <a class="nav-link" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesion</a>
+            <li class="nav-item">
+                <span class="navbar-text" href="">
+                    @if(Auth::user()->hasRole('Administrador'))
+                        <b>Administrador: </b>
+                    @elseif(Auth::user()->hasRole('OCR'))
+                        <b>OCR: </b>
+                    @elseif(Auth::user()->hasRole('Usuario'))
+                        <b>Usuario: </b>
+                    @endif
+                    @if(Auth::user()->cargo != '')
+                    {{Auth::user()->cargo}} - 
+                    @endif
+                    {{Auth::user()->nombre}}
+                </span>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-warning d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesión<i class="fas fa-sign-in-alt"></i></a>
+            </li>
         @endif
+        </ul>
     </div>
 </nav>
