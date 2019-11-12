@@ -31,14 +31,25 @@ class NomenclaturaAvancesController extends Controller
 
     public function store(Request $request)
     {   
-        $tipo_tarea_id = $request->tipo_tarea_id;
         $porcentaje = $request->porcentaje;
-        $validatedData = Validator::make($request->all(), [
-            'glosa' => 'string',            
-            'porcentaje' =>'required|unique:nomenclaturasAvance,porcentaje,'.$porcentaje.'|unique:nomenclaturasAvance,tipo_tarea,'.$tipo_tarea_id.'|numeric|required|min:1|max:100',
-        ], [
-            'porcentaje.unique' => 'El número del porcenaje no puede repetirse'
-        ])->validate();
+        $tipo_tarea_id = $request->tipo_tarea_id;        
+        $validatedData = Validator::make($request->all(), 
+            [
+                'glosa' => 'string',            
+                'porcentaje' => [                    
+                    Rule::unique('nomenclaturasAvance')->where(function ($query) use($porcentaje, $tipo_tarea_id) {
+                        return $query->where('porcentaje', $porcentaje)->where('tipo_tarea', $tipo_tarea_id);
+                    }),
+                    'required',
+                    'numeric',
+                    'min:1',
+                    'max:100'
+                ]
+            ],            
+                [
+                    'porcentaje.unique' => 'El número del porcentaje no puede repetirse'
+                ]
+        )->validate();
         $tipo_tarea = TipoTarea::find($request->tipo_tarea_id);
         $tipo_avance = new NomenclaturaAvance;
         $tipo_avance->glosa = $request->glosa;
@@ -59,14 +70,25 @@ class NomenclaturaAvancesController extends Controller
 
     public function update(Request $request, $id)
     {
-        $tipo_tarea_id = $request->tipo_tarea_id;
         $porcentaje = $request->porcentaje;
-        $validatedData = Validator::make($request->all(), [
-            'glosa' => 'string',            
-            'porcentaje' =>'required|unique:nomenclaturasAvance,porcentaje,'.$porcentaje.'|unique:nomenclaturasAvance,tipo_tarea,'.$tipo_tarea_id.'|numeric|required|min:1|max:100',
-        ], [
-            'porcentaje.unique' => 'El número del porcenaje no puede repetirse'
-        ])->validate();   
+        $tipo_tarea_id = $request->tipo_tarea_id;
+        $validatedData = Validator::make($request->all(), 
+            [
+                'glosa' => 'string',            
+                'porcentaje' => [                    
+                    Rule::unique('nomenclaturasAvance')->where(function ($query) use($porcentaje, $tipo_tarea_id) {
+                        return $query->where('porcentaje', $porcentaje)->where('tipo_tarea', $tipo_tarea_id);
+                    })->ignore($id),
+                    'required',
+                    'numeric',
+                    'min:1',
+                    'max:100'
+                ]
+            ],            
+                [
+                    'porcentaje.unique' => 'El número del porcentaje no puede repetirse'
+                ]
+        )->validate();   
         $tipo_tarea = TipoTarea::find($request->tipo_tarea_id);         
         $tipo_avance_nuevo = NomenclaturaAvance::find($id);
         $tipo_avance_nuevo->glosa = $request->glosa;
