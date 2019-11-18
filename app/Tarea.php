@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\FechasTraducidas;
 use Carbon\Carbon;
+use App\PropiedadesGrafico;
 /**
  * App\Tarea
  *
@@ -98,7 +99,9 @@ class Tarea extends Model
         return $final->diffInDays($this->fecha_inicio);
     }
 
+    /*Ojo, en esta funcion hay variables hardcoded o en duro*/
     public function getColorAtrasoAttribute(){
+        $propiedades = PropiedadesGrafico::all();
         // fechaAdvertencia corresponde al 60% y fechaPeligro al 90%
         $porcentajeParaVerde = 80; // este valor indica bajo que avance la tarea cambiara a color verde
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
@@ -108,25 +111,25 @@ class Tarea extends Model
         $fechaAdvertencia = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion*(3/5))); //indica la fecha en que se cumple un 60% del tiempo
         $fechaPeligro = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion*(9/10))); //indica la fecha en que se cumple un 90% del tiempo
         if($hoyCarbon->lte($fechaAdvertencia)){
-            return "VERDE";
+            return $propiedades[0]->color;
         }
         else if($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)){
             if($this->avance >= $porcentajeParaVerde){
-                return "VERDE";
+                return $propiedades[0]->color;
             }
-            return "AMARILLO";
+            return $propiedades[1]->color;
         }
         else if($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoCarbon)){
             if($this->avance >= $porcentajeParaVerde){
-                return "VERDE";
+                return $propiedades[0]->color;
             }
-            return "NARANJO";
+            return $propiedades[2]->color;
         }
         else{
             if($this->avance >= $porcentajeParaVerde){
-                return "VERDE";
+                return $propiedades[0]->color;
             }
-            return "ROJO";
+            return $propiedades[3]->color;
         }        
     }
 

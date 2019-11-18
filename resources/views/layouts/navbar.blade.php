@@ -36,6 +36,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
                             <a class="dropdown-item" href="/tipotareas/">Gestionar tipos de tarea</a>
+                            <a class="dropdown-item" href="/propiedadesGrafico/">Gestionar colores grafico</a>
                         </div>                        
                     </li>
                 @endif                
@@ -68,3 +69,4 @@
         </ul>
     </div>
 </nav>
+

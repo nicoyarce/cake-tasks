@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Tarea;
 use App\Area;
 use App\Proyecto;
+use App\PropiedadesGrafico;
 
 class GraficosController extends Controller
 {   
@@ -20,12 +21,13 @@ class GraficosController extends Controller
             ->sortBy(function($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
+        $propiedades = PropiedadesGrafico::all();
         //dd($tareas);
         //$tareas = $tareas->makeHidden('created_at');
         //$tareas = $tareas->makeHidden('updated_at');
         $tareas = json_encode($tareas);
         //dd($tareas);
-        return view('grafico', compact('proyecto','areas','tareas'));
+        return view('grafico', compact('proyecto','areas','tareas','propiedades'));
     }
 
     public function vistaGraficoArchivados($id){        
@@ -38,19 +40,21 @@ class GraficosController extends Controller
             ->sortBy(function($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
+        $propiedades = PropiedadesGrafico::all();
         //dd($tareas);
         //$tareas = $tareas->makeHidden('created_at');
         //$tareas = $tareas->makeHidden('updated_at');
         $tareas = json_encode($tareas);
         //dd($tareas);
-        return view('grafico', compact('proyecto','areas','tareas'));
+        return view('grafico', compact('proyecto','areas','tareas','propiedades'));
     }
 
     public function filtrar(Request $request){        
         $proyectoid = $request->proyectoid;
         $areaid = $request->areaid;
         $opcionColor = $request->colorAtraso;
-        $proyecto = Proyecto::find($proyectoid);        
+        $proyecto = Proyecto::find($proyectoid);
+        $propiedades = PropiedadesGrafico::all();      
         if($areaid == 0 && $opcionColor == "TODAS"){            
             $tareas = $proyecto->tareas
             ->sortBy(function($tarea) {

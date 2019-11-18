@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<meta name="_token" content="{!! csrf_token() !!}" />
+<input type="hidden" name="_token" value="{{ csrf_token() }}" />
 <div class="row justify-content-between">
     <div class="col-4">
         <h4>{{$proyecto->nombre}} 
@@ -133,10 +133,10 @@
 <script src="/js/dibujarGrafico.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-$("#barra").hide();
-$("#footer").hide();
-dibujarGrafico({!!$tareas!!});
-dibujarSimbologia();
+    $("#barra").hide();
+    $("#footer").hide();
+    dibujarSimbologia();
+    dibujarGrafico({!!$tareas!!});
 });
 </script>
 @endsection

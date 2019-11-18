@@ -31,6 +31,8 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 
     Route::get('areas/crear', 'AreasController@indexConModal');
     Route::resource('areas', 'AreasController');
+    
+    Route::resource('propiedadesGrafico', 'PropiedadesGraficoController');
 
     Route::get('avances/crear', 'NomenclaturaAvancesController@indexConModal');
     Route::resource('avances', 'NomenclaturaAvancesController');
@@ -80,6 +82,7 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
     Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico'); //ajax    
     Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');  //ajax
     Route::post('/tareas/consultaAvances', 'NomenclaturaAvancesController@avances'); //ajax
+    Route::post('/obtienePropiedadesGrafico', 'PropiedadesGraficoController@obtienePropiedadesGrafico');
 });
 
 Route::get('/login', 'SessionsController@create')->name('login');

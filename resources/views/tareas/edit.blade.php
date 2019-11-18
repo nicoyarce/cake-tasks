@@ -268,7 +268,7 @@
                     console.log(JSON.stringify(jqXHR));
                     console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
                 }
-            });             
+            });
         });        
     });
 </script>
