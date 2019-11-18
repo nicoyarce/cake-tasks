@@ -14,13 +14,14 @@ use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProyectosImport;
 use App\Imports\TareasImport;
+use App\PropiedadesGrafico;
 use Illuminate\Support\Facades\Storage;
 
 class ProyectosController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');        
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -29,25 +30,23 @@ class ProyectosController extends Controller
      */
     public function index()
     {
-        if(Auth::user()->hasRole('Administrador')){
-            $proyectos = Proyecto::paginate(10);            
+        if (Auth::user()->hasRole('Administrador')) {
+            $proyectos = Proyecto::paginate(10);
+        } else {
+            $proyectos = Auth::user()->proyectos()->paginate(10);
         }
-        else{
-            $proyectos = Auth::user()->proyectos()->paginate(10);            
-        }                      
         return view('proyectos.index', compact('proyectos'));
     }
-    
+
     public function indexArchivados()
     {
-        if(Auth::user()->hasRole('Administrador')){
+        if (Auth::user()->hasRole('Administrador')) {
             $proyectos = Proyecto::onlyTrashed()->get()
-                ->sortBy('deleted_at')->values()->all();            
-        }
-        else{
+                ->sortBy('deleted_at')->values()->all();
+        } else {
             $proyectos = Auth::user()->proyectos()->onlyTrashed()->get()
                 ->sortBy('deleted_at')->values()->all();
-        }                      
+        }
         return view('proyectos.indexarchivados', compact('proyectos'));
     }
 
@@ -68,21 +67,21 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ProyectosRequest $request)
-    {  
+    {
         $proyecto = new Proyecto($request->all());
         $proyecto->nombre = $request->nombre;
         $proyecto->fecha_inicio = $request->fecha_inicio;
         $proyecto->fecha_termino_original = $request->fecha_termino;
-        $proyecto->fecha_termino = $request->fecha_termino;      
+        $proyecto->fecha_termino = $request->fecha_termino;
         $proyecto->save();
-        foreach ($request->observaciones as $textoObservacion) {   
-            if(!is_null($textoObservacion)){         
+        foreach ($request->observaciones as $textoObservacion) {
+            if (!is_null($textoObservacion)) {
                 $observacion = new Observacion();
                 $observacion->contenido = $textoObservacion;
                 $observacion->proyecto()->associate($proyecto);
                 $observacion->user()->associate(User::find(Auth::user()->id))->save();
                 $observacion->save();
-            }        
+            }
         }
         flash('Proyecto registrado')->success();
         return redirect('proyectos');
@@ -95,13 +94,13 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Proyecto $proyecto)
-    {           
+    {
         $tareas = $proyecto->tareas
-            ->sortBy(function($tarea) {
+            ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
-            })->values()->all();        
+            })->values()->all();
         return view('proyectos.show', compact('proyecto', 'tareas'));
-    }    
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -123,29 +122,29 @@ class ProyectosController extends Controller
      */
 
     public function update(ProyectosRequest $request, Proyecto $proyecto)
-    {   
-        $proyectoNuevo = Proyecto::find($proyecto->id);       
+    {
+        $proyectoNuevo = Proyecto::find($proyecto->id);
         $proyectoNuevo->nombre = $request->nombre;
         $proyectoNuevo->fecha_termino = $request->fecha_termino;
-        if($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {            
+        if ($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {
             $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
             $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
         }
-        if($request->has('observaciones')){
-            $ids_observaciones = collect($request->ids_observaciones);            
+        if ($request->has('observaciones')) {
+            $ids_observaciones = collect($request->ids_observaciones);
             Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
             $observacionesRestantes = $proyectoNuevo->observaciones()->get()->pluck('contenido');
-            foreach ($request->observaciones as $n => $textoObservacion) {                                
-                if(!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)){
+            foreach ($request->observaciones as $n => $textoObservacion) {
+                if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
                     $observacion = new Observacion();
                     $observacion->contenido = $textoObservacion;
                     $observacion->proyecto()->associate($proyectoNuevo);
                     $observacion->autor()->associate(User::find(Auth::user()->id));
                     $observacion->save();
-                }                
+                }
             }
         }
-        $proyectoNuevo->save();        
+        $proyectoNuevo->save();
         flash('Proyecto actualizado')->success();
         return redirect('proyectos');
     }
@@ -157,11 +156,11 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Proyecto $proyecto)
-    {   
+    {
         $string = 'command:generaInforme';
         \Artisan::call($string, ['proyecto' => $proyecto->id]);
         $proyecto = Proyecto::destroy($proyecto->id);
-        flash('Proyecto archivado')->success();        
+        flash('Proyecto archivado')->success();
         return redirect('proyectos');
     }
 
@@ -171,72 +170,76 @@ class ProyectosController extends Controller
             ->where('id', $id)
             ->get()
             ->first();
-        //dd($proyecto);      
+        //dd($proyecto);
         $tareas = $proyecto->tareas()->withTrashed()->get()
-            ->sortBy(function($tarea) {
+            ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
         //dd(count($proyecto->tareas()->withTrashed()->get()));
         return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
-    public function restaurar($id){        
+    public function restaurar($id)
+    {
         $proyecto = Proyecto::withTrashed()->find($id);
         $proyecto->restore();
-        $proyecto->informes()->withTrashed()->restore(); 
+        $proyecto->informes()->withTrashed()->restore();
         $proyecto->tareas()->withTrashed()->restore();
-        //$proyecto->tareasHijas()->withTrashed()->restore(); //usar esto en laravel 5.8        
-        foreach($proyecto->tareas()->withTrashed()->get() as $tarea){
+        //$proyecto->tareasHijas()->withTrashed()->restore(); //usar esto en laravel 5.8
+        foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
             $tarea->restore();
-            foreach($tarea->tareasHijas()->withTrashed()->get() as $tareaHija){
+            foreach ($tarea->tareasHijas()->withTrashed()->get() as $tareaHija) {
                 $tareaHija->restore();
             }
         }
-        flash('Proyecto restaurado')->success();        
+        flash('Proyecto restaurado')->success();
         return redirect('proyectosArchivados');
     }
 
-    public function eliminarPermanente($id){        
-        $proyecto = Proyecto::withTrashed()->find($id);        
-        $proyecto->informes()->withTrashed()->forceDelete();         
-        //$proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8        
-        foreach($proyecto->tareas()->withTrashed()->get() as $tarea){            
-            foreach($tarea->tareasHijas()->withTrashed()->get() as $tareaHija){
+    public function eliminarPermanente($id)
+    {
+        $proyecto = Proyecto::withTrashed()->find($id);
+        $proyecto->informes()->withTrashed()->forceDelete();
+        //$proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
+        foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
+            foreach ($tarea->tareasHijas()->withTrashed()->get() as $tareaHija) {
                 $tareaHija->forceDelete();
             }
             $tarea->forceDelete();
         }
         $proyecto->forceDelete();
-        flash('Proyecto eliminado')->success();        
+        flash('Proyecto eliminado')->success();
         return redirect('proyectosArchivados');
     }
 
-    public function vistaCargarXLS(){
+    public function vistaCargarXLS()
+    {
         return view('proyectos.cargarxls');
     }
 
-    public function cargarXLS(Request $request){        
+    public function cargarXLS(Request $request)
+    {
         $validatedData = $request->validate([
             'archivo' => 'required|file|mimes:xlsx',
         ]);
-        Excel::import(new ProyectosImport, $request->archivo);        
+        Excel::import(new ProyectosImport, $request->archivo);
         flash('Proyecto importado correctamente')->success();
         return redirect('proyectos');
     }
 
-    public function vistaCargarHijas(){
+    public function vistaCargarHijas()
+    {
         $proyectos = Proyecto::all();
         return view('proyectos.cargarhijas', compact('proyectos'));
     }
 
-    public function cargarHijas(Request $request){
+    public function cargarHijas(Request $request)
+    {
         $validatedData = $request->validate([
             'archivo' => 'required|file|mimes:xlsx',
-        ]);        
+        ]);
         Excel::import(new TareasImport, $request->archivo);
         flash('Tareas importadas correctamente')->success();
-        return redirect('proyectos');   
+        return redirect('proyectos');
     }
-
-    
 }

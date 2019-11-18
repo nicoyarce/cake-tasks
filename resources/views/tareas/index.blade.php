@@ -32,15 +32,16 @@
 			<tbody>
 				@foreach ($tareas as $tarea)
 				<tr id="{{$tarea->id}}">
-					@if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
-						<td class="bg-success"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
-					@elseif($tarea->colorAtraso == "AMARILLO")
-						<td class="fondo-amarillo"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
-					@elseif($tarea->colorAtraso == "NARANJO")
-						<td class="fondo-naranjo"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
-					@elseif($tarea->colorAtraso == "ROJO")
-						<td class="bg-danger"><a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
-					@endif
+					@if($tarea->colorAtraso == $propiedades[0]->color || $tarea->avance == 100)
+                        <td style="background-color: {{$propiedades[0]->color}};">
+					@elseif($tarea->colorAtraso == $propiedades[1]->color)
+						<td style="background-color: {{$propiedades[1]->color}};">
+					@elseif($tarea->colorAtraso == $propiedades[2]->color)
+						<td style="background-color: {{$propiedades[2]->color}};">
+					@elseif($tarea->colorAtraso == $propiedades[3]->color)
+						<td style="background-color: {{$propiedades[3]->color}};">
+                    @endif
+                    <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
 					@if($tarea->critica)
 						<span class="badge badge-pill badge-warning">Crítica</span>
 					@endif
@@ -54,7 +55,7 @@
 							@if(empty($tarea->autorUltimoCambioFtt))
 								{{ $tarea->fecha_termino->format('d-M-Y')}}
 							@else
-								<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
+								<a data-toggle="tooltip" data-placement="bottom" data-html="true"
 									title="Modificado por: {{$tarea->autorUltimoCambioFtt->nombre}} <br> Fecha: <br> {{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
 									{{ $tarea->fecha_termino->format('d-M-Y')}}
 								</a>
@@ -72,7 +73,7 @@
 						@if(empty($tarea->autorUltimoCambioAvance))
 							{{$tarea->avance}}
 						@else
-							<a data-toggle="tooltip" data-placement="bottom" data-html="true" 
+							<a data-toggle="tooltip" data-placement="bottom" data-html="true"
 							title="Autor ultimo cambio: {{$tarea->autorUltimoCambioAvance->nombre}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
 								{{$tarea->avance}}
 							</a>
@@ -124,19 +125,20 @@
 			<tbody>
 				@foreach ($tareas as $tarea)
 				<tr id="{{$tarea->id}}">
-					@if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
-						<td class="bg-success"><a class="text-dark" {{-- href="{{action('TareasController@show', $tarea['id'])}}" --}}>{{$tarea->nombre}}</a>
-					@elseif($tarea->colorAtraso == "AMARILLO")
-						<td class="fondo-amarillo"><a class="text-dark" >{{$tarea->nombre}}</a>
-					@elseif($tarea->colorAtraso == "NARANJO")
-						<td class="fondo-naranjo"><a class="text-dark" >{{$tarea->nombre}}</a>
-					@elseif($tarea->colorAtraso == "ROJO")
-						<td class="bg-danger"><a class="text-dark" >{{$tarea->nombre}}</a>
-					@endif
-					@if($tarea->critica)
-						<span class="badge badge-pill badge-warning">Crítica</span>
-					@endif
-					</td>
+					@if($tarea->colorAtraso == $propiedades[0]->color || $tarea->avance == 100)
+                        <td style="background-color: {{$propiedades[0]->color}};">
+                    @elseif($tarea->colorAtraso == $propiedades[1]->color)
+                        <td style="background-color: {{$propiedades[1]->color}};">
+                    @elseif($tarea->colorAtraso == $propiedades[2]->color)
+                        <td style="background-color: {{$propiedades[2]->color}};">
+                    @elseif($tarea->colorAtraso == $propiedades[3]->color)
+                        <td style="background-color: {{$propiedades[3]->color}};">
+                    @endif
+                        <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
+                        @if($tarea->critica)
+                        <span class="badge badge-pill badge-warning">Crítica</span>
+                        @endif
+                    </td>
 					<td style="width: 12%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
 					<td style="width: 12%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
 					<td style="width: 12%">

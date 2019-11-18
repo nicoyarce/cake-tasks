@@ -3,7 +3,7 @@
 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 <div class="row justify-content-between">
     <div class="col-4">
-        <h4>{{$proyecto->nombre}} 
+        <h4>{{$proyecto->nombre}}
             @if(!is_null($proyecto->deleted_at))
                 <span class="badge badge-pill badge-warning">Archivado</span>
             @endif
@@ -12,14 +12,14 @@
     <div class="col-7">
         <table class="table table-sm table-borderless">
             <thead>
-                <tr>                    
+                <tr>
                     <th>FIR</th>
                     <th>FTR Original</th>
-                    <th>FTR Modificada</th>                    
+                    <th>FTR Modificada</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>                    
+                <tr>
                     <td>{{ $proyecto->fecha_inicio->format('d-M-Y') }}</td>
                     <td>{{ $proyecto->fecha_termino_original->format('d-M-Y') }}</td>
                     <td>
@@ -28,13 +28,13 @@
                         @else
                         {{ $proyecto->fecha_termino->format('d-M-Y')}}
                         @endif
-                    </td>                                      
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
     <div class="col-1">
-        <a type="button" class="btn btn-primary btn-sm float-right" href="{{url()->previous()}}">Atrás 
+        <a type="button" class="btn btn-primary btn-sm float-right" href="{{url()->previous()}}">Atrás
             <i class="fas fa-arrow-left "></i>
         </a>
     </div>
@@ -45,12 +45,12 @@
     </div>
     {{-- <div id="zoom" class="col-6 p-1">
         <div class="small">
-            
+
         </div>
     </div> --}}
     <div id="botones" class="col-6">
         <div class="row form-group">
-            <div class="col-2">                            
+            <div class="col-2">
                 <div class="text-center">
                     <h3><span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span></h3>
                 </div>
@@ -62,9 +62,9 @@
             <div class="col-5">
                 <p class="m-0 text-center font-weight-bold" style="font-size:15px">AVANCE PROYECTADO</p>
                 <p class="m-0 text-center text-primary font-weight-bold" style="font-size:15px">{{$proyecto->porcentajeAtraso}}%</p>
-            </div>            
+            </div>
         </div>
-        <div class="row col-12">                            
+        <div class="row col-12">
             <svg id="simbologia" class="w-100">
                 <defs>
                     <marker
@@ -79,7 +79,7 @@
                     <path d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: #000;"></path>
                     </marker>
                 </defs>
-            </svg>                              
+            </svg>
         </div>
         <div class="row">
             <div class="form-group col-6">
@@ -95,14 +95,14 @@
                 <label for="opcion">Filtro color:</label>
                 <select data-id="{{$proyecto->id}}" class="form-control" id="opcionColor" name="opcionColor">
                     <option selected value="TODAS">Todas</option>
-                    <option value="VERDE">Verde</option>
-                    <option value="AMARILLO">Amarillo</option>
-                    <option value="NARANJO">Naranjo</option>
-                    <option value="ROJO">Rojo</option>
+                    <option value="{{$propiedades[0]->color}}">Verde</option>
+                    <option value="{{$propiedades[1]->color}}">Amarillo</option>
+                    <option value="{{$propiedades[2]->color}}">Naranjo</option>
+                    <option value="{{$propiedades[3]->color}}">Rojo</option>
                 </select>
             </div>
         </div>
-        
+
         <div class="row">
             <ul class="detallesTarea list-group w-100 mb-1" style="display: none;">
                 <li class="list-group-item"><span class="titulospan">Nombre tarea:</span><span id="nombre"><br></span></li>
@@ -115,11 +115,11 @@
                 <li class="list-group-item"><span class="titulospan">FIT:</span><span id="fir"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT original:</span><span id="ftro"></span></li>
                 <li class="list-group-item"><span class="titulospan">FTT modificada:</span><span id="ftrm"></span></li>
-                <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>                
+                <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
             </ul>
             <ul class="detallesTarea list-group w-50 mb-1" style="display: none;">
                 <li class="list-group-item"><p class="titulospan">Observaciones:</p></li>
-                <div id="listaObservaciones" style="display: none;">                    
+                <div id="listaObservaciones" style="display: none;">
                 </div>
             </ul>
         </div>
