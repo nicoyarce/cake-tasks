@@ -54,7 +54,7 @@
             <div class="form-group col-4">
                 <label>FTT original</label>
                 <input class="form-control" id="fecha_termino_original" name="fecha_termino_original" type="date"
-                @if (!Auth::user()->hasRole('Admin')) readonly @endif
+                @if (!Auth::user()->hasRole('Administrador')) readonly @endif
                 value={{$tarea->fecha_termino_original}}>
             </div>
             <div class="form-group col-4">

@@ -128,7 +128,7 @@ class TareasController extends Controller
             $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id))->save();
             $tareaNueva->fecha_ultimo_cambio_ftt = Date::now();
         }
-        if ($request->has('fecha_termino_original') && Auth::user()->hasRole('Admin')) {
+        if ($request->has('fecha_termino_original') && Auth::user()->hasRole('Administrador')) {
             $tareaNueva->fecha_termino_original = $request->fecha_termino_original;
         }
         if ($request->has('avance') && $request->avance != $tarea->avance) {

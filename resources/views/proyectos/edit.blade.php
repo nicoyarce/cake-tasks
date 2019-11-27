@@ -23,7 +23,7 @@
         <div class="form-group col-4">
             <label>FTR original</label>
             <input class="form-control" type="date" id="fecha_termino_original"
-            @if (!Auth::user()->hasRole('Admin')) readonly @endif
+            @if (!Auth::user()->hasRole('Administrador')) readonly @endif
             name="fecha_termino_original"  value={{$proyecto->fecha_termino_original}}>
         </div>
         <div class="form-group col-4">
