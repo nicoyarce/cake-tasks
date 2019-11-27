@@ -22,7 +22,7 @@
             <div class="form-group col-5">
                 <label for="nombre">Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" value="{{$tarea->nombre}}">
-            </div>          
+            </div>
             <div class="form-group col-2">
                 <label for="area_id">Nro. Documento</label>
                 <input type="text" class="form-control" id="nro_documento" name="nro_documento" value="{{$tarea->nro_documento}}">
@@ -43,21 +43,23 @@
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" @if($tarea->critica) checked @endif id="critica" name="critica">
                     <label class="custom-control-label" for="critica">¿Es ruta crítica?</label>
-                </div>              
+                </div>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="fecha_inicio">FIT</label>
-                <input class="form-control" type="date" readonly value={{$tarea->fecha_inicio}}>    
+                <input class="form-control" type="date" readonly value={{$tarea->fecha_inicio}}>
             </div>
             <div class="form-group col-4">
-                <label>FTT original</label>         
-                <input class="form-control" id="fecha_termino_original" name="fecha_termino_original" type="date" readonly value={{$tarea->fecha_termino_original}}>            
+                <label>FTT original</label>
+                <input class="form-control" id="fecha_termino_original" name="fecha_termino_original" type="date"
+                @if (!Auth::user()->hasRole('Admin')) readonly @endif
+                value={{$tarea->fecha_termino_original}}>
             </div>
             <div class="form-group col-4">
-                <label for="fecha_termino">FTT modificada</label>           
-                <input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>            
+                <label for="fecha_termino">FTT modificada</label>
+                <input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>
             </div>
         </div>
         <div class="form-row">
@@ -71,7 +73,7 @@
                                 <input id="observacion_{{$n}}" name="observaciones[]" value="{{$observacion->contenido}}" class="texto form-control col-11 mr-1">
                                 <input type="hidden" id="id_observacion_{{$n}}" name="ids_observaciones[]" value="{{$observacion->id}}" class="form-control">
                                 <button id="quitaObs_{{$n}}" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus"></i></button>
-                            </div>                      
+                            </div>
                         @endforeach
                     @else
                         <div id="fila_0" class="fila col-12 row form-group pr-0">
@@ -85,24 +87,24 @@
                     <input disabled="true" id="observacion_" name="observaciones[]" value="" class="form-control col-11 mr-1">
                     <input disabled="true" type="hidden" id="id_observacion_" name="ids_observaciones[]" value="" class="form-control">
                     <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm pull-right"><i class="fas fa-minus"></i></button>
-                </div>                  
-            </div>          
+                </div>
+            </div>
         </div>
         <div class="form-row">
             <div class="form-group col-12">
-                <label for="avance">Tipo Tarea</label>       
+                <label for="avance">Tipo Tarea</label>
                 <select class="form-control" id="tipo_tarea" required name="tipo_tarea">
-                    @if($tarea->tipo_tarea == null)                        
+                    @if($tarea->tipo_tarea == null)
                         <option value="" disabled selected>Elija una opción</option>
                     @endif
-                    @foreach($tipo_tareas as $tipo_tarea)                                                
+                    @foreach($tipo_tareas as $tipo_tarea)
                         @if($tipo_tarea->id == $tarea->tipo_tarea)
                             <option selected value="{{$tipo_tarea->id}}">{{$tipo_tarea->descripcion}}</option>
                         @else
-                            <option value="{{$tipo_tarea->id}}">{{$tipo_tarea->descripcion}}</option>         
+                            <option value="{{$tipo_tarea->id}}">{{$tipo_tarea->descripcion}}</option>
                         @endif
                     @endforeach
-                </select> 
+                </select>
             </div>
         </div>
     @else
@@ -123,12 +125,12 @@
                     @if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
                     <td class="bg-success">{{$tarea->nombre}}</td>
                     @elseif($tarea->colorAtraso == "AMARILLO")
-                    <td class="fondo-amarillo">{{$tarea->nombre}}</td>              
+                    <td class="fondo-amarillo">{{$tarea->nombre}}</td>
                 @elseif($tarea->colorAtraso == "NARANJO")
                     <td class="fondo-naranjo">{{$tarea->nombre}}</td>
                 @elseif($tarea->colorAtraso == "ROJO")
                     <td class="bg-danger">{{$tarea->nombre}}</td>
-                @endif  
+                @endif
                     <td>{{$tarea->area->nombrearea}}</td>
                     <td>{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
                     <td >{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
@@ -153,23 +155,23 @@
             <div class="form-group col-12">
                 <label for="observaciones">Observaciones</label>
                 <ul>
-                @if(count($tarea->observaciones)>0)                 
+                @if(count($tarea->observaciones)>0)
                     @foreach ($tarea->observaciones as $observacion)
                         <li>{{$observacion}}</li>
-                    @endforeach                                     
+                    @endforeach
                 @else
                     <li><h5>No hay datos.</h5></li>
                 @endif
-                </ul>   
+                </ul>
             </div>
         </div>
     @endif
     <div class="form-row" id="fila_avance">
         <div class="form-group col-12">
-            <label for="avance">Porcentaje avance</label>       
+            <label for="avance">Porcentaje avance</label>
                 <select class="form-control" id="avance" required name="avance" @role('Usuario') onchange="formulario.submit()" @endrole>
-                    @if(empty($avances))                        
-                        <option selected value="">Debe asignar o solicitar la asignación de un tipo tarea para esta tarea</option>                        
+                    @if(empty($avances))
+                        <option selected value="">Debe asignar o solicitar la asignación de un tipo tarea para esta tarea</option>
                     @else
                         @foreach($avances as $avance)
                         @if($avance->porcentaje == $tarea->avance)
@@ -185,7 +187,7 @@
     @if(!Auth::user()->hasRole('Usuario'))
         <div class="form-group text-center">
             <button class="btn btn-primary" type="submit">Confirmar</button>
-        </div>  
+        </div>
     @endif
 </form>
 @if(Auth::user()->hasRole('Usuario'))
@@ -203,16 +205,16 @@
         }
         else{
             $("#quitaObs").prop('disabled', false);
-        }       
-    
+        }
+
         $("#agregaObs").click(function(){
             var nroObservaciones = $("#listaObservaciones").children().length;
             let fila_dummy = $("#fila_").clone(true, true);
             let id_original = fila_dummy.attr('id');
-            fila_dummy.attr('id',id_original+nroObservaciones); 
-            fila_dummy.removeAttr('style'); 
+            fila_dummy.attr('id',id_original+nroObservaciones);
+            fila_dummy.removeAttr('style');
             fila_dummy.children().prop('disabled', false);
-            fila_dummy.children().each(function(){          
+            fila_dummy.children().each(function(){
                 $(this).attr('id',$(this).attr('id')+nroObservaciones);
             });
             fila_dummy.appendTo("#listaObservaciones")
@@ -222,7 +224,7 @@
             }
             else{
                 $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', false);
-            }       
+            }
         });
 
         $(".quitar").click(function(){
@@ -238,7 +240,7 @@
 
         $("#tipo_tarea").on('change', function(){
             var ruta = '/tareas/consultaAvances';
-            let tipo_tarea = $("#tipo_tarea").val();            
+            let tipo_tarea = $("#tipo_tarea").val();
             let datos = {
                 "tipo_tarea": tipo_tarea
             };
@@ -247,29 +249,29 @@
                     'X-CSRF-TOKEN': $('input[name="_token"]').val()
                 }
             });
-            
+
             $.ajax({
                 method: 'POST', // Type of response and matches what we said in the route
                 url: ruta, // This is the url we gave in the route
                 data: datos, // la información a enviar (también es posible utilizar una cadena de datos)
                 dataType: 'json', //tipo de respuesta esperada
-                success: function(response) { // What to do if we succeed  
-                    $("#avance").empty();                  
-                    if(Array.isArray(response) && response.length){                    
-                        $.each(response, function(key, value){                    
+                success: function(response) { // What to do if we succeed
+                    $("#avance").empty();
+                    if(Array.isArray(response) && response.length){
+                        $.each(response, function(key, value){
                             $("#avance").append('<option value="'+value.porcentaje+'">'+value.porcentaje+'% - '+value.glosa+'</option>');
                         });
                         $("#fila_avance").show();
-                    } else {                    
+                    } else {
                         $("#avance").append('<option disabled selected value="">Tipo tarea no registra nomenclaturas de avance</option>');
-                    }   
+                    }
                 },
-                error: function(jqXHR, textStatus, errorThrown, exception) { // What to do if we fail            
+                error: function(jqXHR, textStatus, errorThrown, exception) { // What to do if we fail
                     console.log(JSON.stringify(jqXHR));
                     console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
                 }
             });
-        });        
+        });
     });
 </script>
 @endsection
