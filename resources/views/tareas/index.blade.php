@@ -119,7 +119,8 @@
 					<th>FTT<br>Original</th>
 					<th>FTT<br>Modificada</th>
 					<th>ATRASO<br>[días]</th>
-					<th>AVANCE<br>[%]</th>
+					<th class="text-center">AVANCE<br>REAL<br>[%]</th>
+                    <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -134,10 +135,10 @@
                     @elseif($tarea->colorAtraso == $propiedades[3]->color)
                         <td style="background-color: {{$propiedades[3]->color}};">
                     @endif
-                        <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
-                        @if($tarea->critica)
-                        <span class="badge badge-pill badge-warning">Crítica</span>
-                        @endif
+                    <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
+                    @if($tarea->critica)
+                    <span class="badge badge-pill badge-warning">Crítica</span>
+                    @endif
                     </td>
 					<td style="width: 12%">{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
 					<td style="width: 12%">{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
@@ -156,6 +157,7 @@
 						@endif
 					</td>
 					<td>{{$tarea->avance}}</td>
+					<td>{{$tarea->porcentajeAtraso}}</td>
 				</tr>
 				@endforeach
 			</tbody>
