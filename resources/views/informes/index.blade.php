@@ -96,7 +96,7 @@
                     <td>{{$informe->fecha->format('d-M-Y')}}</td> 
                     <td>{{$informe->created_at->format('H:i:s')}}</td>         
                     <td> 
-                        <a href="{{Storage::url($informe->ruta)}}" type="button" class="btn btn-primary" >
+                        <a href="{{Storage::url($informe->ruta)}}" type="button" class="btn btn-primary" target="_blank">
                             <i class="fas fa-eye "></i>
                         </a>
                     </td>                             
