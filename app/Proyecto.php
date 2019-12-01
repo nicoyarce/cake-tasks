@@ -89,8 +89,8 @@ class Proyecto extends Model
     }
 
     public function getAvanceAttribute()
-    {
-        $tareas = Tarea::where('proyecto_id', $this->id)->get();
+    {   
+        $tareas = (is_null($this->deleted_at)) ? Tarea::where('proyecto_id', $this->id)->get() : Tarea::withTrashed('proyecto_id', $this->id)->get();
         if (count($tareas) == 0) {
             return 0;
         } else {
@@ -112,7 +112,7 @@ class Proyecto extends Model
     {
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
         $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);
         $fechaAdvertencia = $fechaInicioCarbon->addDays(($diferenciaFechas * 60) / 100); // verde antes de esta fecha
         $fechaPeligro = Carbon::parse($this->fecha_inicio)->addDays(($diferenciaFechas * 90) / 100);  // amarillo antes de esta fecha, naranjo despues de fecha
@@ -129,7 +129,7 @@ class Proyecto extends Model
 
     public function getPorcentajeAtrasoAttribute()
     {
-        $tareas = Tarea::where('proyecto_id', $this->id)->get();
+        $tareas = (is_null($this->deleted_at)) ? Tarea::where('proyecto_id', $this->id)->get() : Tarea::withTrashed('proyecto_id', $this->id)->get();
         if (count($tareas) == 0) {
             return 0;
         } else {

@@ -119,7 +119,7 @@ class Tarea extends Model
         $porcentajeParaVerde = $propiedades[5]->avance; // este valor indica bajo que avance la tarea cambiara a color verde
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
         $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon); //indica la diferencia de dias entre el inicio y termino de la tarea
         $fechaAdvertencia = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion * (3 / 5))); //indica la fecha en que se cumple un 60% del tiempo
         $fechaPeligro = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion * (9 / 10))); //indica la fecha en que se cumple un 90% del tiempo
@@ -148,7 +148,7 @@ class Tarea extends Model
     {
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
         $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon);
         if ($hoyCarbon->lte($fechaInicioCarbon)) {
             $porcentajeAtraso = 0;
@@ -174,8 +174,9 @@ class Tarea extends Model
     }
 
     public function scopeAtrasoVerde($query)
-    {
-        return $query->where('colorAtraso', 'VERDE');
+    {   
+        $propiedades = PropiedadesGrafico::all();
+        return $query->where('colorAtraso', $propiedades[0]->color);
     }
 
     public function scopeCompletadas($query)
