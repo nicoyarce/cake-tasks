@@ -38,7 +38,7 @@
                     @elseif($tarea->colorAtraso == $propiedades[3]->color)
                 <td style="background-color: {{$propiedades[3]->color}};">
                     @endif
-                    <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
+                    <a class="text-dark" href="#">{{$tarea->nombre}}</a>
                     @if($tarea->critica)
                     <span class="badge badge-pill badge-warning">Crítica</span>
                     @endif

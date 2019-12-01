@@ -30,6 +30,15 @@ class TareasController extends Controller
         return view('tareas.show', compact('tarea','tareasHijas'));
     }
 
+    public function showArchivadas($id){        
+        $tarea = Tarea::withTrashed()
+            ->where('id', $id)
+            ->get()
+            ->first();
+        $tareasHijas = $tarea->tareasHijas()->withTrashed()->get();        
+        return view('tareas.show', compact('tarea','tareasHijas'));
+    }
+
     public function create($proyectoId){        
         $proyecto = Proyecto::find($proyectoId);
         $areas = Area::all();

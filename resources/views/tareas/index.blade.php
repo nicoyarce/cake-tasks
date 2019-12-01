@@ -135,7 +135,7 @@
                     @elseif($tarea->colorAtraso == $propiedades[3]->color)
                         <td style="background-color: {{$propiedades[3]->color}};">
                     @endif
-                    <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
+                    <a class="text-dark" href="{{action('TareasController@showArchivadas', $tarea['id'])}}">{{$tarea->nombre}}</a>
                     @if($tarea->critica)
                     <span class="badge badge-pill badge-warning">Crítica</span>
                     @endif
@@ -146,7 +146,14 @@
 						@if($tarea->fecha_termino_original == $tarea->fecha_termino)
 						-
 						@else
-						{{ $tarea->fecha_termino->format('d-M-Y')}}
+							@if(empty($tarea->autorUltimoCambioFtt))
+								{{ $tarea->fecha_termino->format('d-M-Y')}}
+							@else
+								<a data-toggle="tooltip" data-placement="bottom" data-html="true"
+									title="Modificado por: {{$tarea->autorUltimoCambioFtt->nombre}} <br> Fecha: <br> {{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
+									{{ $tarea->fecha_termino->format('d-M-Y')}}
+								</a>
+							@endif
 						@endif
 					</td>
 					<td>
