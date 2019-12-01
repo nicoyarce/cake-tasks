@@ -6,6 +6,7 @@ use Faker\Factory as Faker;
 use App\Proyecto;
 use App\Tarea;
 use App\Area;
+use Illuminate\Support\Facades\DB;
 
 class ProyectosTareasSeeder extends Seeder
 {

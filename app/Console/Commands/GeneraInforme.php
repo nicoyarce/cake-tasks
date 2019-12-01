@@ -9,6 +9,7 @@ use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\Snappy\Snappy as PDF;
+use Illuminate\Support\Facades\DB;
 
 class GeneraInforme extends Command
 {
