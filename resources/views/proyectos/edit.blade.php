@@ -22,11 +22,15 @@
         </div>
         <div class="form-group col-4">
             <label>FTR original</label>
-            <input class="form-control" type="date" id="fecha_termino_original" readonly name="fecha_termino_original"  value={{$proyecto->fecha_termino_original}}>
+            <input class="form-control" type="date" id="fecha_termino_original" required name="fecha_termino_original"  value={{$proyecto->fecha_termino_original}}>
         </div>
         <div class="form-group col-4">
             <label for="fecha_termino">FTR modificada</label>
-            <input class="form-control" type="date" id="fecha_termino" name="fecha_termino" 
+            <input class="form-control" type="date" id="fecha_termino" required 
+            @if(!Auth::user()->hasRole('Administrador')) 
+                readonly 
+                name="fecha_termino"
+            @endif            
             @if($proyecto->fecha_termino_original==$proyecto->fecha_termino)
                 value=""
             @else

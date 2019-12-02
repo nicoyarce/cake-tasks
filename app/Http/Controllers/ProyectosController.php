@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Proyecto;
-use App\Tarea;
-use App\TareaHija;
 use App\Observacion;
 use App\User;
 use App\Http\Requests\ProyectosRequest;
@@ -14,8 +12,6 @@ use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProyectosImport;
 use App\Imports\TareasImport;
-use App\PropiedadesGrafico;
-use Illuminate\Support\Facades\Storage;
 
 class ProyectosController extends Controller
 {
@@ -71,8 +67,8 @@ class ProyectosController extends Controller
         $proyecto = new Proyecto($request->all());
         $proyecto->nombre = $request->nombre;
         $proyecto->fecha_inicio = $request->fecha_inicio;
-        $proyecto->fecha_termino_original = $request->fecha_termino;
-        $proyecto->fecha_termino = $request->fecha_termino;
+        $proyecto->fecha_termino_original = $request->fecha_termino_original;
+        $proyecto->fecha_termino = $request->fecha_termino_original;
         $proyecto->save();
         foreach ($request->observaciones as $textoObservacion) {
             if (!is_null($textoObservacion)) {
@@ -125,10 +121,13 @@ class ProyectosController extends Controller
     {
         $proyectoNuevo = Proyecto::find($proyecto->id);
         $proyectoNuevo->nombre = $request->nombre;
-        $proyectoNuevo->fecha_termino = $request->fecha_termino;
+        if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $proyecto->fecha_termino_original) {
+            $proyectoNuevo->fecha_termino_original = $request->fecha_termino_original;
+        }
         if ($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {
             $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
             $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
+            $proyectoNuevo->fecha_termino = $request->fecha_termino;
         }
         if ($request->has('observaciones')) {
             $ids_observaciones = collect($request->ids_observaciones);
@@ -145,7 +144,7 @@ class ProyectosController extends Controller
             }
         }
         $proyectoNuevo->save();
-        flash('Proyecto actualizado')->success();
+        flash('Proyecto <b>' . $proyectoNuevo->nombre . '</b> actualizado.')->success();
         return redirect('proyectos');
     }
 

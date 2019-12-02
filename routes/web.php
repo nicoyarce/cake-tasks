@@ -53,6 +53,7 @@ Route::group(['middleware' => ['role:Administrador|OCR']], function () {
     Route::get('proyectosArchivados/{id}', 'ProyectosController@showArchivados');
     Route::get('graficoArchivados/{id}', 'GraficosController@vistaGraficoArchivados');
     Route::get('informesArchivados/{id}', 'InformesController@vistaListaInformesArchivados');
+    Route::get('tareasArchivadas/{id}', 'TareasController@showArchivadas');
     Route::get('proyectosArchivados/restaurar/{id}', 'ProyectosController@restaurar');
     Route::delete('/proyectosArchivados/eliminarPermanente/{id}','ProyectosController@eliminarPermanente');
 });
