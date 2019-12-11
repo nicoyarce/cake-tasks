@@ -15,6 +15,7 @@
 		</a>
 	</div>
 </div>
+@include('layouts.errors')
 @if(count($areas)>0)
 		<table class="table table-hover">
 			<thead>

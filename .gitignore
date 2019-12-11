@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/backups
 /vendor
 /.idea
 /.vscode
@@ -20,3 +21,4 @@ _ide_helper.php
 /public/phpMyAdmin
 /config/snappy.php
 *.bat
+/.phpintel/

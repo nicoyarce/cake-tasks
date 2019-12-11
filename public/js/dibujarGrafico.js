@@ -57,7 +57,7 @@ function dibujarGrafico(data) {
     var outerPath = svg.selectAll(".outlineArc")
         .data(pie(data))
         .enter().append("g")
-        .attr("class", "parte")        
+        .attr("class", "parte")
         .on('mouseout', function (d, i){
             //$(".detallesTarea").hide();
             $("#listaObservaciones").hide();
@@ -86,14 +86,15 @@ function dibujarGrafico(data) {
             $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
             $("#atraso").text(d.data.atraso);
         }  
-        $("#avance").text(d.data.avance);  
+        $("#avance").text(d.data.avance+'% - '+d.data.glosaAvance); 
         if(d.data.observaciones.length>0){
             $("#listaObservaciones").show();
         }else{
             $("#listaObservaciones").hide();
         }
         $.each(d.data.observaciones, function(indice){
-            $("<li></li>").appendTo("#listaObservaciones").text(d.data.observaciones[indice].contenido+ " - " +formatoFecha(new Date(d.data.observaciones[indice].created_at)));              
+            let string = d.data.observaciones[indice].contenido+" - "+formatoFecha(new Date(d.data.observaciones[indice].created_at))+" - "+d.data.observaciones[indice].autor[0];
+            $('<div class="list-group-item flex-column align-items-start"></div>').appendTo("#listaObservaciones").text(string);              
         });
         if(d.data.critica == 1){
             $("#critica").show();
@@ -104,16 +105,22 @@ function dibujarGrafico(data) {
         dibujarFlecha(d.data.porcentajeAtraso);
     }
 
-    outerPath.append("path")
+    outerPath.append("path")            
+        .on('click', function(d, i){            
+            console.log(d3.selectAll("path"))
+            //.style("stroke", null)
+            //.style("stroke-width", null);
+            d3.select(this)
+            .style("stroke-width", "3")
+            .style("stroke", "cyan");
+        })
         .attr("fill", calcularColor)
-        .attr("class", "outlineArc")
-        /*.attr("stroke", "grey")*/
+        .attr("class", "outlineArc")        
         .attr("d", outlineArc);
 
     outerPath.append("path")
         .attr("fill", "#074590")
         .attr("class", "solidArc")
-        /*.attr("stroke", "grey")*/
         .attr("d", arc);
 
     outerPath.append("svg:text")                             //add a label to each slice
@@ -161,15 +168,10 @@ function dibujarGrafico(data) {
 }
 
 function calcularColor(d) {    
-    if (d.data.colorAtraso == "VERDE") {
-        return "#28a745"; //verde
-    } else if (d.data.colorAtraso == "AMARILLO") {        
-        return "#ffff00"; //amarillo
-    } else if (d.data.colorAtraso == "NARANJO") {
-        return "#f48024"; //naranjo
-    } else if (d.data.colorAtraso == "ROJO"){
-        return "#dc3545"; //rojo
-    }else{
+    if (d.data.colorAtraso != "") {
+        return d.data.colorAtraso;
+    }
+    else {
         return "#000000";
     }
 }
@@ -192,7 +194,7 @@ function cargarVistaGantt(id_tarea){
     };
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            'X-CSRF-TOKEN': $('input[name="_token"]').val()
         }
     })    
     $.post(ruta, datos, function(html){
@@ -216,7 +218,7 @@ $(".form-control").change(function() {
     };
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            'X-CSRF-TOKEN': $('input[name="_token"]').val()
         }
     })
     $.ajax({
@@ -267,7 +269,8 @@ var alturaBarra = 10;
 var largoFlecha = 25;
 var colorBorde = "black";
 var grosorLineaNegra = 0.4;
-function dibujarSimbologia(dato){    
+
+function dibujarSimbologia(){
     /*---LINEAS---*/
     var lineaVertIzq = svgSimbologia.append("line")
         .attr("x1",borde)  
@@ -370,39 +373,57 @@ function dibujarSimbologia(dato){
         .attr("font-size", "4px")
         .attr("fill", "black");
 
-    /*---BARRA---*/ 
-    var rectangulo1 = svgSimbologia.append("rect")
-        .attr("fill", "#28a745") //verde
-        .attr("x",borde)
-        .attr("y",bordeArriba+5)
-        .attr("width",60)
-        .attr("height",alturaBarra)
-        .attr("stroke",colorBorde)
-        .attr("stroke-width",grosorLineaNegra);
-    var rectangulo2 = svgSimbologia.append("rect")
-        .attr("fill", "#ffff00") //amarillo
-        .attr("x",60+borde)
-        .attr("y",bordeArriba+5)
-        .attr("width",30)
-        .attr("height",alturaBarra)
-        .attr("stroke",colorBorde)
-        .attr("stroke-width",grosorLineaNegra);
-    var rectangulo3 = svgSimbologia.append("rect")
-        .attr("fill", "#f48024") //naranjo
-        .attr("x",90+borde)
-        .attr("y",bordeArriba+5)
-        .attr("width",10)
-        .attr("height",alturaBarra)
-        .attr("stroke",colorBorde)
-        .attr("stroke-width",grosorLineaNegra);
-    var rectangulo4 = svgSimbologia.append("rect")
-        .attr("fill", "#dc3545") //rojo
-        .attr("x",100+borde)
-        .attr("y",bordeArriba+5)
-        .attr("width",20)
-        .attr("height",alturaBarra)
-        .attr("stroke",colorBorde)
-        .attr("stroke-width",grosorLineaNegra);    
+    var ruta = '/obtienePropiedadesGrafico';    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('input[name="_token"]').val()
+        }
+    });    
+    $.ajax({
+        method: 'POST', // Type of response and matches what we said in the route
+        url: ruta, // This is the url we gave in the route
+        data: '', // la información a enviar (también es posible utilizar una cadena de datos)
+        dataType: 'json', //tipo de respuesta esperada
+        success: function(response) { // What to do if we succeed  
+            /*---BARRA---*/ 
+            var rectangulo1 = svgSimbologia.append("rect")
+                .attr("fill", response[0]['color']) //verde
+                .attr("x",borde)
+                .attr("y",bordeArriba+5)
+                .attr("width",60)
+                .attr("height",alturaBarra)
+                .attr("stroke",colorBorde)
+                .attr("stroke-width",grosorLineaNegra);
+            var rectangulo2 = svgSimbologia.append("rect")
+                .attr("fill", response[1]['color']) //amarillo
+                .attr("x",60+borde)
+                .attr("y",bordeArriba+5)
+                .attr("width",30)
+                .attr("height",alturaBarra)
+                .attr("stroke",colorBorde)
+                .attr("stroke-width",grosorLineaNegra);
+            var rectangulo3 = svgSimbologia.append("rect")
+                .attr("fill", response[2]['color']) //naranjo
+                .attr("x",90+borde)
+                .attr("y",bordeArriba+5)
+                .attr("width",10)
+                .attr("height",alturaBarra)
+                .attr("stroke",colorBorde)
+                .attr("stroke-width",grosorLineaNegra);
+            var rectangulo4 = svgSimbologia.append("rect")
+                .attr("fill", response[3]['color']) //rojo
+                .attr("x",100+borde)
+                .attr("y",bordeArriba+5)
+                .attr("width",20)
+                .attr("height",alturaBarra)
+                .attr("stroke",colorBorde)
+                .attr("stroke-width",grosorLineaNegra);
+        },
+        error: function(jqXHR, textStatus, errorThrown, exception) { // What to do if we fail            
+            console.log(JSON.stringify(jqXHR));
+            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+        }
+    });    
 }
 
 function dibujarFlecha(avance){   

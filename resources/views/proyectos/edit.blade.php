@@ -22,11 +22,13 @@
         </div>
         <div class="form-group col-4">
             <label>FTR original</label>
-            <input class="form-control" type="date" id="fecha_termino_original" readonly name="fecha_termino_original"  value={{$proyecto->fecha_termino_original}}>
+            <input class="form-control" type="date" id="fecha_termino_original"
+            @if (!Auth::user()->hasRole('Administrador')) readonly @endif
+            name="fecha_termino_original"  value={{$proyecto->fecha_termino_original}}>
         </div>
         <div class="form-group col-4">
             <label for="fecha_termino">FTR modificada</label>
-            <input class="form-control" type="date" id="fecha_termino" name="fecha_termino" 
+            <input class="form-control" type="date" id="fecha_termino" name="fecha_termino"
             @if($proyecto->fecha_termino_original==$proyecto->fecha_termino)
                 value=""
             @else
@@ -46,7 +48,7 @@
                             <input id="observacion_{{$n}}" name="observaciones[]" value="{{$observacion->contenido}}" class="texto form-control col-11 mr-1">
                             <input type="hidden" id="id_observacion_{{$n}}" name="ids_observaciones[]" value="{{$observacion->id}}" class="form-control">
                             <button id="quitaObs_{{$n}}" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus"></i></button>
-                        </div>                      
+                        </div>
                     @endforeach
                 @else
                     <div id="fila_0" class="fila col-12 row form-group pr-0">
@@ -60,8 +62,8 @@
                 <input disabled="true" id="observacion_" name="observaciones[]" value="" class="form-control col-11 mr-1">
                 <input disabled="true" type="hidden" id="id_observacion_" name="ids_observaciones[]" value="" class="form-control">
                 <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm pull-right"><i class="fas fa-minus"></i></button>
-            </div>                  
-        </div>          
+            </div>
+        </div>
     </div>
     <div class="form-group text-center">
         <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -82,10 +84,10 @@
             var nroObservaciones = $("#listaObservaciones").children().length;
             let fila_dummy = $("#fila_").clone(true, true);
             let id_original = fila_dummy.attr('id');
-            fila_dummy.attr('id',id_original+nroObservaciones); 
-            fila_dummy.removeAttr('style'); 
+            fila_dummy.attr('id',id_original+nroObservaciones);
+            fila_dummy.removeAttr('style');
             fila_dummy.children().prop('disabled', false);
-            fila_dummy.children().each(function(){          
+            fila_dummy.children().each(function(){
                 $(this).attr('id',$(this).attr('id')+nroObservaciones);
             });
             fila_dummy.appendTo("#listaObservaciones")
@@ -96,7 +98,7 @@
             }
             else{
                 $("#listaObservaciones .fila:first").children(".quitar").prop('disabled', false);
-            }       
+            }
         });
 
         $(".quitar").click(function(){

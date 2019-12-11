@@ -28,6 +28,7 @@ class TareasRequest extends FormRequest
             'area_id'=>'required',
             'fecha_inicio'=>'required|date|before:fecha_termino',
             'fecha_termino'=>'required|date|after:fecha_inicio',            
+            'tipo_tarea'=>'required',
             'avance'=>'required'
         ];
 
