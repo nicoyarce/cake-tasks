@@ -122,15 +122,20 @@
             </thead>
             <tbody>
                 <tr>
-                    @if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
-                    <td class="bg-success">{{$tarea->nombre}}</td>
-                    @elseif($tarea->colorAtraso == "AMARILLO")
-                    <td class="fondo-amarillo">{{$tarea->nombre}}</td>
-                @elseif($tarea->colorAtraso == "NARANJO")
-                    <td class="fondo-naranjo">{{$tarea->nombre}}</td>
-                @elseif($tarea->colorAtraso == "ROJO")
-                    <td class="bg-danger">{{$tarea->nombre}}</td>
-                @endif
+                    @if($tarea->colorAtraso == $propiedades[0]->color || $tarea->avance == 100)
+                        <td style="background-color: {{$propiedades[0]->color}};">
+                    @elseif($tarea->colorAtraso == $propiedades[1]->color)
+                        <td style="background-color: {{$propiedades[1]->color}};">
+                    @elseif($tarea->colorAtraso == $propiedades[2]->color)
+                        <td style="background-color: {{$propiedades[2]->color}};">
+                    @elseif($tarea->colorAtraso == $propiedades[3]->color)
+                        <td style="background-color: {{$propiedades[3]->color}};">
+                    @endif
+                    <a class="text-dark">{{$tarea->nombre}}</a>
+                    @if($tarea->critica)
+                        <span class="badge badge-pill badge-warning">Crítica</span>
+                    @endif
+                    </td>
                     <td>{{$tarea->area->nombrearea}}</td>
                     <td>{{ $tarea->fecha_inicio->format('d-M-Y')}}</td>
                     <td >{{ $tarea->fecha_termino_original->format('d-M-Y') }}</td>
@@ -155,9 +160,9 @@
             <div class="form-group col-12">
                 <label for="observaciones">Observaciones</label>
                 <ul>
-                @if(count($tarea->observaciones)>0)
-                    @foreach ($tarea->observaciones as $observacion)
-                        <li>{{$observacion}}</li>
+                @if(count($observaciones)>0)
+                    @foreach ($observaciones as $observacion)
+                        <li>{{$observacion->contenido}}</li>
                     @endforeach
                 @else
                     <li><h5>No hay datos.</h5></li>
