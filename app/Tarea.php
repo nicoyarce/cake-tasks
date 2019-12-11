@@ -178,6 +178,11 @@ class Tarea extends Model
         return $query->where('colorAtraso', 'VERDE');
     }
 
+    public function scopeColoresTarea($query, $color)
+    {
+        return $query->whereIn('colorAtraso', $color);
+    }
+
     public function scopeCompletadas($query)
     {
         return $query->where('avance', '=', '100');
