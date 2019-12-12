@@ -1,26 +1,26 @@
 <head>
     <script src="{{public_path('js/jquery-3.3.1.min.js')}}"></script>
     <link href="{{public_path('css/bootstrap.css')}}" rel="stylesheet">
-    <link href="{{public_path('css/personal.css')}}" rel="stylesheet">    
-    <script> 
+    <link href="{{public_path('css/personal.css')}}" rel="stylesheet">
+    <script>
 
 Function.prototype.bind = Function.prototype.bind || function (thisp) {
     var fn = this;
     return function () {
         return fn.apply(thisp, arguments);
     };
-;</script>    
+;</script>
     {{-- <script src="/js/jquery-3.3.1.min.js"></script>
     <link href="/css/bootstrap.css" rel="stylesheet">
     <link href="/css/personal.css" rel="stylesheet"> --}}
     <style>
         thead { display: table-header-group }
         tfoot { display: table-row-group }
-        tr { page-break-inside: avoid }        
+        tr { page-break-inside: avoid }
     </style>
 </head>
 
-<nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">    
+<nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">
     <div id="logo" class="row">
         <div class="col-1"><img src="{{public_path('armada.png')}}" width="35px" height="auto"></div>
         <!-- <img src="/armada.png" width="35px" height="auto"> -->
@@ -29,14 +29,16 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 </nav>
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s')}}</h3>
 <hr>
-<div class="row" id="graficoBotones">        
+<div class="row" id="graficoBotones">
     <div id="zoom" class="col-6 ml-3 pl-3">
         <div class="small">
-            <div id="grafico" style="width: 500px; height: 500px;"></div>
-        </div>        
+            @if ($arrayConfiguraciones->incluye_grafico)
+                <div id="grafico" style="width: 500px; height: 500px;"></div>
+            @endif
+        </div>
     </div>
     <div id="botones" class="col-6">
-        <div class="row form-group d-flex justify-content-end mr-3">            
+        <div class="row form-group d-flex justify-content-end mr-3">
             <ul class="detallesTarea list-group ">
                 <li class="list-group-item"><b>{{ $proyecto->nombre }}</b></li>
                 <li class="list-group-item"><b>FIR:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
@@ -55,10 +57,10 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
                         {{$proyecto->atraso}}
                     @endif
                 </li>
-                <li class="list-group-item"><b>Avance [%]: </b>{{$proyecto->avance}}</li>                
-            </ul>                   
+                <li class="list-group-item"><b>Avance [%]: </b>{{$proyecto->avance}}</li>
+            </ul>
         </div>
-    </div>        
+    </div>
 </div>
 <br>
 <div class="row">
@@ -79,7 +81,7 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
         </tr>
     </thead>
     <tbody>
-        @foreach ($tareas as $llave=>$tarea)        
+        @foreach ($tareas as $llave=>$tarea)
         <tr id="{{$tarea->id}}">
             <td>{{$llave+1}}</td>
             @if($tarea->colorAtraso == "VERDE" || $tarea->avance == 100)
@@ -124,13 +126,13 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 <script src="{{public_path('js/moment.js')}}"></script>
 <script src="{{public_path('js/dibujarGrafico.js')}}"></script>
 
-{{-- <link href="/css/estiloGrafico.css" rel="stylesheet" >    
+{{-- <link href="/css/estiloGrafico.css" rel="stylesheet" >
 <script src="/js/d3.v3.min.js"></script>
 <script src="/js/d3-time-format.v2.min.js"></script>
 <script src="/js/moment.js"></script>
 <script src="/js/dibujarGrafico.js"></script> --}}
-<script type="text/javascript">    
-    $(document).ready(function(){        
-        dibujarGrafico({!!$tareasJSON!!});              
+<script type="text/javascript">
+    $(document).ready(function(){
+        dibujarGrafico({!!$tareasJSON!!});
     });
 </script>

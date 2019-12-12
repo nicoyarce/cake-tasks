@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Informe;
+use App\PropiedadesGrafico;
 use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\Snappy\Snappy as PDF;
@@ -56,14 +57,26 @@ class InformesController extends Controller
 
     public function generarInformePersonalizado(Proyecto $proyecto, Request $request)
     {
-        dd($request);
+        $incluye_grafico = ($request->has('grafico')) ? true : false;
+        $incluye_observaciones = ($request->has('observaciones')) ? true : false;
+        $arrayConfiguraciones = compact('incluye_grafico', 'incluye_observaciones');
+        dd($arrayConfiguraciones);
+        $arrayColores = [];
+        if ($request->has('incluye_tareas')) {
+            foreach ($request->incluye_tareas as $seleccion) {
+                $propiedad = PropiedadesGrafico::find($seleccion);
+                if ($propiedad->id == $seleccion) {
+                    array_push($arrayColores, $propiedad->color);
+                }
+            }
+        }
         $tareas = $proyecto->tareas()->coloresTarea($arrayColores)->get();
         $tareas = $tareas->sortBy(function ($tarea) {
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareas);
         //dd($tareasJSON);
-        $pdf = PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
+        $pdf = PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
         $pdf->setOption('encoding', 'UTF-8');
         $pdf->setOption('javascript-delay', 2000);
         $informe = new Informe;

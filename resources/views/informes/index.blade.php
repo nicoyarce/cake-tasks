@@ -126,20 +126,28 @@ Generar Informe
 <form class="form-horizontal" method="POST" action="{{action('InformesController@generarInformePersonalizado', $proyecto['id'])}}">
     {{csrf_field()}}
     <div class="form-group">
-        <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="grafico" name="grafico">
-            <label class="custom-control-label" for="grafico">Incluir gráfico</label>
+        <div class="form-row">
+            <div class="col-6">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="grafico" name="grafico">
+                    <label class="custom-control-label" for="grafico">Incluir gráfico</label>
+                </div>
+            </div>
         </div>
-        <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="observaciones" name="observaciones">
-            <label class="custom-control-label" for="observaciones">Incluir observaciones</label>
+        <div class="form-row">
+            <div class="col-6">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="observaciones" name="observaciones">
+                    <label class="custom-control-label" for="observaciones">Incluir observaciones</label>
+                </div>
+            </div>
         </div>
         @foreach ($propiedades as $i => $propiedad)
             @if($propiedad->id != 6)
                 <div class="form-row">
                     <div class="col-6">
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="incluye_tareas_{{$i}}" name="incluye_tareas_{{$i}}">
+                        <input type="checkbox" class="custom-control-input" id="incluye_tareas_{{$i}}" name="incluye_tareas[]" value="{{$propiedad->id}}">
                             <label class="custom-control-label" for="incluye_tareas_{{$i}}">Incluir tareas color </label>
                         </div>
                     </div>
@@ -149,7 +157,6 @@ Generar Informe
                 </div>
             @endif
         @endforeach
-
     </div>
     <div class="form-group text-center">
         <button type="submit" class="btn btn-primary">Generar informe personalizado
