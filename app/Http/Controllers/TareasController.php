@@ -19,11 +19,13 @@ class TareasController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    public function show(Tarea $tarea){
+
+    public function show(Tarea $tarea)
+    {
         $tareasHijas = $tarea->tareasHijas()->get();
-        return view('tareas.show', compact('tarea','tareasHijas'));
+        return view('tareas.show', compact('tarea', 'tareasHijas'));
     }
+
 
     public function showArchivadas($id){        
         $tarea = Tarea::withTrashed()
@@ -34,14 +36,17 @@ class TareasController extends Controller
         return view('tareas.show', compact('tarea','tareasHijas'));
     }
 
-    public function create($proyectoId){        
+    public function create($proyectoId)
+    {
         $proyecto = Proyecto::find($proyectoId);
         $areas = Area::all();
         $tipo_tareas = TipoTarea::all();
         return view('tareas.create', compact('proyecto', 'areas', 'tipo_tareas'));
     }
 
-    public function store(TareasRequest $request){        
+
+    public function store(TareasRequest $request)
+    {
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
         $proyecto = Proyecto::find($request->proyecto_id);
@@ -51,26 +56,29 @@ class TareasController extends Controller
         $tarea->fecha_termino_original = $request->fecha_termino_original;
         $tarea->fecha_termino = $request->fecha_termino_original;
         $tarea->nro_documento = $request->nro_documento;
+
         $tarea->critica = ($request->has('critica')) ? true : false;
+
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
         $tarea->tipoTarea()->associate($tipo_tarea);
         $tarea->save();
-        foreach ($request->observaciones as $textoObservacion) {   
-            if(!is_null($textoObservacion)){         
+        foreach ($request->observaciones as $textoObservacion) {
+            if (!is_null($textoObservacion)) {
                 $observacion = new Observacion();
                 $observacion->contenido = $textoObservacion;
                 $observacion->proyecto()->associate($proyecto);
                 $observacion->user()->associate(User::find(Auth::user()->id))->save();
                 $observacion->save();
-            }        
+            }
         }
-        flash('Tarea registrada')->success();        
-        return redirect()->route('proyectos.show',$request->proyecto_id)->with('idTareaMod', $tarea->id);
+        flash('Tarea registrada')->success();
+        return redirect()->route('proyectos.show', $request->proyecto_id)->with('idTareaMod', $tarea->id);
     }
 
-    public function edit(Tarea $tarea){
+    public function edit(Tarea $tarea)
+    {
         $listaProyectos = Proyecto::all();
         $areas = Area::all();
         $tipo_tareas = (is_null($tarea->tipo_tarea)) ? TipoTarea::all() : TipoTarea::findOrFail($tarea->tipo_tarea)->get();        
@@ -123,21 +131,23 @@ class TareasController extends Controller
         }        
         $tareaNueva->save();
         flash('Tarea <b>' . $tareaNueva->nombre . '</b>  actualizada')->success();
-        return redirect()->route('proyectos.show',$tareaNueva->proyecto_id)->with('idTareaMod', $tareaNueva->id);
-    }
+        return redirect()->route('proyectos.show',$tareaNueva->proyecto_id)->with('idTareaMod', $tareaNueva->id);        
+    }   
 
-    public function destroy(Tarea $tarea){        
-        $proyectoId = $tarea->proyecto()->get()->first()->id;        
-        Tarea::find($tarea->id)->forceDelete();        
-        flash('Tarea eliminada')->success(); 
+    public function destroy(Tarea $tarea)
+    {
+        $proyectoId = $tarea->proyecto()->get()->first()->id;
+        Tarea::find($tarea->id)->forceDelete();
+        flash('Tarea eliminada')->success();
         return redirect()->route('proyectos.show', $proyectoId);
     }
 
-    public function cargarVisor(Request $request){ 
+    public function cargarVisor(Request $request)
+    {
         $response = [
-          'tasks'  => []
+            'tasks'  => []
         ];
-        $tareaMadre = Tarea::find($request->tareaid);        
+        $tareaMadre = Tarea::find($request->tareaid);
         $tareas = $tareaMadre->tareasHijas()->get();
         //dd($tareaMadre->fecha_inicio);
         $response['tasks'][] = [
@@ -153,24 +163,23 @@ class TareasController extends Controller
             'collapsed'            => false,
             'hasChild' => true,
         ];
-        foreach($tareas as $tarea){                    
+        foreach ($tareas as $tarea) {
             $response['tasks'][] = [
                 'id'            => $tarea->id,
                 'name'            => $tarea->nombre,
                 'progress'            => $tarea->avance,
                 'level'            => $tarea->nivel,
                 'status' => "STATUS_ACTIVE",
-                //'depends'            => $tarea->id,                
+                //'depends'            => $tarea->id,
                 'start'            => $tarea->fecha_inicio->timestamp * 1000,
                 //'duration'            => (string) "-"+$tareaMadre->id,
                 'end'            => $tarea->fecha_termino->timestamp * 1000,
                 'collapsed'            => false,
-            ];                      
-        }    
-    
+            ];
+        }
+
         $response = json_encode($response);
         //dd($response);
-        return view('visor', compact('response'));                
-    } 
-      
+        return view('visor', compact('response'));
+    }
 }

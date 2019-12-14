@@ -143,6 +143,9 @@ class ProyectosController extends Controller
                 }
             }
         }
+        if ($request->has('fecha_termino_original') && Auth::user()->hasRole('Administrador')) {
+            $proyectoNuevo->fecha_termino_original = $request->fecha_termino_original;
+        }
         $proyectoNuevo->save();
         flash('Proyecto <b>' . $proyectoNuevo->nombre . '</b> actualizado.')->success();
         return redirect('proyectos');

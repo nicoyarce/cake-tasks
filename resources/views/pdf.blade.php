@@ -15,10 +15,10 @@
     <style>
         thead { display: table-header-group }
         tfoot { display: table-row-group }
-        tr { page-break-inside: avoid }        
+        tr { page-break-inside: avoid }
     </style>
 
-<nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">    
+<nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">
     <div id="logo" class="row">
         <div class="col-1"><img src="{{public_path('armada.png')}}" width="35px" height="auto"></div>
         {{-- <img src="/armada.png" width="35px" height="auto"> --}}
@@ -28,7 +28,9 @@
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s') }}</h3>
 <hr>
 <div class="row" id="graficoBotones">
-    <div id="grafico" style="width: 500px; height: 500px;"></div>  
+    @if ($arrayConfiguraciones->incluye_grafico)
+        <div id="grafico" style="width: 500px; height: 500px;"></div>  
+    @endif
     <div id="botones" class="col-6">
         <div class="row w-100">
             <ul class="detallesTarea list-group w-100">
@@ -76,7 +78,7 @@
                 @endif                
             </ul>
         </div>
-    </div>        
+    </div>
 </div>
 <br>
 <div class="row">
@@ -98,7 +100,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($tareas as $llave=>$tarea)        
+        @foreach ($tareas as $llave=>$tarea)
         <tr id="{{$tarea->id}}">
             <td>{{$llave+1}}</td>
             @if($tarea->colorAtraso == $propiedades[0]->color || $tarea->avance == 100)
@@ -144,15 +146,17 @@
 <script src="{{public_path('js/d3-time-format.v2.min.js')}}"></script>
 <script src="{{public_path('js/moment.js')}}"></script>
 <script src="{{public_path('js/dibujarGrafico.js')}}"></script>
+
 {{-- 
-<link href="/css/estiloGrafico.css" rel="stylesheet" >    
+<link href="/css/estiloGrafico.css" rel="stylesheet" >
 <script src="/js/d3.v3.min.js"></script>
 <script src="/js/d3-time-format.v2.min.js"></script>
 <script src="/js/moment.js"></script>
-<script src="/js/dibujarGrafico.js"></script> --}}
+<script src="/js/dibujarGrafico.js"></script>
+--}}
 
-<script type="text/javascript">    
+<script type="text/javascript">
     $(document).ready(function(){
-        dibujarGrafico({!!$tareasJSON!!});              
+        dibujarGrafico({!!$tareasJSON!!});
     });
 </script>
