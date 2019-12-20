@@ -40,14 +40,6 @@ function dibujarGrafico(data) {
     try {
         data.forEach(function (d) {
             d.id = d.id;
-            d.proyecto_id = d.proyecto_id;
-            d.area_id = d.area_id;
-            d.nombre = d.nombre;
-            d.fecha_inicio.date = d.fecha_inicio.date;
-            d.fecha_termino_original.date = d.fecha_termino_original.date;
-            d.fecha_termino.date = d.fecha_termino.date;
-            d.atraso = d.atraso;
-            d.avance = d.avance;
             d.weight = 1;
             d.width = +d.weight;
         });
@@ -64,24 +56,19 @@ function dibujarGrafico(data) {
             $("#critica").hide();
             $("#listaObservaciones").empty();
             svgSimbologia.selectAll("line.flecha").remove();
-            muestraDatosGrafico(d, i)
+            muestraDatosGrafico(d, i);
+            d3.selectAll(".outlineArc")
+                .style("stroke-width", "0")
+                .style("stroke", "cyan");
+            d3.select(this).select("path")
+                .style("stroke-width", "5")
+                .style("stroke", "cyan");
         })
         .on('dblclick', function (d, i) {
             cargarVistaGantt(d.data.id);
         });
 
     outerPath.append("path")
-        .on('click', function (d, i) {
-            console.log(d3.selectAll("path"))
-            //.style("stroke", null)
-            //.style("stroke-width", null);
-            d3.selectAll("path")
-                .style("stroke-width", "0")
-                .style("stroke", "cyan");
-            d3.select(this)
-                .style("stroke-width", "5")
-                .style("stroke", "cyan");
-        })
         .attr("fill", calcularColor)
         .attr("class", "outlineArc")
         .attr("d", outlineArc);
@@ -165,6 +152,7 @@ function muestraDatosGrafico(d, i) {
     else {
         $("#critica").hide();
     }
+    console.log(d.data.porcentajeAtraso);
     dibujarFlecha(d.data.porcentajeAtraso);
 }
 
