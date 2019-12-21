@@ -37,7 +37,6 @@
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
                             <a class="dropdown-item" href="/tipotareas/">Gestionar tipos de tarea</a>
                             <a class="dropdown-item" href="/propiedadesGrafico/">Gestionar colores gráfico</a>
-                            <a class="dropdown-item" href="/configuracionInformes/">Configurar generación de informes</a>
                         </div>                        
                     </li>
                 @endif                

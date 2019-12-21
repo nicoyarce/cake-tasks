@@ -28,7 +28,7 @@
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s') }}</h3>
 <hr>
 <div class="row" id="graficoBotones">
-    @if ($arrayConfiguraciones->incluye_grafico)
+    @if (array_key_exists("incluye_grafico",$arrayConfiguraciones) && $arrayConfiguraciones['incluye_grafico'] == true)
         <div id="grafico" style="width: 500px; height: 500px;"></div>  
     @endif
     <div id="botones" class="col-6">
@@ -57,26 +57,28 @@
         </div>
         <hr>
         <div class="row w-100">            
-            <ul class="list-group w-100">
-                @if(count($proyecto->observaciones)>0)
-                    @foreach ($proyecto->observaciones()->get() as $observacion)
-                        <div class="list-group-item flex-column align-items-start">
-                            <p class="card-text">{{$observacion->contenido}}</p>
-                        <small>{{$observacion->created_at->format('d-M-Y H:m')}} -
-                        @if($observacion->autor == null)
-                            Sin autor
-                        @else
-                            {{$observacion->autor[0]}}
-                        @endif
-                        </small>
+            @if (array_key_exists("incluye_observaciones",$arrayConfiguraciones) && $arrayConfiguraciones['incluye_observaciones'] == true)
+                <ul class="list-group w-100">
+                    @if(count($proyecto->observaciones)>0)
+                        @foreach ($proyecto->observaciones()->get() as $observacion)
+                            <div class="list-group-item flex-column align-items-start">
+                                <p class="card-text">{{$observacion->contenido}}</p>
+                            <small>{{$observacion->created_at->format('d-M-Y H:m')}} -
+                            @if($observacion->autor == null)
+                                Sin autor
+                            @else
+                                {{$observacion->autor[0]}}
+                            @endif
+                            </small>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="list-group-item ">
+                            <p class="mb-1">No hay datos.</p>
                         </div>
-                    @endforeach
-                @else
-                    <div class="list-group-item ">
-                        <p class="mb-1">No hay datos.</p>
-                    </div>
-                @endif                
-            </ul>
+                    @endif                
+                </ul>
+            @endif
         </div>
     </div>
 </div>
@@ -103,7 +105,7 @@
         @foreach ($tareas as $llave=>$tarea)
         <tr id="{{$tarea->id}}">
             <td>{{$llave+1}}</td>
-            @if($tarea->colorAtraso == $propiedades[0]->color || $tarea->avance == 100)
+            @if($tarea->colorAtraso == $propiedades[0]->color)
                 <td style="background-color: {{$propiedades[0]->color}};">
             @elseif($tarea->colorAtraso == $propiedades[1]->color)
                 <td style="background-color: {{$propiedades[1]->color}};">

@@ -15,7 +15,7 @@
             @endcan
         </div>
         <div class="col-1 d-flex align-items-center">
-            <a type="button" class="btn btn-primary float-right" href="{{url()->previous()}}">Atrás <i class="fas fa-arrow-left "></i></a>
+            <a type="button" class="btn btn-primary float-right" href="/proyectos">Atrás <i class="fas fa-arrow-left "></i></a>
         </div>
     </div>
     <hr>
@@ -25,11 +25,14 @@
         </div>
     </div>
     @if(count($informes)>0)
-        <table class="table table-hover">
+        <table id="tablaInformes" class="table table-hover">
             <thead>
                 <tr>
                     <th>Fecha</th>
                     <th>Hora</th>
+                    <th>Incluye gráfico</th>
+                    <th>Incluye observaciones</th>
+                    <th>Colores</th>
                     <th>Ver</th>
                     @can('borrar_informes')
                     <th>Borrar</th>
@@ -42,6 +45,15 @@
                 <tr>
                     <td>{{$informe->fecha->format('d-M-Y')}}</td>
                     <td>{{$informe->created_at->format('H:i:s')}}</td>
+                    <td>{!!$informe->grafico ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'!!}</td>
+                    <td>{!!$informe->observaciones ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'!!}</td>
+                    <td>
+                        @foreach((array)json_decode($informe->colores) as $color)								
+                            <div class="col">                                
+                                <input style="height:25px" disabled="" type="color" class="form-control" value="{{$color}}">
+                            </div>
+                        @endforeach
+                    </td>
                     <td>
                         <a href="{{Storage::url($informe->ruta)}}" type="button" class="btn btn-primary" >
                             <i class="fas fa-eye "></i>
@@ -115,15 +127,22 @@ Generar Informe
 @endsection
 @section('modal-content')
 @include('layouts.errors')
-<div class="form-group text-center">
-    <a type="button" class="btn btn-success mx-auto"
-        href="{{action('InformesController@generarInformeManual', $proyecto['id'])}}" role="button">Generar informe
-        completo
-        <i class="fas fa-file-alt"></i>
-    </a>
-</div>
+<form class="form-horizontal" method="POST" action="{{action('InformesController@generarInforme', $proyecto['id'])}}">
+    {{csrf_field()}}
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-success mx-auto" role="button">Generar informe completo
+            <i class="fas fa-file-alt"></i>
+        </button>
+    </div>
+</form>
 <hr>
-<form class="form-horizontal" method="POST" action="{{action('InformesController@generarInformePersonalizado', $proyecto['id'])}}">
+<div class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
+    Debe elegir algun tipo de tarea.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<form id="personalizado" class="form-horizontal" method="POST" action="{{action('InformesController@generarInforme', $proyecto['id'])}}">
     {{csrf_field()}}
     <div class="form-group">
         <div class="form-row">
@@ -147,7 +166,7 @@ Generar Informe
                 <div class="form-row">
                     <div class="col-6">
                         <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="incluye_tareas_{{$i}}" name="incluye_tareas[]" value="{{$propiedad->id}}">
+                        <input type="checkbox" rel="incluye_tareas" class="custom-control-input" id="incluye_tareas_{{$i}}" name="incluye_tareas[]" value="{{$propiedad->id}}">
                             <label class="custom-control-label" for="incluye_tareas_{{$i}}">Incluir tareas color </label>
                         </div>
                     </div>
@@ -159,10 +178,36 @@ Generar Informe
         @endforeach
     </div>
     <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary">Generar informe personalizado
+        <button type="button" class="btn btn-primary" onclick="enviar()">Generar informe personalizado
             <i class="fas fa-tasks"></i>
         </button>
     </div>
 </form>
 
+<link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min.css">
+C:\laragon\www\ProyectoArmada\public\css\fixedHeader.dataTables.min.css
+<script src="/js/dataTables.fixedHeader.min.js"></script>
+<script src="/js/jquery.stickytableheaders.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('#tablaInformes').stickyTableHeaders();
+    	$('#tablaInformes').DataTable( {
+    		//"order": [[ 1, 'asc' ], [ 2, 'asc' ]],
+    		//"fixedHeader": true,
+    		"ordering": false,
+    		"paging":   false,
+	        "language": {
+	            "url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
+	        }
+    	} );
+    } );
+    
+	function enviar() {
+        if (!$('input[rel=incluye_tareas]:checked').length > 0) {
+            $('.alert').show();               
+        } else {
+            $("#personalizado").submit();
+        }
+    }
+</script>
 @endsection

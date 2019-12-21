@@ -21,11 +21,13 @@ Route::group(['middleware' => ['role:Administrador']], function () {
     Route::get('/proyectos/cargarHijas', 'ProyectosController@vistaCargarHijas');
     Route::post('/proyectos/cargarHijas', 'ProyectosController@cargarHijas');
     //Informes
-    Route::get('/generarInformeManual/{proyecto}', 'InformesController@generarInformeManual');
-    Route::post('/generarInformePersonalizado/{proyecto}', 'InformesController@generarInformePersonalizado');
+    Route::post('/generarInforme/{proyecto}', 'InformesController@generarInforme');
     Route::delete('/informes/destroy/{id}', 'InformesController@destroy');
 
-    Route::delete('users/destroySelected', ['as' => 'users.destroySelected', 'uses' => 'UsersController@destroySelected']);
+    Route::delete('users/destroySelected', [
+        'as' => 'users.destroySelected',
+        'uses' => 'UsersController@destroySelected'
+    ]);
     Route::resource('users', 'UsersController');
 
     Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);
