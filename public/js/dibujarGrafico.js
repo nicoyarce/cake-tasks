@@ -61,7 +61,7 @@ function dibujarGrafico(data) {
                 .style("stroke-width", "0")
                 .style("stroke", "cyan");
             d3.select(this).select("path")
-                .style("stroke-width", "5")
+                .style("stroke-width", "3")
                 .style("stroke", "cyan");
         })
         .on('dblclick', function (d, i) {
