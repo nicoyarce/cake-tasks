@@ -25,9 +25,9 @@ class ProyectosRequest extends FormRequest
     {
         return [
             'nombre'=>'string|required|min:4|max:100',
-            'fecha_inicio'=>'required|date|before:fecha_termino',            
-            'fecha_termino_original'=>'required|date|after:fecha_inicio',           
-            'fecha_termino'=>'date|after:fecha_termino_original'
+            'fecha_inicio'=>'date|before:fecha_termino_original',
+            'fecha_termino_original'=>'required|date|after:fecha_inicio|before:fecha_termino',
+            'fecha_termino'=>'nullable|date|after:fecha_termino_original',
         ];
     }
 }
