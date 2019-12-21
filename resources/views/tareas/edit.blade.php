@@ -49,11 +49,16 @@
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="fecha_inicio">FIT</label>
-                <input class="form-control" type="date" readonly value={{$tarea->fecha_inicio}}>
+                <input class="form-control" id="fecha_inicio" type="date" 
+                @if(!Auth::user()->hasRole('Administrador'))
+                readonly 
+                name="fecha_inicio"
+                @endif
+                value={{$tarea->fecha_inicio}}>
             </div>
             <div class="form-group col-4">
                 <label>FTT original</label>         
-                <input class="form-control" id="fecha_termino_original"  type="date" required 
+                <input class="form-control" id="fecha_termino_original" type="date" required 
                 @if(!Auth::user()->hasRole('Administrador'))
                     readonly
                     name="fecha_termino_original"

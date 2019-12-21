@@ -125,12 +125,12 @@ class Tarea extends Model
         $fechaPeligro = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion * (9 / 10))); //indica la fecha en que se cumple un 90% del tiempo
         if ($hoyCarbon->lte($fechaAdvertencia)) {
             return $propiedades[0]->color;
-        } else if ($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)) {
+        } elseif ($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)) {
             if ($this->avance >= $porcentajeParaVerde) {
                 return $propiedades[0]->color;
             }
             return $propiedades[1]->color;
-        } else if ($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoCarbon)) {
+        } elseif ($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoCarbon)) {
             if ($this->avance >= $porcentajeParaVerde) {
                 return $propiedades[0]->color;
             }
@@ -152,7 +152,7 @@ class Tarea extends Model
         $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon);
         if ($hoyCarbon->lte($fechaInicioCarbon)) {
             $porcentajeAtraso = 0;
-        } else if ($hoyCarbon->gt($fechaInicioCarbon) && $hoyCarbon->lt($fechaTerminoCarbon)) {
+        } elseif ($hoyCarbon->gt($fechaInicioCarbon) && $hoyCarbon->lt($fechaTerminoCarbon)) {
             $diasHastaHoy = $fechaInicioCarbon->diffInDays($hoyCarbon);
             $porcentajeAtraso = round(($diasHastaHoy * 100) / $diasDeEjecucion); //regla de 3 para saber que porcentaje de atraso hay
         } else {
@@ -173,21 +173,11 @@ class Tarea extends Model
         return $glosa;
     }
 
-    public function scopeAtrasoVerde($query)
-    {   
-        $propiedades = PropiedadesGrafico::all();
-        return $query->where('colorAtraso', $propiedades[0]->color);
-    }
-
-    public function scopeColoresTarea($query, $color)
-    {
-        return $query->whereIn('colorAtraso', $color);
-    }
-
     public function scopeCompletadas($query)
     {
         return $query->where('avance', '=', '100');
     }
+    
     /*
     public function getFechaInicioAttribute($atraso){
         return $this->fecha_inicio->toDateTimeString();
