@@ -51,12 +51,14 @@
 					<td style="width: 12%">
 						@if($tarea->fecha_termino_original == $tarea->fecha_termino)
 						-
-						@else
-							@if(empty($tarea->autorUltimoCambioFtt))
+						@else						
+							@if(empty($tarea->autorUltimoCambioFtt()->withTrashed()->first()))
 								{{ $tarea->fecha_termino->format('d-M-Y')}}
 							@else
 								<a data-toggle="tooltip" data-placement="bottom" data-html="true"
-									title="Modificado por: {{$tarea->autorUltimoCambioFtt->nombre}} <br> Fecha: <br> {{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
+									title="Modificado por: {{array_get($tarea->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre')}} <br>
+									Fecha: <br>
+									{{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
 									{{ $tarea->fecha_termino->format('d-M-Y')}}
 								</a>
 							@endif
@@ -70,11 +72,11 @@
 						@endif
 					</td>
 					<td>
-						@if(empty($tarea->autorUltimoCambioAvance))
+						@if(empty($tarea->autorUltimoCambioAvance()->withTrashed()->first()))
 							{{$tarea->avance}}
 						@else
 							<a data-toggle="tooltip" data-placement="bottom" data-html="true"
-							title="Autor ultimo cambio: {{$tarea->autorUltimoCambioAvance->nombre}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
+							title="Autor ultimo cambio: {{array_get($tarea->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre')}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
 								{{$tarea->avance}}
 							</a>
 						@endif
@@ -145,12 +147,14 @@
 					<td style="width: 12%">
 						@if($tarea->fecha_termino_original == $tarea->fecha_termino)
 						-
-						@else
-							@if(empty($tarea->autorUltimoCambioFtt))
+						@else						
+							@if(empty($tarea->autorUltimoCambioFtt()->withTrashed()->first()))
 								{{ $tarea->fecha_termino->format('d-M-Y')}}
 							@else
 								<a data-toggle="tooltip" data-placement="bottom" data-html="true"
-									title="Modificado por: {{$tarea->autorUltimoCambioFtt->nombre}} <br> Fecha: <br> {{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
+									title="Modificado por: {{array_get($tarea->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre')}} <br>
+									Fecha: <br>
+									{{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
 									{{ $tarea->fecha_termino->format('d-M-Y')}}
 								</a>
 							@endif
@@ -163,7 +167,16 @@
 						{{$tarea->atraso}}
 						@endif
 					</td>
-					<td>{{$tarea->avance}}</td>
+					<td>
+						@if(empty($tarea->autorUltimoCambioAvance()->withTrashed()->first()))
+							{{$tarea->avance}}
+						@else
+							<a data-toggle="tooltip" data-placement="bottom" data-html="true"
+							title="Autor ultimo cambio: {{array_get($tarea->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre')}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
+								{{$tarea->avance}}
+							</a>
+						@endif
+					</td>
 					<td>{{$tarea->porcentajeAtraso}}</td>
 				</tr>
 				@endforeach
@@ -174,7 +187,7 @@
 		<h3 class="text-center">No hay tareas</h3>
 	@endif
 @endif
-<link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min">
+<link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min.css">
 <script src="/js/dataTables.fixedHeader.min.js"></script>
 <script src="/js/jquery.stickytableheaders.min.js"></script>
 
