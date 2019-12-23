@@ -108,18 +108,24 @@ $(document).ready(function(){
             <label for="nombre">Nombre</label>       
             <input type="text" class="form-control" id="nombre" required name="nombre" value="{{$editar->nombre}}">        
         </div>
+        
+        @if($editar->id != 5)
         <div class="form-group">
-            <label for="nombre">Avance</label>       
-            <input type="text" class="form-control" id="avance" readonly="" disabled="" name="avance" value="{{$editar->avance}}">        
+            <label for="nombre">Avance</label>
+            @if($editar->id == 6)  
+                <input type="text" class="form-control" id="avance"  @if($editar->id != 6)readonly="" disabled=""@endif name="avance" value="{{$editar->avance}}">
+            @else
+                <h4>{{$editar->avance}}</h4>
+            @endif
         </div> 
+        @endif
+        
+        @if($editar->id != 6)
         <div class="form-group">
             <label for="nombre">Color</label>       
-            <input 
-            @if($editar->id ==6)
-            disabled="" 
-            @endif
-            style="height:50px" type="color" class="form-control" id="color" required name="color" value="{{$editar->color}}">
+            <input style="height:50px" type="color" class="form-control" id="color" required name="color" value="{{$editar->color}}">
         </div>       
+        @endif
         <div class="form-group text-center">
             <button type="submit" class="btn btn-primary">Guardar</button>
         </div>

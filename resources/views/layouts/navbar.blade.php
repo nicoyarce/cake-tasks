@@ -36,7 +36,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
                             <a class="dropdown-item" href="/tipotareas/">Gestionar tipos de tarea</a>
-                            <a class="dropdown-item" href="/propiedadesGrafico/">Gestionar colores grafico</a>
+                            <a class="dropdown-item" href="/propiedadesGrafico/">Gestionar colores gráfico</a>
                         </div>                        
                     </li>
                 @endif                
@@ -63,7 +63,9 @@
                 </span>
             </li>
             <li class="nav-item">
-                <a class="btn btn-warning d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesión<i class="fas fa-sign-in-alt"></i></a>
+                <a class="btn btn-warning ml-3" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesión
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
             </li>
         @endif
         </ul>

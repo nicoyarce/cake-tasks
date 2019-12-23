@@ -5,18 +5,13 @@ namespace App\Http\Controllers;
 use App\Tarea;
 use App\Proyecto;
 use App\Area;
-use App\TareaHija;
 use App\Observacion;
 use App\User;
 use App\TipoTarea;
-use App\NomenclaturaAvance;
 use Jenssegers\Date\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreTareasRequest;
-use App\Http\Requests\UpdateTareasRequest;
-use App\Http\Requests\ProyectosRequest;
-
+use App\Http\Requests\TareasRequest;
 
 class TareasController extends Controller
 {
@@ -31,6 +26,16 @@ class TareasController extends Controller
         return view('tareas.show', compact('tarea', 'tareasHijas'));
     }
 
+
+    public function showArchivadas($id) {
+        $tarea = Tarea::withTrashed()
+            ->where('id', $id)
+            ->get()
+            ->first();
+        $tareasHijas = $tarea->tareasHijas()->withTrashed()->get();
+        return view('tareas.show', compact('tarea', 'tareasHijas'));
+    }
+
     public function create($proyectoId)
     {
         $proyecto = Proyecto::find($proyectoId);
@@ -39,7 +44,8 @@ class TareasController extends Controller
         return view('tareas.create', compact('proyecto', 'areas', 'tipo_tareas'));
     }
 
-    public function store(StoreTareasRequest $request)
+
+    public function store(TareasRequest $request)
     {
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
@@ -47,14 +53,12 @@ class TareasController extends Controller
         $tipo_tarea = TipoTarea::find($request->tipo_tarea);
         $tarea->nombre = $request->nombre;
         $tarea->fecha_inicio = $request->fecha_inicio;
-        $tarea->fecha_termino_original = $request->fecha_termino;
-        $tarea->fecha_termino = $request->fecha_termino;
+        $tarea->fecha_termino_original = $request->fecha_termino_original;
+        $tarea->fecha_termino = $request->fecha_termino_original;
         $tarea->nro_documento = $request->nro_documento;
-        if ($request->has('critica')) {
-            $tarea->critica = true;
-        } else {
-            $tarea->critica = false;
-        }
+
+        $tarea->critica = ($request->has('critica')) ? true : false;
+
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
@@ -77,67 +81,56 @@ class TareasController extends Controller
     {
         $listaProyectos = Proyecto::all();
         $areas = Area::all();
-        $tipo_tareas = TipoTarea::all();
-        if (!is_null($tarea->tipo_tarea)) {
-            $avances = TipoTarea::find($tarea->tipo_tarea)->nomenclaturasAvances()->get()->sortBy('porcentaje');
-        } else {
-            $avances = [];
-        }
+        $tipo_tareas = (is_null($tarea->tipo_tarea)) ? TipoTarea::all() : TipoTarea::findOrFail($tarea->tipo_tarea)->get();        
+        $avances = (is_null($tarea->tipo_tarea)) ? [] : TipoTarea::find($tarea->tipo_tarea)->nomenclaturasAvances()->get()->sortBy('porcentaje');
         $observaciones = $tarea->observaciones()->get();
         return view('tareas.edit', compact('tarea', 'listaProyectos', 'areas', 'tipo_tareas', 'avances', 'observaciones'));
     }
 
-    public function update(Request $request, Tarea $tarea)
-    {
-        //dd($request);
-        $validatedData = $request->validate([
-            'fecha_termino' => 'nullable|after:fecha_termino_original',
-            'avance' => 'required',
-            'tipo_tarea' => 'required'
-        ]);
+    public function update(TareasRequest $request, Tarea $tarea) {
         $tareaNueva = Tarea::find($tarea->id);
-        $tipo_tarea = TipoTarea::find($request->tipo_tarea);
         if (Auth::user()->hasRole('Usuario')) {
             $tareaNueva->fill($request->only('avance'));
-        } elseif (is_null($request->fecha_termino)) {
-            $tareaNueva->fill($request->except('fecha_termino'));
-            $tareaNueva->fecha_termino = $tarea->fecha_termino;
-        } else {
-            $tareaNueva->fill($request->all());
         }
-        if ($request->has('critica')) {
-            $tareaNueva->critica = true;
-        } else {
-            $tareaNueva->critica = false;
-        }
-        if ($request->has('observaciones')) {
-            $ids_observaciones = collect($request->ids_observaciones);
-            Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
-            $observacionesRestantes = $tareaNueva->observaciones()->get()->pluck('contenido');
-            foreach ($request->observaciones as $n => $textoObservacion) {
-                if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
-                    $observacion = new Observacion();
-                    $observacion->contenido = $textoObservacion;
-                    $observacion->tarea()->associate($tareaNueva);
-                    $observacion->autor()->associate(User::find(Auth::user()->id));
-                    $observacion->save();
+        else {
+            $tareaNueva->nombre = $request->nombre;
+            $tareaNueva->nro_documento = $request->nro_documento;
+            $area = Area::find($request->area_id);
+            $tareaNueva->area()->associate($area);
+            $tareaNueva->critica = ($request->has('critica')) ? true : false;
+            if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $tarea->fecha_termino_original) {
+                $tareaNueva->fecha_termino_original = $request->fecha_termino_original;
+                $tareaNueva->fecha_termino = $request->fecha_termino_original;
+            }
+            if ($request->has('fecha_termino') && !is_null($request->fecha_termino) && $request->fecha_termino != $tarea->fecha_termino) {
+                $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id))->save();
+                $tareaNueva->fecha_ultimo_cambio_ftt = Date::now();
+                $tareaNueva->fecha_termino = $request->fecha_termino;
+            }
+            if ($request->has('observaciones')) {
+                $ids_observaciones = collect($request->ids_observaciones);
+                Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
+                $observacionesRestantes = $tareaNueva->observaciones()->get()->pluck('contenido');
+                foreach ($request->observaciones as $n => $textoObservacion) {
+                    if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)){
+                        $observacion = new Observacion();
+                        $observacion->contenido = $textoObservacion;
+                        $observacion->tarea()->associate($tareaNueva);
+                        $observacion->autor()->associate(User::find(Auth::user()->id));
+                        $observacion->save();
+                    }
                 }
             }
+            $tipo_tarea = TipoTarea::find($request->tipo_tarea);
+            $tareaNueva->tipoTarea()->associate($tipo_tarea);
+            if ($request->has('avance') && $request->avance != $tarea->avance) {
+                $tareaNueva->autorUltimoCambioAvance()->associate(User::find(Auth::user()->id))->save();
+                $tareaNueva->fecha_ultimo_cambio_avance = Date::now();
+                $tareaNueva->avance = $request->avance;
+            }
         }
-        if ($request->has('fecha_termino') && $request->fecha_termino != $tarea->fecha_termino) {
-            $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id))->save();
-            $tareaNueva->fecha_ultimo_cambio_ftt = Date::now();
-        }
-        if ($request->has('fecha_termino_original') && Auth::user()->hasRole('Administrador')) {
-            $tareaNueva->fecha_termino_original = $request->fecha_termino_original;
-        }
-        if ($request->has('avance') && $request->avance != $tarea->avance) {
-            $tareaNueva->autorUltimoCambioAvance()->associate(User::find(Auth::user()->id))->save();
-            $tareaNueva->fecha_ultimo_cambio_avance = Date::now();
-        }
-        $tarea->tipoTarea()->associate($tipo_tarea);
         $tareaNueva->save();
-        flash('Tarea actualizada')->success();
+        flash('Tarea <b>' . $tareaNueva->nombre . '</b>  actualizada')->success();
         return redirect()->route('proyectos.show', $tareaNueva->proyecto_id)->with('idTareaMod', $tareaNueva->id);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TareasRequest extends FormRequest
 {
@@ -23,15 +24,31 @@ class TareasRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'nombre'=>'required|min:4|max:100',
-            'area_id'=>'required',
-            'fecha_inicio'=>'required|date|before:fecha_termino',
-            'fecha_termino'=>'required|date|after:fecha_inicio',            
-            'tipo_tarea'=>'required',
-            'avance'=>'required'
-        ];
 
+        if (Auth::user()->hasRole('Usuario')) {
+            return [
+                'avance' => 'required|required_without'
+            ];
+        }
+        if (Auth::user()->hasRole('Administrador')) {
+            return [
+                'nombre' => 'required|min:4|max:100',
+                'area_id' => 'required',
+                'fecha_inicio' => 'date|before:fecha_termino_original',
+                'fecha_termino_original' => 'required|date|after:fecha_inicio|before:fecha_termino',
+                'fecha_termino' => 'nullable|date|after:fecha_termino_original',
+                'tipo_tarea' => 'required',
+                'avance' => 'required|required_without'
+            ];
+        }
+        if (Auth::user()->hasRole('OCR')) {
+            return [
+                'nombre' => 'required|min:4|max:100',
+                'area_id' => 'required',
+                'fecha_termino' => 'nullable|date|after:fecha_termino_original',
+                'tipo_tarea' => 'required',
+                'avance' => 'required|required_without'
+            ];
+        }
     }
-     
 }

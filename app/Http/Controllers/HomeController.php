@@ -7,34 +7,34 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 
 class HomeController extends Controller
-{    
+{
     /**
      * Create a new controller instance.
      *
      * @return void
      */
 
-    public function index(){
-        if(Auth::check()){
-            if(Auth::user()->hasRole('Administrador')){
+    public function index() {
+        if (Auth::check()) {
+            if (Auth::user()->hasRole('Administrador')) {
                 $nroProyectos = Proyecto::all()->count();
                 $nroProyectosArch = Proyecto::onlyTrashed()->count();
             }
-            elseif(Auth::user()->hasRole('OCR')){
+            elseif (Auth::user()->hasRole('OCR')) {
                 $nroProyectos = Auth::user()->proyectos->count();
-                $nroProyectosArch = Proyecto::onlyTrashed()->count();      
+                $nroProyectosArch = Auth::user()->proyectos()->onlyTrashed()->count();
             }
-            else{
-                $nroProyectos = Auth::user()->proyectos->count();  
+            else {
+                $nroProyectos = Auth::user()->proyectos->count();
             }
             return view('welcome', compact('nroProyectos', 'nroProyectosArch'));
         }
-        else{
+        else {
             return redirect('login');
         }
     }
 
-    public function about(){
+    public function about() {
         return view('about');
     }
 

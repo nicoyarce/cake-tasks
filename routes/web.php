@@ -21,17 +21,20 @@ Route::group(['middleware' => ['role:Administrador']], function () {
     Route::get('/proyectos/cargarHijas', 'ProyectosController@vistaCargarHijas');
     Route::post('/proyectos/cargarHijas', 'ProyectosController@cargarHijas');
     //Informes
-    Route::get('/generarInformeManual/{proyecto}','InformesController@generarInformeManual'); 
-    Route::delete('/informes/destroy/{id}','InformesController@destroy');    
+    Route::post('/generarInforme/{proyecto}', 'InformesController@generarInforme');
+    Route::delete('/informes/destroy/{id}', 'InformesController@destroy');
 
-    Route::delete('users/destroySelected' ,['as' => 'users.destroySelected', 'uses' => 'UsersController@destroySelected']);
+    Route::delete('users/destroySelected', [
+        'as' => 'users.destroySelected',
+        'uses' => 'UsersController@destroySelected'
+    ]);
     Route::resource('users', 'UsersController');
-    
-    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);      
+
+    Route::resource('proyectos', 'ProyectosController', ['except' => 'index', 'show']);
 
     Route::get('areas/crear', 'AreasController@indexConModal');
     Route::resource('areas', 'AreasController');
-    
+
     Route::resource('propiedadesGrafico', 'PropiedadesGraficoController');
 
     Route::get('avances/crear', 'NomenclaturaAvancesController@indexConModal');
@@ -42,44 +45,51 @@ Route::group(['middleware' => ['role:Administrador']], function () {
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR']], function () {
-    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);    
+    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);
     Route::post('/visor', 'TareasController@cargarVisor'); //ajax
     Route::get('/visor', 'TareasController@cargarVisor'); //ajax
-    Route::get('/tareas/create/{proyectoId}',[
-    'as' => 'tareas.create', 
-    'uses' => 'TareasController@create']);    
+    Route::get('/tareas/create/{proyectoId}', [
+        'as' => 'tareas.create',
+        'uses' => 'TareasController@create'
+    ]);
     //Archivar proyectos terminados
     Route::get('proyectosArchivados', 'ProyectosController@indexArchivados');
     Route::get('proyectosArchivados/{id}', 'ProyectosController@showArchivados');
     Route::get('graficoArchivados/{id}', 'GraficosController@vistaGraficoArchivados');
     Route::get('informesArchivados/{id}', 'InformesController@vistaListaInformesArchivados');
+    Route::get('tareasArchivadas/{id}', 'TareasController@showArchivadas');
     Route::get('proyectosArchivados/restaurar/{id}', 'ProyectosController@restaurar');
-    Route::delete('/proyectosArchivados/eliminarPermanente/{id}','ProyectosController@eliminarPermanente');
+    Route::delete('/proyectosArchivados/eliminarPermanente/{id}', 'ProyectosController@eliminarPermanente');
 });
 
 Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
-    Route::get('/tareas/{tarea}/edit',[
-    'as' => 'tareas.edit', 
-    'uses' => 'TareasController@edit']);
+    Route::get('/tareas/{tarea}/edit', [
+        'as' => 'tareas.edit',
+        'uses' => 'TareasController@edit'
+    ]);
 
-    Route::put('/tareas/{tarea}',[
-    'as' => 'tareas.update', 
-    'uses' => 'TareasController@update']);
+    Route::put('/tareas/{tarea}', [
+        'as' => 'tareas.update',
+        'uses' => 'TareasController@update'
+    ]);
 
-    Route::get('/tareas/{tarea}',[
-    'as' => 'tareas.show', 
-    'uses' => 'TareasController@show']);
+    Route::get('/tareas/{tarea}', [
+        'as' => 'tareas.show',
+        'uses' => 'TareasController@show'
+    ]);
 
     Route::get('/proyectos', [
-    'as' => 'proyectos.index', 
-    'uses' => 'ProyectosController@index']);
+        'as' => 'proyectos.index',
+        'uses' => 'ProyectosController@index'
+    ]);
 
     Route::get('/proyectos/{proyecto}', [
-    'as' => 'proyectos.show', 
-    'uses' =>'ProyectosController@show']);
+        'as' => 'proyectos.show',
+        'uses' => 'ProyectosController@show'
+    ]);
 
-    Route::get('/informes/{proyecto}','InformesController@vistaListaInformes');
-    Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico'); //ajax    
+    Route::get('/informes/{proyecto}', 'InformesController@vistaListaInformes');
+    Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico'); //ajax
     Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');  //ajax
     Route::post('/tareas/consultaAvances', 'NomenclaturaAvancesController@avances'); //ajax
     Route::post('/obtienePropiedadesGrafico', 'PropiedadesGraficoController@obtienePropiedadesGrafico');
@@ -88,4 +98,3 @@ Route::group(['middleware' => ['role:Administrador|OCR|Usuario']], function () {
 Route::get('/login', 'SessionsController@create')->name('login');
 Route::post('/login', 'SessionsController@store');
 Route::get('/logout', 'SessionsController@destroy');
-

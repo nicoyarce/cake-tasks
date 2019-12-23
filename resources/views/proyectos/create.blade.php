@@ -21,7 +21,7 @@
         </div>
         <div class="form-group col-6">
             <label for="fecha_termino">FTR</label>
-            <input class="form-control" type="date" id="fecha_termino" required name="fecha_termino">
+            <input class="form-control" type="date" id="fecha_termino_original" required name="fecha_termino_original">
         </div>
     </div>
     <div class="form-row">

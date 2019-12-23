@@ -9,6 +9,7 @@ use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\Snappy\Snappy as PDF;
+use Illuminate\Support\Facades\DB;
 
 class GeneraInforme extends Command
 {
@@ -45,6 +46,7 @@ class GeneraInforme extends Command
     {   
         Log::info('Inicio de generacion de informe');
         $proyectoId = $this->argument('proyecto');
+        DB::beginTransaction();
         try{
             $proyecto = Proyecto::find($proyectoId);            
             $tareas = $proyecto->tareas()->get();
@@ -54,15 +56,17 @@ class GeneraInforme extends Command
             $tareasJSON = json_encode($tareasJSON);            
             $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
             $pdf->setOption('encoding', 'UTF-8');
-            $pdf->setOption('javascript-delay', 2000);
+            $pdf->setOption('javascript-delay', 1000);
             $informe = new Informe;
             $informe->fecha = Date::now();        
             $informe->ruta = 'public/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'-'.$informe->fecha->format('H.i.s').'.pdf';
             $informe->proyecto()->associate($proyecto);
             $informe->save();
-            Storage::disk('local')->put($informe->ruta, $pdf->output());            
+            Storage::disk('local')->put($informe->ruta, $pdf->output());  
+            DB::commit();          
         } catch(\Exception $e){
             Log::error('Ha ocurrido una excepcion: '.$e);
+            DB::rollBack();
         }
         Log::info('Termino de generacion de informe');        
     }

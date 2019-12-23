@@ -1,5 +1,16 @@
+INSERT INTO `areas` (`id`, `nombrearea`, `created_at`, `updated_at`) VALUES
+	(1, 'Ingeniería', now(), now()),
+	(2, 'Armamento', now(), now()),
+	(3, 'Telecomunicaciones', now(), now()),
+	(4, 'Electricidad', now(), now()),
+	(5, 'Electrónica', now(), now()),
+	(6, 'Otra', now(), now());
+
+INSERT INTO `tipo_tareas` (`id`, `descripcion`, `created_at`, `updated_at`) VALUES
+	(1, 'Tarea', now(), now());
+
 INSERT INTO `nomenclaturasavance` (`id`, `porcentaje`, `glosa`, `created_at`, `updated_at`, `tipo_tarea`) VALUES
-	(1, 0, 'Cotización aceptada por el cliente.', now(), now(), 1),
+    (1, 0, 'Cotización aceptada por el cliente.', now(), now(), 1),
 	(2, 5, 'Tareas giradas a talleres.', now(), now(), 1),
 	(3, 10, 'Trabajo a Flote: Inspección abordo efectuada.', now(), now(), 1),
 	(4, 15, 'Trabajo en taller: Equipo desmontado - todo o partes en Taller.', now(), now(), 1),
@@ -22,9 +33,5 @@ INSERT INTO `propiedades_grafico` (`id`, `nombre`, `avance`, `color`) VALUES
 	(3, 'Peligro', 90, '#f48024'),
 	(4, 'Atrasado', 100, '#dc3545'),
 	(5, 'Avance', -1, '#074590'),
-	(6, 'Porcentaje para verde', 80, '#28a745');
+	(6, 'Porcentaje para verde', 101, '#28a745');
 
-INSERT INTO `tipo_tareas` (`id`, `descripcion`, `created_at`, `updated_at`) VALUES
-	(1, 'Trabajo normal', now(), now()),
-	(2, 'Trabajo diagnostico', now(), now()),
-	(4, 'Obra en mas', now(), now());

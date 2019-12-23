@@ -119,18 +119,18 @@ class Tarea extends Model
         $porcentajeParaVerde = $propiedades[5]->avance; // este valor indica bajo que avance la tarea cambiara a color verde
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
         $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon); //indica la diferencia de dias entre el inicio y termino de la tarea
         $fechaAdvertencia = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion * (3 / 5))); //indica la fecha en que se cumple un 60% del tiempo
         $fechaPeligro = Carbon::parse($fechaInicioCarbon)->addDays(round($diasDeEjecucion * (9 / 10))); //indica la fecha en que se cumple un 90% del tiempo
         if ($hoyCarbon->lte($fechaAdvertencia)) {
             return $propiedades[0]->color;
-        } else if ($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)) {
+        } elseif ($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)) {
             if ($this->avance >= $porcentajeParaVerde) {
                 return $propiedades[0]->color;
             }
             return $propiedades[1]->color;
-        } else if ($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoCarbon)) {
+        } elseif ($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoCarbon)) {
             if ($this->avance >= $porcentajeParaVerde) {
                 return $propiedades[0]->color;
             }
@@ -148,11 +148,11 @@ class Tarea extends Model
     {
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
         $diasDeEjecucion = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon);
         if ($hoyCarbon->lte($fechaInicioCarbon)) {
             $porcentajeAtraso = 0;
-        } else if ($hoyCarbon->gt($fechaInicioCarbon) && $hoyCarbon->lt($fechaTerminoCarbon)) {
+        } elseif ($hoyCarbon->gt($fechaInicioCarbon) && $hoyCarbon->lt($fechaTerminoCarbon)) {
             $diasHastaHoy = $fechaInicioCarbon->diffInDays($hoyCarbon);
             $porcentajeAtraso = round(($diasHastaHoy * 100) / $diasDeEjecucion); //regla de 3 para saber que porcentaje de atraso hay
         } else {
@@ -173,15 +173,11 @@ class Tarea extends Model
         return $glosa;
     }
 
-    public function scopeAtrasoVerde($query)
-    {
-        return $query->where('colorAtraso', 'VERDE');
-    }
-
     public function scopeCompletadas($query)
     {
         return $query->where('avance', '=', '100');
     }
+    
     /*
     public function getFechaInicioAttribute($atraso){
         return $this->fecha_inicio->toDateTimeString();
