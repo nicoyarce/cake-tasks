@@ -185,7 +185,6 @@ Generar Informe
 </form>
 
 <link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min.css">
-C:\laragon\www\ProyectoArmada\public\css\fixedHeader.dataTables.min.css
 <script src="/js/dataTables.fixedHeader.min.js"></script>
 <script src="/js/jquery.stickytableheaders.min.js"></script>
 <script>
