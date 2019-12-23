@@ -16,7 +16,7 @@ class AgregaCamposGeneracionInforme extends Migration
         Schema::table('informes', function (Blueprint $table) {
             $table->boolean('grafico')->default(true);
             $table->boolean('observaciones')->default(true);
-            $table->json('colores')->default('{"0": "#28a745", "1": "#ffff00", "2": "#f48024", "3": "#dc3545", "4": "#074590"}');
+            $table->json('colores');
         });
     }
 
