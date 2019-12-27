@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Observacion;
 use App\User;
-use App\Http\Requests\ProyectosRequest;
+use App\Http\Requests\StoreProyectosRequest;
+use App\Http\Requests\UpdateProyectosRequest;
 use Jenssegers\Date\Date;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProyectosImport;
@@ -62,7 +63,7 @@ class ProyectosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProyectosRequest $request)
+    public function store(StoreProyectosRequest $request)
     {
         $proyecto = new Proyecto($request->all());
         $proyecto->nombre = $request->nombre;
@@ -75,11 +76,11 @@ class ProyectosController extends Controller
                 $observacion = new Observacion();
                 $observacion->contenido = $textoObservacion;
                 $observacion->proyecto()->associate($proyecto);
-                $observacion->user()->associate(User::find(Auth::user()->id))->save();
+                $observacion->autor()->associate(User::find(Auth::user()->id))->save();
                 $observacion->save();
             }
         }
-        flash('Proyecto registrado')->success();
+        flash('Proyecto <b>' . $proyecto->nombre . '</b> registrado')->success();
         return redirect('proyectos');
     }
 
@@ -117,7 +118,7 @@ class ProyectosController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(ProyectosRequest $request, Proyecto $proyecto)
+    public function update(UpdateProyectosRequest $request, Proyecto $proyecto)
     {
         $proyectoNuevo = Proyecto::find($proyecto->id);
         $proyectoNuevo->nombre = $request->nombre;
@@ -159,10 +160,11 @@ class ProyectosController extends Controller
      */
     public function destroy(Proyecto $proyecto)
     {
-        $string = 'command:generaInforme';
-        \Artisan::call($string, ['proyecto' => $proyecto->id]);
+        $string = $proyecto->nombre;
+        $comando = 'command:generaInforme';
+        \Artisan::call($comando, ['proyecto' => $proyecto->id]);
         $proyecto = Proyecto::destroy($proyecto->id);
-        flash('Proyecto archivado')->success();
+        flash('Proyecto <b>' . $string . '</b> archivado')->success();
         return redirect('proyectos');
     }
 
@@ -201,6 +203,7 @@ class ProyectosController extends Controller
     public function eliminarPermanente($id)
     {
         $proyecto = Proyecto::withTrashed()->find($id);
+        $string = $proyecto->nombre;
         $proyecto->informes()->withTrashed()->forceDelete();
         //$proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
         foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
@@ -210,7 +213,7 @@ class ProyectosController extends Controller
             $tarea->forceDelete();
         }
         $proyecto->forceDelete();
-        flash('Proyecto eliminado')->success();
+        flash('Proyecto <b>' . $string . '</b> eliminado')->success();
         return redirect('proyectosArchivados');
     }
 

@@ -24,7 +24,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Cargo</th>
+                    <th>UU.RR.</th>
                     <th>RUN</th>
                     <th>Rol</th>
                     <th>Editar</th>
