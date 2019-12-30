@@ -24,8 +24,8 @@ class ProyectosRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'=>'string|required|min:4|max:100',
-            'fecha_inicio'=>'date|before:fecha_termino_original',
+            'nombre'=>'required|min:4|max:100',
+            'fecha_inicio'=>'required|date|before:fecha_termino_original',
             'fecha_termino_original'=>'required|date|after:fecha_inicio|before:fecha_termino',
             'fecha_termino'=>'nullable|date|after:fecha_termino_original',
         ];
