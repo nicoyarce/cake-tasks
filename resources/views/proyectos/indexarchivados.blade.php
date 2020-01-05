@@ -101,6 +101,7 @@
     @endforeach
     </tbody>
 </table>
+{{$proyectos->links()}}
 @else
 <hr>
 <h3 class="text-center">No hay proyectos archivados</h3>

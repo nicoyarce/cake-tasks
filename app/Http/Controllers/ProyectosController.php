@@ -38,11 +38,9 @@ class ProyectosController extends Controller
     public function indexArchivados()
     {
         if (Auth::user()->hasRole('Administrador')) {
-            $proyectos = Proyecto::onlyTrashed()->get()
-                ->sortBy('deleted_at')->values()->all();
+            $proyectos = Proyecto::onlyTrashed()->orderBy('deleted_at')->paginate(5);
         } else {
-            $proyectos = Auth::user()->proyectos()->onlyTrashed()->get()
-                ->sortBy('deleted_at')->values()->all();
+            $proyectos = Auth::user()->proyectos()->onlyTrashed()->orderBy('deleted_at')->paginate(5);
         }
         return view('proyectos.indexarchivados', compact('proyectos'));
     }
