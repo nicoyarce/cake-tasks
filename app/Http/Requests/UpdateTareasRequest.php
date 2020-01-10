@@ -44,7 +44,7 @@ class UpdateTareasRequest extends FormRequest
             return [
                 'nombre' => 'required|min:4|max:100',
                 'area_id' => 'required',
-                'fecha_termino' => 'date|after:fecha_termino_original',
+                'fecha_termino' => 'nullable|date|after:fecha_termino_original',
                 'tipo_tarea' => 'required',
                 'avance' => 'required'
             ];
