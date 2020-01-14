@@ -49,20 +49,20 @@
         <div class="form-row">
             <div class="form-group col-4">
                 <label for="fecha_inicio">FIT</label>
-                <input class="form-control" id="fecha_inicio" type="date" 
-                @if(!Auth::user()->hasRole('Administrador'))
-                readonly 
+                <input class="form-control" id="fecha_inicio" type="date"
                 name="fecha_inicio"
+                @if(!Auth::user()->hasRole('Administrador'))
+                readonly
                 @endif
                 value={{$tarea->fecha_inicio}}>
             </div>
             <div class="form-group col-4">
-                <label>FTT original</label>         
-                <input class="form-control" id="fecha_termino_original" type="date" required 
+                <label>FTT original</label>
+                <input class="form-control" id="fecha_termino_original" type="date" required
+                name="fecha_termino_original"
                 @if(!Auth::user()->hasRole('Administrador'))
                     readonly
-                    name="fecha_termino_original"
-                @endif 
+                @endif
                 value={{$tarea->fecha_termino_original}}>
             </div>
             <div class="form-group col-4">
@@ -102,7 +102,7 @@
             <div class="form-group col-12">
                 <label for="avance">Tipo Tarea</label>
                 <select class="form-control" id="tipo_tarea" required name="tipo_tarea">
-                    @if($tarea->tipo_tarea == null)                        
+                    @if($tarea->tipo_tarea == null)
                         <option value="">Elija una opción</option>
                     @endif
                     @foreach($tipo_tareas as $tipo_tarea)
@@ -183,7 +183,7 @@
         <div class="form-group col-12">
             <label for="avance">Porcentaje avance</label>
                 <select class="form-control" id="avance" required name="avance" @role('Usuario') onchange="formulario.submit()" @endrole>
-                    @if(empty($avances))                        
+                    @if(empty($avances))
                         <option value="">Debe asignar o solicitar la asignación de un tipo tarea para esta tarea</option>
                     @else
                         @foreach($avances as $avance)
