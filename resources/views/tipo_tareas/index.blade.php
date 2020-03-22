@@ -49,7 +49,9 @@
                             <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el tipo de tarea?')"><i class="fas fa-trash-alt"></i></button>
                         </form>
                         @else
-                        <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="Existen tareas asociadas a este tipo" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
+                        <span data-toggle="tooltip" data-placement="bottom" data-html="true" title="Existen tareas asociadas a este tipo">
+                            <button class="btn btn-danger" disabled="true" style="pointer-events: none;"><i class="fas fa-trash-alt"></i></button>
+                        </span>
                         @endif
                     </td>                   
                 </tr>
