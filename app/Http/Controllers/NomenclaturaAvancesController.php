@@ -42,7 +42,7 @@ class NomenclaturaAvancesController extends Controller
                     }),
                     'required',
                     'numeric',
-                    'min:1',
+                    'min:0',
                     'max:100'
                 ]
             ],            
@@ -81,7 +81,7 @@ class NomenclaturaAvancesController extends Controller
                     })->ignore($id),
                     'required',
                     'numeric',
-                    'min:1',
+                    'min:0',
                     'max:100'
                 ]
             ],            
