@@ -4,7 +4,7 @@
 	<div class="col-6">
 		<h1>Proyectos Activos</h1>
 	</div>
-	@can('crear_proyectos')
+	@can('gestionar_proyectos')
 	<div class="col-2">
 		<a type="button" class="btn btn-primary" href="/proyectos/cargarHijas" role="button">Cargar tareas hijas
 			<i class="fas fa-upload"></i>
@@ -53,10 +53,8 @@
 				@can('ver_informes')
 				<th style="vertical-align: top">Ver informes</th>
 				@endcan
-				@can('modificar_proyectos')
-				<th style="vertical-align: top">Editar</th>
-				@endcan
-				@can('borrar_proyectos')
+				@can('gestionar_proyectos')
+				<th style="vertical-align: top">Editar</th>				
 				<th style="vertical-align: top">Archivar</th>
 				@endcan
 			</tr>
@@ -115,14 +113,12 @@
 					</a>
 				</td>
 				@endcan
-				@can('modificar_proyectos')
+				@can('gestionar_proyectos')
 				<td>
 					<a href="{{action('ProyectosController@edit', $proyecto['id'])}}" type="button" class="btn btn-primary" >
 						<i class="fas fa-edit"></i>
 					</a>
-				</td>
-				@endcan
-				@can('borrar_proyectos')
+				</td>				
 				<td>
 					<form method="POST" action="{{action('ProyectosController@destroy', $proyecto)}}">
 						{{csrf_field()}}

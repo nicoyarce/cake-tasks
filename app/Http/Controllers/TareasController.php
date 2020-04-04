@@ -89,18 +89,17 @@ class TareasController extends Controller
 
     public function update(UpdateTareasRequest $request, Tarea $tarea) {
         $tareaNueva = Tarea::find($tarea->id);
-        if (Auth::user()->hasRole('Usuario')) {
-            $tareaNueva->fill($request->only('avance'));
-        }
-        else {
+        if (Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas')) {
             $tareaNueva->nombre = $request->nombre;
             $tareaNueva->nro_documento = $request->nro_documento;
             $area = Area::find($request->area_id);
             $tareaNueva->area()->associate($area);
             $tareaNueva->critica = ($request->has('critica')) ? true : false;
-            if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $tarea->fecha_termino_original) {
-                $tareaNueva->fecha_termino_original = $request->fecha_termino_original;
-                $tareaNueva->fecha_termino = $request->fecha_termino_original;
+            if (Auth::user()->can('modificar_fechas_originales_tareas')) {
+                if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $tarea->fecha_termino_original) {
+                    $tareaNueva->fecha_termino_original = $request->fecha_termino_original;
+                    $tareaNueva->fecha_termino = $request->fecha_termino_original;
+                }
             }
             if ($request->has('fecha_termino') && !is_null($request->fecha_termino) && $request->fecha_termino != $tarea->fecha_termino) {
                 $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id));
@@ -130,6 +129,8 @@ class TareasController extends Controller
                 $tareaNueva->avance = $request->avance;
                 $tareaNueva->save();
             }
+        } elseif (Auth::user()->can('modificar_avance_tareas')) {
+            $tareaNueva->fill($request->only('avance'));
         }
         $tareaNueva->save();
         flash('Tarea <b>' . $tareaNueva->nombre . '</b>  actualizada')->success();

@@ -11,7 +11,7 @@
     {{csrf_field()}}
     {{method_field('PUT')}}
     {{-- Formulario para Admin y OCR --}}
-    @if(!Auth::user()->hasRole('Usuario'))
+    @if(Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas'))
         <hr>
         @foreach ($listaProyectos as $listaProyecto)
             @if($listaProyecto->id == $tarea->proyecto_id)
@@ -51,18 +51,18 @@
                 <label for="fecha_inicio">FIT</label>
                 <input class="form-control" id="fecha_inicio" type="date"
                 name="fecha_inicio"
-                @if(!Auth::user()->hasRole('Administrador'))
+                @cannot('modificar_fechas_originales_proyecto')
                 readonly
-                @endif
+                @endcan
                 value={{$tarea->fecha_inicio}}>
             </div>
             <div class="form-group col-4">
                 <label>FTT original</label>
                 <input class="form-control" id="fecha_termino_original" type="date" required
                 name="fecha_termino_original"
-                @if(!Auth::user()->hasRole('Administrador'))
+                @cannot('modificar_fechas_originales_proyecto')
                     readonly
-                @endif
+                @endcan
                 value={{$tarea->fecha_termino_original}}>
             </div>
             <div class="form-group col-4">
@@ -115,7 +115,7 @@
                 </select>
             </div>
         </div>
-    @else
+    @elseif (Auth::user()->can('modificar_avance_tareas'))
     {{-- Formulario para usuarios --}}
         <table class="table table-hover">
             <thead>
@@ -197,13 +197,13 @@
                 </select>
         </div>
     </div>
-    @if(!Auth::user()->hasRole('Usuario'))
+    @if (Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas'))
         <div class="form-group text-center">
             <button class="btn btn-primary" type="submit">Confirmar</button>
         </div>
     @endif
 </form>
-@if(Auth::user()->hasRole('Usuario'))
+@if (Auth::user()->can('modificar_avance_tareas') && !Auth::user()->can('modificar_tareas'))
     <script>
         $("#avance").on('change', function(){
             $("#carga").show();

@@ -24,12 +24,7 @@ class UpdateTareasRequest extends FormRequest
      */
     public function rules()
     {
-        if (Auth::user()->hasRole('Usuario')) {
-            return [
-                'avance' => 'required'
-            ];
-        }
-        if (Auth::user()->hasRole('Administrador')) {
+        if (Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_fechas_originales_tarea') && Auth::user()->can('modificar_avance_tareas')) {
             return [
                 'nombre' => 'required|min:4|max:100',
                 'area_id' => 'required',
@@ -39,13 +34,16 @@ class UpdateTareasRequest extends FormRequest
                 'tipo_tarea' => 'required',
                 'avance' => 'required'
             ];
-        }
-        if (Auth::user()->hasRole('OCR')) {
+        } elseif (Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas')) {
             return [
                 'nombre' => 'required|min:4|max:100',
                 'area_id' => 'required',
                 'fecha_termino' => 'nullable|date|after:fecha_termino_original',
                 'tipo_tarea' => 'required',
+                'avance' => 'required'
+            ];
+        } elseif (Auth::user()->can('modificar_avance_tareas')) {
+            return [
                 'avance' => 'required'
             ];
         }

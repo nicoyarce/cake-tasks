@@ -34,6 +34,9 @@
 		<main id="main" role="main" class="container">
 			@yield('content')	
 			@include('layouts.modal')
+			@cannot('gestionar_configuraciones')
+				{{app('debugbar')->disable()}}
+			@endcannot
 		</main>
 		<!-- Begin footer -->
 		{{-- <footer id="footer" class="footer" style="">

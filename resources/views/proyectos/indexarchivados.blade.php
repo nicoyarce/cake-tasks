@@ -36,7 +36,7 @@
                 @can('ver_informes')
                 <th style="vertical-align: top">Ver informes</th>
                 @endcan            
-                @can('borrar_proyectos')            
+                @can('gestionar_proyectos')            
                 <th style="vertical-align: top">Restaurar</th>                                 
                 <th style="vertical-align: top">Borrar</th>   
                 @endcan             
@@ -96,7 +96,7 @@
                     </a>
                 </td>
                 @endcan            
-                @can('borrar_proyectos') 
+                @can('gestionar_proyectos') 
                 <td>
                     <a href="{{action('ProyectosController@restaurar', $proyecto['id'])}}" type="button" class="btn btn-warning" >
                         <i class="fas fa-redo"></i>

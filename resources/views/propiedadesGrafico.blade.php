@@ -79,6 +79,8 @@ $(document).ready(function(){
 }); 
 </script>  
 @endsection
+
+{{-- Modal --}}
 @if(empty($editar))
     {{-- Crear propiedad --}}
     @section('modal-title')
