@@ -27,7 +27,7 @@ class ProyectosController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->hasRole('Administrador')) {
+        if (Auth::user()->can('gestionar_proyectos')) {
             $proyectos = Proyecto::paginate(10);
         } else {
             $proyectos = Auth::user()->proyectos()->paginate(10);
@@ -37,9 +37,9 @@ class ProyectosController extends Controller
 
     public function indexArchivados()
     {
-        if (Auth::user()->hasRole('Administrador')) {
+        if (Auth::user()->can('gestionar_proyectos') && Auth::user()->can('indice_proyectos_archivados')) {
             $proyectos = Proyecto::onlyTrashed()->orderBy('deleted_at')->paginate(5);
-        } else {
+        } elseif (Auth::user()->can('indice_proyectos_archivados')) {
             $proyectos = Auth::user()->proyectos()->onlyTrashed()->orderBy('deleted_at')->paginate(5);
         }
         return view('proyectos.indexarchivados', compact('proyectos'));
@@ -142,7 +142,7 @@ class ProyectosController extends Controller
                 }
             }
         }
-        if ($request->has('fecha_termino_original') && Auth::user()->hasRole('Administrador')) {
+        if ($request->has('fecha_termino_original') && Auth::user()->can('modificar_fechas_originales_proyecto')) {
             $proyectoNuevo->fecha_termino_original = $request->fecha_termino_original;
         }
         $proyectoNuevo->save();

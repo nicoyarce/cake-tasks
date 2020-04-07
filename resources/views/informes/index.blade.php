@@ -8,7 +8,7 @@
             <h1>{{$proyecto->nombre}}</h1>
         </div>
         <div class="col-2 d-flex align-items-center">
-            @can('borrar_informes')
+            @can('crear_informes')
             <a type="button" class="btn btn-success mx-auto" data-toggle="modal" data-target="#exampleModal" href="" role="button">Generar informe
                 <i class="fas fa-plus"></i>
             </a>

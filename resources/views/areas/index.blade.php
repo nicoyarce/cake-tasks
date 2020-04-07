@@ -44,7 +44,9 @@
 							<button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar la área?')"><i class="fas fa-trash-alt"></i></button>
 						</form>
 						@else
-						<button data-toggle="tooltip" data-placement="bottom" data-html="true" title="Existen tareas asociadas a esta área" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
+						<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="Existen tareas asociadas a esta área">
+							<button class="btn btn-danger" disabled="true" style="pointer-events: none;"><i class="fas fa-trash-alt"></i></button>
+						</span>
 						@endif
 					</td>					
 				</tr>
@@ -57,6 +59,8 @@
 		<h3 class="text-center">No hay áreas</h3>
 	@endif	
 @endsection
+
+{{-- Modal --}}
 @if(empty($editar))
 {{-- Crear area --}}
 @section('modal-title')

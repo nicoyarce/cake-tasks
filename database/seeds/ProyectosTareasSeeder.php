@@ -18,8 +18,8 @@ class ProyectosTareasSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('es_ES');
-        $minimo = new DateTime('01/01/2019');
-        $maximo = new DateTime('12/31/2019');
+        $minimo = new DateTime('01/01/2020');
+        $maximo = new DateTime('12/31/2020');
         foreach (range(1,5) as $index){           
             $fecha_inicio = $faker->dateTimeBetween($startDate = $minimo, $endDate = $maximo, $timezone = 'America/Santiago');
             $fecha_inicio = $fecha_inicio->format('Y-m-d'); 

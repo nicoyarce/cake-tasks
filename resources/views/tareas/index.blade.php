@@ -21,9 +21,9 @@
 					<th>ATRASO<br>[días]</th>
 					<th class="text-center">AVANCE<br>REAL<br>[%]</th>
                     <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>
-					@can('modificar_tareas')
+					@if(Auth::user()->can('modificar_tareas') || Auth::user()->can('modificar_avance_tareas'))
 					<th>Editar</th>
-					@endcan
+					@endif
 					@can('borrar_tareas')
 					<th>Eliminar</th>
 					@endcan
@@ -82,12 +82,12 @@
 						@endif
 					</td>
                     <td>{{$tarea->porcentajeAtraso}}</td>
-					@can('modificar_tareas')
+					@if(Auth::user()->can('modificar_tareas') || Auth::user()->can('modificar_avance_tareas'))
 					<td>
 						<a href="{{action('TareasController@edit', $tarea)}} "type="button" class="btn btn-primary">
 						<i class="fas fa-pen"></i></a>
 					</td>
-					@endcan
+					@endif
 					@can('borrar_tareas')
 					<td>
 						<form method="POST" action="{{action('TareasController@destroy', $tarea)}}">

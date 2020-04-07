@@ -24,18 +24,17 @@ class StoreTareasRequest extends FormRequest
      */
     public function rules()
     {
-        if (Auth::user()->hasRole('Usuario')) {
-            return [
-                'avance' => 'required'
-            ];
-        }
-        if (Auth::user()->hasRole('Administrador') || Auth::user()->hasRole('OCR')) {
+        if (Auth::user()->can('crear_tareas') && Auth::user()->can('modificar_avance_tareas')) {
             return [
                 'nombre' => 'required|min:4|max:100',
                 'area_id' => 'required',
                 'fecha_inicio' => 'required|date|before:fecha_termino_original',
                 'fecha_termino_original' => 'required|date|after:fecha_inicio',
                 'tipo_tarea' => 'required',
+                'avance' => 'required'
+            ];
+        } elseif (Auth::user()->can('modificar_avance_tareas')) {
+            return [
                 'avance' => 'required'
             ];
         }

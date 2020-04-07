@@ -12,9 +12,9 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        DB::unprepared(File::get('poblar tablas area y porcentaje.sql')); 
+    {        
         $this->call(RoleTableSeeder::class);
+        DB::unprepared(File::get('poblar tablas.sql')); 
         $this->call(ProyectosTareasSeeder::class);             
     }      
 }

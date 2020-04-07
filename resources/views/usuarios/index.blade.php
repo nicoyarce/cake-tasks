@@ -57,7 +57,9 @@
                         </td>
                     @else                    
                         <td>
-                            <button data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede eliminarse a si mismo" class="btn btn-danger" disabled="true"><i class="fas fa-trash-alt"></i></button>
+                            <span data-toggle="tooltip" data-placement="bottom" data-html="true" title="No puede eliminarse a si mismo">
+                                <button class="btn btn-danger" disabled="true" style="pointer-events: none;"><i class="fas fa-trash-alt"></i></button>
+                            </span>
                         </td>
                         <td>
                             <div class="form-check">
