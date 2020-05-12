@@ -13,7 +13,8 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class TareasImport implements ToCollection, WithHeadingRow
 {
-    public function collection(Collection $rows){
+    public function collection(Collection $rows)
+    {
         /*Validator::make($rows->toArray(), [
             function ($attribute, $value, $fail) {
                 if ($value === 'foo') {
@@ -22,21 +23,20 @@ class TareasImport implements ToCollection, WithHeadingRow
             },
         ])->validate();*/
         $proyecto = Proyecto::find(request()->proyecto_id);
-        $ultimaTareaMadre = new Tarea;   
+        $ultimaTareaMadre = new Tarea;
         $primerIndicadorEncontrado = false;
         DB::beginTransaction();
-        try{
-            foreach ($rows as $key=>$row) {                              
-                if(!$key == 0){
-                    if(!is_null($row['indicador'])){
+        try {
+            foreach ($rows as $key => $row) {
+                if (!$key == 0) {
+                    if (!is_null($row['indicador'])) {
                         $primerIndicadorEncontrado = true;
                         $tareasProyecto = $proyecto->tareas()->get();
                         //$ultimaTareaMadre = $tareasProyecto::where('nombre', 'LIKE', "%{$row->nombre}%")->get();
-                        $ultimaTareaMadre = $tareasProyecto->filter(function ($tarea) use ($row){
+                        $ultimaTareaMadre = $tareasProyecto->filter(function ($tarea) use ($row) {
                             return false !== stristr($tarea->nombre, $row['nombre']);
-                        });                    
-                    }
-                    elseif($primerIndicadorEncontrado){
+                        });
+                    } elseif ($primerIndicadorEncontrado) {
                         $tareaHija = new TareaHija;
                         $tareaHija->nombre = $row['nombre'];
                         $tareaHija->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
@@ -44,12 +44,11 @@ class TareasImport implements ToCollection, WithHeadingRow
                         $tareaHija->nivel = $row['nivel_de_esquema'];
                         $tareaHija->tareaMadre()->associate($ultimaTareaMadre->first());
                         $tareaHija->save();
-                    }                   
+                    }
                 }
             }
             DB::commit();
-        }
-        catch(InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             DB::rollBack();
         }
     }
