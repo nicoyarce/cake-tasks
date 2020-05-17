@@ -24,51 +24,48 @@
             <h2>Informes</h2>
         </div>
     </div>
-    @if(count($informes)>0)
+    @if(count($lista_informes)>0)
         <table id="tablaInformes" class="table table-hover">
             <thead>
                 <tr>
                     <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Incluye gráfico</th>
-                    <th>Incluye observaciones</th>
-                    <th>Colores</th>
-                    <th>Ver</th>
-                    @can('borrar_informes')
-                    <th>Borrar</th>
-                    @endcan
+                    <th>Ver detalles</th>                    
                 </tr>
             </thead>
-
             <tbody>
-                @foreach ($informes as $informe)
-                <tr>
-                    <td>{{$informe->fecha->format('d-M-Y')}}</td>
-                    <td>{{$informe->created_at->format('H:i:s')}}</td>
-                    <td>{!!$informe->grafico ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'!!}</td>
-                    <td>{!!$informe->observaciones ? '<i class="fas fa-check"></i>' : '<i class="fas fa-times"></i>'!!}</td>
-                    <td>
-                        @foreach((array)json_decode($informe->colores) as $color)								
-                            <div class="col">                                
-                                <input style="height:25px" disabled="" type="color" class="form-control" value="{{$color}}">
-                            </div>
-                        @endforeach
-                    </td>
-                    <td>
-                        <a href="{{Storage::url($informe->ruta)}}" type="button" class="btn btn-primary" >
-                            <i class="fas fa-eye "></i>
-                        </a>
-                    </td>
-                    @can('borrar_informes')
-                    <td>
-                        <form method="POST" action="/informes/destroy/{{$informe->id}}">
-                            {{csrf_field()}}
-                            {{method_field('DELETE')}}
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Desea eliminar el informe?')"><i class="fas fa-trash-alt"></i></button>
-                        </form>
-                    </td>
-                    @endcan
-                </tr>
+                @foreach ($lista_informes as $fechas)                                       
+                    <tr>                         
+                        <td>{{$fechas[0]->created_at->format('d-M-Y')}}</td>                                            
+                        <td>
+                            <div class="dropdown dropright">
+                                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-eye"></i>
+                                </button>                                
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @foreach ($fechas as $informe)                                   
+                                    <a href="{{Storage::url($informe->ruta)}}" class="dropdown-item">
+                                        {{$informe->created_at->format('H:i:s')}}                                        
+                                        @foreach((array)json_decode($informe->colores) as $color)
+                                            <div class="cuadro-colores" style="background-color:{{$color}};">&nbsp;</div>
+                                        @endforeach
+                                        @can('borrar_informes')
+                                        <div class="text-right mr-1 mb-1">
+                                            <form method="POST" action="/informes/destroy/{{$informe->id}}">
+                                                {{csrf_field()}}
+                                                {{method_field('DELETE')}}
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Desea eliminar el informe?')"><i class="fas fa-trash-alt"></i></button>
+                                            </form>
+                                        </div>
+                                        @endcan
+                                        <div class="dropdown-divider"></div>
+                                    @endforeach
+                                    </a>
+                                    
+                                </div>
+                            </div>                               
+                        </td>                 
+                    </tr>                   
+                    
                 @endforeach
             </tbody>
         </table>
@@ -161,6 +158,7 @@ Generar Informe
                 </div>
             </div>
         </div>
+        <hr>
         @foreach ($propiedades as $i => $propiedad)
             @if($propiedad->id != 6)
                 <div class="form-row">
