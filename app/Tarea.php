@@ -114,7 +114,7 @@ class Tarea extends Model
     /*Ojo, en esta funcion hay variables hardcoded o en duro*/
     public function getColorAtrasoAttribute()
     {
-        $propiedades = PropiedadesGrafico::all();
+        $propiedades = config('propiedades');
         // fechaAdvertencia corresponde al 60% y fechaPeligro al 90%
         $porcentajeParaVerde = $propiedades[5]->avance; // este valor indica bajo que avance la tarea cambiara a color verde
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
@@ -171,6 +171,16 @@ class Tarea extends Model
     {
         $glosa = NomenclaturaAvance::where('porcentaje', $this->avance)->pluck('glosa');
         return $glosa;
+    }
+
+    public function getNombreAutorUltimoCambioFtt()
+    {
+        return array_get($this->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre');
+    }
+
+    public function getNombreAutorUltimoCambioAvance()
+    {
+        return array_get($this->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre');
     }
 
     public function scopeCompletadas($query)

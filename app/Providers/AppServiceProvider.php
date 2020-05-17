@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
             return $carbon->format('Y-m-d');
         });*/
         view()->share('propiedades', PropiedadesGrafico::all());
+        config(['propiedades' => PropiedadesGrafico::all()]);
     }
 
     /**
