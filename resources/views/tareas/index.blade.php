@@ -52,11 +52,11 @@
 						@if($tarea->fecha_termino_original == $tarea->fecha_termino)
 						-
 						@else						
-							@if(empty($tarea->autorUltimoCambioFtt()->withTrashed()->first()))
+							@if(empty($tarea->getNombreAutorUltimoCambioFtt()))
 								{{ $tarea->fecha_termino->format('d-M-Y')}}
 							@else
 								<a data-toggle="tooltip" data-placement="bottom" data-html="true"
-									title="Modificado por: {{array_get($tarea->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre')}} <br>
+									title="Modificado por: {{$tarea->getNombreAutorUltimoCambioFtt()}} <br>
 									Fecha: <br>
 									{{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
 									{{ $tarea->fecha_termino->format('d-M-Y')}}
@@ -72,11 +72,11 @@
 						@endif
 					</td>
 					<td>
-						@if(empty($tarea->autorUltimoCambioAvance()->withTrashed()->first()))
+						@if(empty($tarea->getNombreAutorUltimoCambioAvance()))
 							{{$tarea->avance}}
 						@else
 							<a data-toggle="tooltip" data-placement="bottom" data-html="true"
-							title="Autor ultimo cambio: {{array_get($tarea->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre')}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
+							title="Autor ultimo cambio: {{$tarea->getNombreAutorUltimoCambioAvance()}} <br> Fecha ultimo cambio: <br> {{$tarea->fecha_ultimo_cambio_avance->format('d-M-Y H:i:s')}}">
 								{{$tarea->avance}}
 							</a>
 						@endif

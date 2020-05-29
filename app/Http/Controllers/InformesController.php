@@ -15,8 +15,10 @@ class InformesController extends Controller
 {
     public function vistaListaInformes(Proyecto $proyecto)
     {
-        $informes = $proyecto->informes->sortByDesc('created_at');
-        return view('informes.index', compact('proyecto', 'informes'));
+        $lista_informes = $proyecto->informes->sortByDesc('created_at')->groupBy(function ($item) {
+            return $item->fecha->format('d-M-y');
+        });
+        return view('informes.index', compact('proyecto', 'lista_informes'));
     }
 
     public function vistaListaInformesArchivados($id)
@@ -62,7 +64,7 @@ class InformesController extends Controller
         //dd($tareasJSON);
         $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
         $pdf->setOption('encoding', 'UTF-8');
-        $pdf->setOption('javascript-delay', 2000);
+        $pdf->setOption('javascript-delay', 1000);
         $informe = new Informe;
         $informe->fecha = Date::now();
         $informe->grafico = $incluye_grafico;
