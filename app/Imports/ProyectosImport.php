@@ -7,6 +7,7 @@ use App\Area;
 use App\Tarea;
 use App\TareaHija;
 use App\TipoTarea;
+use Carbon\Carbon;
 use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -42,50 +43,67 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
         // ])->validate();
         
         $ultimaTareaMadre = new Tarea;
-        $primerIndicadorEncontrado = false;
         DB::beginTransaction();
         try {
+            $formato = "d-m-y G:i"; //01-06-20 8:00
+            $timeZone = "America/Santiago";
             foreach ($rows as $key => $row) {
-                if ($key == 0) {
-                    $proyecto = Proyecto::create([
-                        'nombre' => $row['nombre'],
-                        'fecha_inicio' => Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString(),
-                        'fecha_termino_original' =>  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString(),
-                        'fecha_termino' =>  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString()
-                    ]);
-                    $proyecto->save();
-                } else {
-                    if (!is_null($row['indicador'])) {
-                        $primerIndicadorEncontrado = true;
-                        $tarea = new Tarea;
-                        try {
-                            $area = Area::where('nombrearea', $row['area'])->firstOrFail();
-                        } catch (ModelNotFoundException $e) {
-                            $area = Area::where('nombrearea', 'Otra')->first();
-                        } finally {
-                            $tarea->area()->associate($area);
+                $indicador = $row['indicador'];
+                $nombre = $row['nombre'];
+                $fecha_inicio = $row['comienzo'];
+                $fecha_termino = $row['fin'];
+                $nivel = $row['nivel_de_esquema'];
+                $tipo_tarea = $row['tipo_tarea'];
+                $area = $row['area'];
+                $nro_documento = $row['cot'];
+                if ($row->filter()->isNotEmpty()) {
+                    if ($key == 0) {
+                        $proyecto = Proyecto::create([
+                            'nombre' => $nombre,
+                            'fecha_inicio' => Date::createFromFormat($formato, $fecha_inicio, $timeZone)->toDateTimeString(),
+                            'fecha_termino_original' =>  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString(),
+                            'fecha_termino' =>  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString()
+                        ]);
+                        $proyecto->save();
+                    } else {
+                        if ($indicador == "*") {
+                            $tarea = new Tarea;
+                            try {
+                                $area = Area::where('nombrearea', $area)->firstOrFail();
+                            } catch (ModelNotFoundException $e) {
+                                $area = Area::where('nombrearea', 'Otra')->first();
+                            } finally {
+                                $tarea->area()->associate($area);
+                            }
+                            try {
+                                $tipo_tarea = TipoTarea:: where('descripcion', $tipo_tarea)
+                                    ->orWhere('descripcion', 'like', '%' . $tipo_tarea . '%')->firstOrFail();
+                            } catch (ModelNotFoundException $e) {
+                                $tipo_tarea = TipoTarea::all()->first();
+                            } finally {
+                                $tarea->tipoTarea()->associate($tipo_tarea);
+                            }
+                            $tarea->nombre = $nombre;
+                            //$tarea->nro_documento = (!is_null($nro_documento)) ? $nro_documento : '';
+                            $tarea->fecha_inicio = Date::createFromFormat($formato, $fecha_inicio, $timeZone)->toDateTimeString();
+                            $tarea->fecha_termino_original =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
+                            $tarea->fecha_termino =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
+                            $tarea->proyecto()->associate($proyecto);
+                            $tarea->save();
+                            $ultimaTareaMadre = $tarea;
+                        } else {
+                            $tareaHija = new TareaHija;
+                            $tareaHija->nombre = $nombre;
+                            $tareaHija->fecha_inicio = Date::createFromFormat($formato, $fecha_inicio, $timeZone)->toDateTimeString();
+                            $tareaHija->fecha_termino = Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
+                            if (is_numeric($nivel)) {
+                                $tareaHija->nivel = $nivel;
+                            } else {
+                                $tareaHija->nivel = 2;
+                            }
+                            $tareaHija->tareaMadre()->associate($ultimaTareaMadre);
+                            $tareaHija->save();
                         }
-                        $tipo_tarea = TipoTarea:: where('descripcion', $row['tipo_tarea'])
-                            ->orWhere('descripcion', 'like', '%' . $row['tipo_tarea'] . '%')->get();
-                        if ($tipo_tarea->isEmpty()) {
-                            $tipo_tarea = TipoTarea::all()->first();
-                        }
-                        $tarea->tipoTarea()->associate($tipo_tarea);
-                        $tarea->nombre = $row['nombre'];
-                        $tarea->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
-                        $tarea->fecha_termino_original =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
-                        $tarea->fecha_termino =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
-                        $tarea->proyecto()->associate($proyecto);
-                        $tarea->save();
-                        $ultimaTareaMadre = $tarea;
-                    } elseif ($primerIndicadorEncontrado) {
-                        $tareaHija = new TareaHija;
-                        $tareaHija->nombre = $row['nombre'];
-                        $tareaHija->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
-                        $tareaHija->fecha_termino =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
-                        $tareaHija->nivel = $row['nivel_de_esquema'];
-                        $tareaHija->tareaMadre()->associate($ultimaTareaMadre);
-                        $tareaHija->save();
                     }
                 }
             }
