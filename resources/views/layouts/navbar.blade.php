@@ -1,5 +1,5 @@
 <!-- Fixed navbar -->
-<nav id="barra" class="navbar navbar-expand-md navbar-dark">    
+<nav id="barra" class="navbar navbar-expand-md navbar-dark">
     <div id="logo">
         <img src="/holistic_sinLetras.png" width="150px" height="auto">
     </div>        
@@ -8,7 +8,10 @@
     <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">                        
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Inicio</a>
+            </li>
             @if(Auth::check())
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
@@ -20,32 +23,52 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/proyectos/">Activos</a>
                         {{-- <div class="dropdown-divider"></div> --}}
-                        @if(Auth::user()->hasRole('Administrador')||Auth::user()->hasRole('OCR'))
+                        @can('indice_proyectos_archivados')
                             <a class="dropdown-item" href="/proyectosArchivados">Terminados</a>
                         @endif
                     </div>
-                </li>                
-                @if(Auth::user()->hasRole('Administrador'))
+                </li>
+                @can('gestionar_usuarios')
                     <li class="nav-item">
                         <a class="nav-link" href="/users/">Usuarios</a>
-                    </li>                   
-                @endif
+                    </li>
+                @endcan
+                @can('gestionar_configuraciones')
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Configuraciones
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
+                            <a class="dropdown-item" href="/tipotareas/">Gestionar tipos de tarea</a>
+                            <a class="dropdown-item" href="/propiedadesGrafico/">Gestionar colores gráfico</a>
+                            <a class="dropdown-item" href="/roles/">Gestionar roles y permisos</a>
+                        </div>                        
+                    </li>
+                @endcan              
                 <li class="nav-item">
                     <a class="nav-link" href="/about/">Acerca de</a>
                 </li>
             @endif
         </ul>
+        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         @if(Auth::check())
-            <span class="navbar-text" href="">
-                @if(Auth::user()->hasRole('Administrador'))
-                    <b>Administrador: </b>{{Auth::user()->nombre}}
-                @elseif(Auth::user()->hasRole('OCR'))
-                    <b>OCR: </b>{{Auth::user()->nombre}}
-                @elseif(Auth::user()->hasRole('Usuario'))
-                    <b>Usuario: </b>{{Auth::user()->nombre}}
-                @endif
-            </span>
-            <a class="nav-link" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesion</a>
+            <li class="nav-item">
+                <span class="navbar-text" href="">
+                    <b>{{Auth::user()->getRoleNames()->first()}}: </b>
+                    @if(Auth::user()->cargo != '')
+                    {{Auth::user()->cargo}} - 
+                    @endif
+                    {{Auth::user()->nombre}}
+                </span>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-warning ml-3" onclick="return confirm('¿Desea finalizar su sesión?')" href="{{action('SessionsController@destroy')}}">Cerrar sesión
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </li>
         @endif
+        </ul>
     </div>
 </nav>
+

@@ -21,4 +21,20 @@ trait FechasTraducidas{
     public function getFechaTerminoAttribute($date){
         return new Date($date);
     }
+
+    public function getFechaUltimoCambioFtrAttribute($date){
+        return new Date($date);
+    }
+
+    public function getFechaUltimoCambioFttAttribute($date){
+        return new Date($date);
+    }
+
+    public function getFechaUltimoCambioAvanceAttribute($date){
+        return new Date($date);
+    }
+
+    public function getCreatedAtAttribute($date){
+        return new Date($date);
+    }
 }

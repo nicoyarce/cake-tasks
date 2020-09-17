@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Role;
 use App\Proyecto;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * App\User
  *
@@ -31,13 +33,15 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'nombre', 'run', 'password'
+        'nombre', 'run', 'password', 'deleted_at'
     ];
 
     /**
@@ -51,6 +55,10 @@ class User extends Authenticatable
    
     public function proyectos(){
         return $this->belongsToMany(Proyecto::class);
+    }
+
+    public function observaciones(){
+        return $this->hasMany(Observacion::class);
     }
            
 }

@@ -36,84 +36,119 @@ class Proyecto extends Model
     use SoftDeletes;
     use FechasTraducidas;
     protected $table = 'proyectos';
-    protected $fillable = ['nombre','fecha_inicio','fecha_termino_original','fecha_termino','avance'];
+    protected $fillable = ['nombre', 'fecha_inicio', 'fecha_termino_original', 'fecha_termino', 'avance'];
     protected $dates = ['deleted_at'];
 
-    public function tareas(){
+    public function tareas()
+    {
         return $this->hasMany(Tarea::class);
     }
 
-    public function users(){
+    public function tareasArchivadas()
+    {
+        return $this->hasMany(Tarea::class)->withTrashed();
+    }
+
+    public function users()
+    {
         return $this->belongsToMany(User::class);
     }
 
-    public function informes(){
+    public function informes()
+    {
         return $this->hasMany(Informe::class);
     }
 
-    public function tareasHijas(){
+    public function tareasHijas()
+    {
         return $this->hasManyThrough(TareaHija::class, Tarea::class, 'proyecto_id', 'tarea_madre_id', 'id', 'id')->withTrashed();
     }
 
-    public function observaciones(){
+    public function observaciones()
+    {
         return $this->hasMany(Observacion::class, 'proyecto_id')->withTrashed();
     }
 
-    protected static function boot() {
+    public function autorUltimoCambioFtr()
+    {
+        return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftr_id');
+    }
+
+    protected static function boot()
+    {
         parent::boot();
-        static::deleting(function($proyecto) { 
-            foreach($proyecto->tareas as $tarea){
-              $tarea->delete();
+        static::deleting(function ($proyecto) {
+            foreach ($proyecto->tareas as $tarea) {
+                $tarea->delete();
             }
-            foreach($proyecto->informes as $informe){
-              $informe->delete();
+            foreach ($proyecto->informes as $informe) {
+                $informe->delete();
             }
         });
     }
 
-    public function getAtrasoAttribute(){
+    public function getAtrasoAttribute()
+    {
         $final = Carbon::parse($this->fecha_termino_original);
         return $final->diffInDays($this->fecha_termino);
     }
 
-    public function getAvanceAttribute(){
-        $tareas = Tarea::where('proyecto_id',$this->id)->get();
-        if(count($tareas) == 0){
+    public function getAvanceAttribute()
+    {        
+        $tareas = (is_null($this->deleted_at)) ? $this->tareas()->get() : $this->tareasArchivadas()->get();
+        if (count($tareas) == 0) {
             return 0;
-        }
-        else{
+        } else {
             $totalDuracion = 0;
             foreach ($tareas as $tarea) {
-                $totalDuracion = $totalDuracion + $tarea->duracion;
-            } 
+                $totalDuracion = $totalDuracion + $tarea->duracion; //dias duracion
+            }
             $tiempoPonderado = 0;
             $avancePonderado = 0;
             foreach ($tareas as $tarea) {
-                $tiempoPonderado = $tarea->duracion/$totalDuracion;
+                $tiempoPonderado = $tarea->duracion / $totalDuracion;
                 $avancePonderado = $avancePonderado + ($tarea->avance * $tiempoPonderado);
             }
             return floor($avancePonderado);
-        }        
+        }
     }
 
-    public function getColorAtrasoAttribute(){
+    public function getColorAtrasoAttribute()
+    {
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
         $fechaTerminoOrigCarbon = Carbon::parse($this->fecha_termino);
-        $hoyCarbon = Carbon::today();
-        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);        
-        $fechaAdvertencia = $fechaInicioCarbon->addDays(($diferenciaFechas*60)/100); // verde antes de esta fecha
-        $fechaPeligro = Carbon::parse($this->fecha_inicio)->addDays(($diferenciaFechas*90)/100);  // amarillo antes de esta fecha, naranjo despues de fecha 
-        if($hoyCarbon->lte($fechaAdvertencia)){
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
+        $diferenciaFechas = $fechaInicioCarbon->diffInDays($fechaTerminoOrigCarbon);
+        $fechaAdvertencia = $fechaInicioCarbon->addDays(($diferenciaFechas * 60) / 100); // verde antes de esta fecha
+        $fechaPeligro = Carbon::parse($this->fecha_inicio)->addDays(($diferenciaFechas * 90) / 100);  // amarillo antes de esta fecha, naranjo despues de fecha
+        if ($hoyCarbon->lte($fechaAdvertencia)) {
             return "VERDE";
-        }
-        else if($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)){
+        } elseif ($hoyCarbon->gt($fechaAdvertencia) && $hoyCarbon->lte($fechaPeligro)) {
             return "AMARILLO";
-        }
-        else if($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoOrigCarbon)){
+        } elseif ($hoyCarbon->gt($fechaPeligro) && $hoyCarbon->lte($fechaTerminoOrigCarbon)) {
             return "NARANJO";
-        }
-        else{
+        } else {
             return "ROJO";
+        }
+    }
+
+    public function getPorcentajeAtrasoAttribute()
+    {
+        $tareas = (is_null($this->deleted_at)) ? $this->tareas()->get() : $this->tareasArchivadas()->get();
+        if (count($tareas) == 0) {
+            return 0;
+        } else {
+            $totalDuracion = 0;
+            foreach ($tareas as $tarea) {
+                $totalDuracion = $totalDuracion + $tarea->duracion; //dias duracion
+            }
+            $tiempoPonderado = 0;
+            $avanceProyectado = 0;
+            foreach ($tareas as $tarea) {
+                $tiempoPonderado = $tarea->duracion / $totalDuracion;
+                $avanceProyectado = $avanceProyectado + ($tarea->porcentajeAtraso * $tiempoPonderado);
+            }
+            return floor($avanceProyectado);
         }
     }
 }

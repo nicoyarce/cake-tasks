@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProyectosRequest extends FormRequest
+class StoreProyectosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class ProyectosRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre'=>'min:4|max:100',
-            'fecha_inicio'=>'date|before:fecha_termino',            
-            'fecha_termino'=>'date|after:fecha_inicio',           
+            'nombre'=>'required|min:4|max:100',
+            'fecha_inicio'=>'required|date|before:fecha_termino_original',
+            'fecha_termino_original'=>'required|date|after:fecha_inicio'
         ];
     }
 }

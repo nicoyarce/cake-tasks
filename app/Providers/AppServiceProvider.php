@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+
+use App\PropiedadesGrafico;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,10 +14,12 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {        
+    {
         /*Carbon::serializeUsing(function ($carbon) {
             return $carbon->format('Y-m-d');
         });*/
+        view()->share('propiedades', PropiedadesGrafico::all());
+        config(['propiedades' => PropiedadesGrafico::all()]);
     }
 
     /**
@@ -27,6 +31,6 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }   
+        }
     }
 }

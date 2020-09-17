@@ -12,11 +12,15 @@
     {{csrf_field()}}
     {{method_field('PUT')}}
     <div class="row">
-        <div class="form-group col-6">
+        <div class="form-group col-4">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" class="form-control" readonly value="{{$usuario->nombre}}">
+            <input type="text" id="nombre" name="nombre" class="form-control" value="{{$usuario->nombre}}">
         </div>
-        <div class="form-group col-6">
+        <div class="form-group col-4">
+            <label for="nombre">UU.RR.</label>
+            <input type="text" id="cargo" name="cargo" class="form-control" value="{{$usuario->cargo}}">
+        </div>
+        <div class="form-group col-4">
             <label for="run">RUN</label>
             <input type="text" id="run" name="run" class="form-control" readonly value="{{$usuario->run}}">
         </div>

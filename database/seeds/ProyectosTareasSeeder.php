@@ -6,6 +6,7 @@ use Faker\Factory as Faker;
 use App\Proyecto;
 use App\Tarea;
 use App\Area;
+use Illuminate\Support\Facades\DB;
 
 class ProyectosTareasSeeder extends Seeder
 {
@@ -17,8 +18,8 @@ class ProyectosTareasSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('es_ES');
-        $minimo = new DateTime('01/01/2018');
-        $maximo = new DateTime('12/31/2018');
+        $minimo = new DateTime('01/01/2020');
+        $maximo = new DateTime('12/31/2020');
         foreach (range(1,5) as $index){           
             $fecha_inicio = $faker->dateTimeBetween($startDate = $minimo, $endDate = $maximo, $timezone = 'America/Santiago');
             $fecha_inicio = $fecha_inicio->format('Y-m-d'); 

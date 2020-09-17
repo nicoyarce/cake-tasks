@@ -15,6 +15,7 @@
             <b>
             <li class="list-inline-item">Indicador</li>
             <li class="list-inline-item"> - Area</li>
+            <li class="list-inline-item"> - Tipo Tarea</li>
             <li class="list-inline-item"> - Nombre</li>
             <li class="list-inline-item"> - Comienzo</li>
             <li class="list-inline-item"> - Fin</li>
@@ -24,6 +25,7 @@
       </ul>
       <li>La segunda fila sera considerada como el nombre del proyecto.</li>
       <li>El formato de fechas aceptado es: dia-mes-año hora:minuto Ej: (20-11-2020 8:00).</li>
+      <li>Revisar el formato de las celdas excel antes de cargar</li>
   </ul>
 </div>
 <form id="formulario" class="form-horizontal" action="{{action('ProyectosController@cargarXLS')}}" method="POST" enctype="multipart/form-data">

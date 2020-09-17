@@ -9,6 +9,8 @@ use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\Snappy\Snappy as PDF;
+use Illuminate\Support\Facades\DB;
+use App\PropiedadesGrafico;
 
 class GenerarInformes extends Command
 {
@@ -44,28 +46,44 @@ class GenerarInformes extends Command
     public function handle()
     {
         Log::info('Inicio de generacion de informes');
-        try{
+        DB::beginTransaction();
+        try {
             $proyectos = Proyecto::all();
-            foreach ($proyectos as $proyecto) {
-                $tareas = $proyecto->tareas()->get();
-                $tareasJSON = $tareas->sortBy(function($tarea) {
-                                return [$tarea->fecha_inicio, $tarea->fecha_termino];
-                            })->values()->all();
-                $tareasJSON = json_encode($tareasJSON);            
-                $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
-                $pdf->setOption('encoding', 'UTF-8');
-                $pdf->setOption('javascript-delay', 2000);
-                $informe = new Informe;
-                $informe->fecha = Date::now();        
-                $informe->ruta = 'public/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'-'.$informe->fecha->format('H.i.s').'.pdf';
-                $informe->proyecto()->associate($proyecto);
-                $informe->save();
-                Storage::disk('local')->put($informe->ruta, $pdf->output());
-
+            $incluye_grafico = true;
+            $incluye_observaciones = true;
+            $arrayConfiguraciones = compact('incluye_grafico', 'incluye_observaciones');
+            for ($i=1; $i <= 4; $i++) {
+                foreach ($proyectos as $proyecto) {
+                    if ($i==1) {
+                        //para generar informe completo
+                        $arrayColores = PropiedadesGrafico::all()->whereNotIn('id', 6)->pluck('color');
+                        $tareas = $proyecto->tareas()->get();
+                    } else {
+                        //para generar colores individuales
+                        $arrayColores = PropiedadesGrafico::where('id', $i)->pluck('color');
+                        $tareas = $proyecto->tareas()->get()->whereIn('colorAtraso', $arrayColores);
+                    }
+                    $tareasJSON = $tareas->sortBy(function ($tarea) {
+                                    return [$tarea->fecha_inicio, $tarea->fecha_termino];
+                    })->values()->all();
+                    $tareasJSON = json_encode($tareasJSON);
+                    $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
+                    $pdf->setOption('encoding', 'UTF-8');
+                    $pdf->setOption('javascript-delay', 1000);
+                    $informe = new Informe;
+                    $informe->fecha = Date::now();
+                    $informe->ruta = 'public/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'-'.$informe->fecha->format('H.i.s').'.pdf';
+                    $informe->colores = json_encode($arrayColores, JSON_FORCE_OBJECT);
+                    $informe->proyecto()->associate($proyecto);
+                    $informe->save();
+                    Storage::disk('local')->put($informe->ruta, $pdf->output());
+                }
             }
-        } catch(\Exception $e){
+            DB::commit();
+        } catch (\Exception $e) {
             Log::error('Ha ocurrido una excepcion: '.$e);
+            DB::rollback();
         }
-        Log::info('Termino de generacion de informes');        
+        Log::info('Termino de generacion de informes');
     }
 }

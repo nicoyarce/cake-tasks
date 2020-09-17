@@ -19,42 +19,24 @@ class RoleTableSeeder extends Seeder
         $roleOCR = Role::create(['name' => 'OCR']);       
         $roleUser = Role::create(['name' => 'Usuario']);    
 
-        $indice_tareas = Permission::create(['name' => 'indice_tareas']);
-        $crear_tareas = Permission::create(['name' => 'crear_tareas']);
-        $modificar_tareas = Permission::create(['name' => 'modificar_tareas']);
-        $borrar_tareas = Permission::create(['name' => 'borrar_tareas']);
+        Permission::create(['name' => 'crear_tareas']);
+        Permission::create(['name' => 'modificar_tareas']);
+        Permission::create(['name' => 'borrar_tareas']);
 
-        $indice_proyectos = Permission::create(['name' => 'indice_proyectos']);
-        $crear_proyectos = Permission::create(['name' => 'crear_proyectos']);
-        $modificar_proyectos = Permission::create(['name' => 'modificar_proyectos']);
-        $borrar_proyectos = Permission::create(['name' => 'borrar_proyectos']);
-        $detalle_proyectos = Permission::create(['name' => 'detalle_proyectos']);
+        Permission::create(['name' => 'gestionar_proyectos']);        
 
-        $gestionar_usuarios = Permission::create(['name' => 'gestionar_usuarios']);
-        $ver_graficos = Permission::create(['name' => 'ver_graficos']);
+        Permission::create(['name' => 'gestionar_usuarios']);
+        Permission::create(['name' => 'ver_graficos']);
         
-        $ver_informes = Permission::create(['name' => 'ver_informes']);
-        $borrar_informes = Permission::create(['name' => 'borrar_informes']);
+        Permission::create(['name' => 'crear_informes']);
+        Permission::create(['name' => 'ver_informes']);
+        Permission::create(['name' => 'borrar_informes']);
 
-
-        
-        $roleUser->givePermissionTo(
-            'indice_tareas', 
-            'modificar_tareas',
-            'indice_proyectos',
-            'detalle_proyectos',
-            'ver_graficos',
-            'ver_informes');
-        
-        $roleOCR->givePermissionTo(
-            'indice_tareas', 
-            'modificar_tareas',
-            'indice_proyectos',
-            'detalle_proyectos',
-            'crear_tareas',
-            'borrar_tareas',
-            'ver_graficos',
-            'ver_informes');
+        Permission::create(['name' => 'modificar_avance_tareas']);
+        Permission::create(['name' => 'modificar_fechas_originales_tareas']);
+        Permission::create(['name' => 'modificar_fechas_originales_proyecto']);        
+        Permission::create(['name' => 'indice_proyectos_archivados']);
+        Permission::create(['name' => 'gestionar_configuraciones']);
         
         $roleAdmin->givePermissionTo(Permission::all());
 

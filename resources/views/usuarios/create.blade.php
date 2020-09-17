@@ -11,11 +11,15 @@
 <form class="form-horizontal" method="POST" action="{{action('UsersController@store')}}">
     {{csrf_field()}}
     <div class="row">
-        <div class="form-group col-6">
+        <div class="form-group col-4">
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" name="nombre" class="form-control" required>
         </div>
-        <div class="form-group col-6">
+        <div class="form-group col-4">
+            <label for="nombre">UU.RR.</label>
+            <input type="text" id="cargo" name="cargo" class="form-control">
+        </div>
+        <div class="form-group col-4">
             <label for="run">RUN</label>
             <input type="text" id="run" name="run" class="form-control" required>
         </div>
