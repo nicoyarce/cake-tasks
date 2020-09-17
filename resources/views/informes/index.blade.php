@@ -133,54 +133,64 @@ Generar Informe
     </div>
 </form>
 <hr>
-<div class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
-    Debe elegir algun tipo de tarea.
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+<div class="form-group text-center">
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#detalle_generacion" aria-expanded="false" aria-controls="detalle_generacion">
+        Detalles informe personalizado
+        <i class="fas fa-tasks"></i>
+    </button>    
 </div>
-<form id="personalizado" class="form-horizontal" method="POST" action="{{action('InformesController@generarInforme', $proyecto['id'])}}">
-    {{csrf_field()}}
-    <div class="form-group">
-        <div class="form-row">
-            <div class="col-6">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="grafico" name="grafico">
-                    <label class="custom-control-label" for="grafico">Incluir gráfico</label>
-                </div>
-            </div>
+<div class="collapse" id="detalle_generacion">
+    <div class="card card-body">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="display: none;">
+            Debe elegir algun tipo de tarea.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-        <div class="form-row">
-            <div class="col-6">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="observaciones" name="observaciones">
-                    <label class="custom-control-label" for="observaciones">Incluir observaciones</label>
-                </div>
-            </div>
-        </div>
-        <hr>
-        @foreach ($propiedades as $i => $propiedad)
-            @if($propiedad->id != 6)
+        <form id="personalizado" class="form-horizontal" method="POST" action="{{action('InformesController@generarInforme', $proyecto['id'])}}">
+            {{csrf_field()}}
+            <div class="form-group">
                 <div class="form-row">
                     <div class="col-6">
                         <div class="custom-control custom-checkbox">
-                        <input type="checkbox" rel="incluye_tareas" class="custom-control-input" id="incluye_tareas_{{$i}}" name="incluye_tareas[]" value="{{$propiedad->id}}">
-                            <label class="custom-control-label" for="incluye_tareas_{{$i}}">Incluir tareas color </label>
+                            <input type="checkbox" class="custom-control-input" id="grafico" name="grafico">
+                            <label class="custom-control-label" for="grafico">Incluir gráfico</label>
                         </div>
                     </div>
+                </div>
+                <div class="form-row">
                     <div class="col-6">
-                        <input style="height:50px" disabled="" type="color" class="form-control" value="{{$propiedad->color}}">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="observaciones" name="observaciones">
+                            <label class="custom-control-label" for="observaciones">Incluir observaciones</label>
+                        </div>
                     </div>
                 </div>
-            @endif
-        @endforeach
+                <hr>
+                @foreach ($propiedades as $i => $propiedad)
+                    @if($propiedad->id != 6)
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="custom-control custom-checkbox">
+                                <input type="checkbox" rel="incluye_tareas" class="custom-control-input" id="incluye_tareas_{{$i}}" name="incluye_tareas[]" value="{{$propiedad->id}}">
+                                    <label class="custom-control-label" for="incluye_tareas_{{$i}}">Incluir tareas color </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <input style="height:50px" disabled="" type="color" class="form-control" value="{{$propiedad->color}}">
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+            <div class="form-group text-center">
+                <button type="button" class="btn btn-primary" onclick="enviar()">Generar
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="form-group text-center">
-        <button type="button" class="btn btn-primary" onclick="enviar()">Generar informe personalizado
-            <i class="fas fa-tasks"></i>
-        </button>
-    </div>
-</form>
+</div>
 
 <link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min.css">
 <script src="/js/dataTables.fixedHeader.min.js"></script>
