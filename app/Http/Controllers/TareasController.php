@@ -28,7 +28,8 @@ class TareasController extends Controller
     }
 
 
-    public function showArchivadas($id) {
+    public function showArchivadas($id)
+    {
         $tarea = Tarea::withTrashed()
             ->where('id', $id)
             ->get()
@@ -87,7 +88,8 @@ class TareasController extends Controller
         return view('tareas.edit', compact('tarea', 'listaProyectos', 'areas', 'tipo_tareas', 'avances', 'observaciones'));
     }
 
-    public function update(UpdateTareasRequest $request, Tarea $tarea) {
+    public function update(UpdateTareasRequest $request, Tarea $tarea)
+    {
         $tareaNueva = Tarea::find($tarea->id);
         if (Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas')) {
             $tareaNueva->nombre = $request->nombre;
@@ -109,9 +111,9 @@ class TareasController extends Controller
             }
             if ($request->has('observaciones')) {
                 $ids_observaciones = collect($request->ids_observaciones);
-                Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
+                $tareaNueva->observaciones()->where('tarea_id', $tareaNueva->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
                 $observacionesRestantes = $tareaNueva->observaciones()->get()->pluck('contenido');
-                foreach ($request->observaciones as $n => $textoObservacion) {
+                foreach ($request->observaciones as $textoObservacion) {
                     if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
                         $observacion = new Observacion();
                         $observacion->contenido = $textoObservacion;
@@ -127,7 +129,6 @@ class TareasController extends Controller
                 $tareaNueva->autorUltimoCambioAvance()->associate(User::find(Auth::user()->id));
                 $tareaNueva->fecha_ultimo_cambio_avance = Date::now();
                 $tareaNueva->avance = $request->avance;
-                $tareaNueva->save();
             }
         } elseif (Auth::user()->can('modificar_avance_tareas')) {
             $tareaNueva->fill($request->only('avance'));

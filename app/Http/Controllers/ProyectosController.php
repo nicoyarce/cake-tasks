@@ -130,7 +130,7 @@ class ProyectosController extends Controller
         }
         if ($request->has('observaciones')) {
             $ids_observaciones = collect($request->ids_observaciones);
-            Observacion::whereNotIn('id', $ids_observaciones)->forceDelete();
+            $proyectoNuevo->observaciones()->where('proyecto', $proyectoNuevo->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
             $observacionesRestantes = $proyectoNuevo->observaciones()->get()->pluck('contenido');
             foreach ($request->observaciones as $n => $textoObservacion) {
                 if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
