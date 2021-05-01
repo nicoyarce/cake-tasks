@@ -1,0 +1,28 @@
+body {
+    overflow: hidden;
+}
+
+/* Preloader */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    /* change if the mask should have another color then white */
+    z-index: 99;
+    /* makes sure it stays on top */
+}
+
+#status {
+    width: 100%;
+    height: 50%;
+    background-image: url(/img/logo_no_back.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom;
+    margin-top: 15%;
+    /* is width and height divided by two */
+}

@@ -1,0 +1,101 @@
+/* Personal styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body > .container {
+  padding: 10px 10px 0;
+  margin-bottom: 35px;
+}
+
+td{  
+  text-align: center;
+}
+
+th{  
+  text-align: center;
+}
+
+#logo{
+  padding-right: 5px
+}
+
+#titulo{
+  color: white; font-size: 25px; padding-right: 10px;
+}
+
+.fondo-amarillo{
+  background-color: #ffff00;
+}
+
+.fondo-naranjo{
+  background-color: #f48024;
+}
+
+#carga{    
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: none;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 35px;
+  line-height: 25px; /* Vertically center the text there */
+  background-color: #f5f5f5;
+}
+
+#barra{
+  background-color: #1b7498;
+}
+
+#mensaje{
+  position: absolute;
+  margin: 0 auto;
+  left: 10px ;
+  z-index: 10;
+  animation: mensaje 10s forwards;    
+}
+
+.cuadro-colores {
+  width: 10px;
+  height: 10px;
+  float: right;
+  margin: 5px;
+  border-style: solid;
+  border-width: 1px;  
+}
+
+@keyframes mensaje {
+    0%   {opacity: 1;}
+    100% {opacity: 0; display:none;}
+}
+
+/*
+.large{
+  width: 1800px;
+  height: 1800px;
+}
+
+.small{
+  width: 500px;
+  height: 500px;
+}
+
+.large { 
+  background: #fff; 
+}
+*/
