@@ -68,7 +68,7 @@
             if($(this).val()==1){ //es admin
                 $("#divProyectos").hide();
             }
-            else{ //es ocr
+            else{ //es moderador
                 $("#divProyectos").show();
             }
             if($(this).val()==3){ //es usuario
