@@ -34,9 +34,9 @@
         <div class="row w-100">
             <ul class="detallesTarea list-group w-100">
                 <li class="list-group-item"><b>{{ $proyecto->nombre }}</b></li>
-                <li class="list-group-item"><b>FIR:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
-                <li class="list-group-item"><b>FTR original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
-                <li class="list-group-item"><b>FTR modificada: </b>
+                <li class="list-group-item"><b>Fecha Inicio Proyecto:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
+                <li class="list-group-item"><b>Fecha Término Proyecto original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
+                <li class="list-group-item"><b>Fecha Término Proyecto modificada: </b>
                     @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
                         -
                     @else
@@ -92,9 +92,9 @@
         <tr>
             <th>#</th>
             <th>NOMBRE<br>TAREA</th>
-            <th>FIT<br>&nbsp;</th>
-            <th>FTT<br>Original</th>
-            <th>FTT<br>Modificada</th>
+            <th>Fecha Inicio Tarea<br>&nbsp;</th>
+            <th>Fecha Término Tarea<br>Original</th>
+            <th>Fecha Término Tarea<br>Modificada</th>
             <th>ATRASO<br>[días]</th>
             <th class="text-center">AVANCE<br>REAL<br>[%]</th>
             <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>

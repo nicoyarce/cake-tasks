@@ -114,7 +114,7 @@ class Tarea extends Model
     /*Ojo, en esta funcion hay variables hardcoded o en duro*/
     public function getColorAtrasoAttribute()
     {
-        $propiedades = config('propiedades');
+        $propiedades = PropiedadesGrafico::all();
         // fechaAdvertencia corresponde al 60% y fechaPeligro al 90%
         $porcentajeParaVerde = $propiedades[5]->avance; // este valor indica bajo que avance la tarea cambiara a color verde
         $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);

@@ -13,9 +13,9 @@
         <table class="table table-sm table-borderless">
             <thead>
                 <tr>
-                    <th>FIR</th>
-                    <th>FTR Original</th>
-                    <th>FTR Modificada</th>
+                    <th>Fecha Inicio Proyecto</th>
+                    <th>Fecha Término Proyecto Original</th>
+                    <th>Fecha Término Proyecto Modificada</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,9 +112,9 @@
         <div class="row">
             <ul class="detallesTarea list-group w-50" style="display: none;">
                 <li class="list-group-item"><span class="titulospan">Área:</span><br><span id="area"></span></li>
-                <li class="list-group-item"><span class="titulospan">FIT:</span><span id="fir"></span></li>
-                <li class="list-group-item"><span class="titulospan">FTT original:</span><span id="ftro"></span></li>
-                <li class="list-group-item"><span class="titulospan">FTT modificada:</span><span id="ftrm"></span></li>
+                <li class="list-group-item"><span class="titulospan">Fecha Inicio Tarea:</span><span id="fir"></span></li>
+                <li class="list-group-item"><span class="titulospan">Fecha Término Tarea original:</span><span id="ftro"></span></li>
+                <li class="list-group-item"><span class="titulospan">Fecha Término Tarea modificada:</span><span id="ftrm"></span></li>
                 <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
             </ul>
             <ul class="detallesTarea list-group w-50 mb-1" style="display: none;">

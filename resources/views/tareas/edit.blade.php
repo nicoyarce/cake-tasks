@@ -10,7 +10,7 @@
 <form id="formulario" method="POST" action="{{action('TareasController@update', $tarea)}}">
     {{csrf_field()}}
     {{method_field('PUT')}}
-    {{-- Formulario para Admin y OCR --}}
+    {{-- Formulario para Admin y Moderador --}}
     @if(Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas'))
         <hr>
         @foreach ($listaProyectos as $listaProyecto)
@@ -48,7 +48,7 @@
         </div>
         <div class="form-row">
             <div class="form-group col-4">
-                <label for="fecha_inicio">FIT</label>
+                <label for="fecha_inicio">Fecha Inicio Tarea</label>
                 <input class="form-control" id="fecha_inicio" type="date"
                 name="fecha_inicio"
                 @cannot('modificar_fechas_originales_proyecto')
@@ -57,7 +57,7 @@
                 value={{$tarea->fecha_inicio}}>
             </div>
             <div class="form-group col-4">
-                <label>FTT original</label>
+                <label>Fecha Término Tarea original</label>
                 <input class="form-control" id="fecha_termino_original" type="date" required
                 name="fecha_termino_original"
                 @cannot('modificar_fechas_originales_proyecto')
@@ -66,7 +66,7 @@
                 value={{$tarea->fecha_termino_original}}>
             </div>
             <div class="form-group col-4">
-                <label for="fecha_termino">FTT modificada</label>
+                <label for="fecha_termino">Fecha Término Tarea modificada</label>
                 <input class="form-control" type="date" id="fecha_termino" name="fecha_termino" @if($tarea->fecha_termino_original != $tarea->fecha_termino) value={{$tarea->fecha_termino}} @endif>
             </div>
         </div>
@@ -122,9 +122,9 @@
                 <tr>
                     <th>NOMBRE<br>TAREA</th>
                     <th>ÁREA<br>&nbsp;</th>
-                    <th>FIT<br>&nbsp;</th>
-                    <th>FTT<br>Original</th>
-                    <th>FTT<br>Modificada</th>
+                    <th>Fecha Inicio Tarea<br>&nbsp;</th>
+                    <th>Fecha Término Tarea<br>Original</th>
+                    <th>Fecha Término Tarea<br>Modificada</th>
                     <th>ATRASO<br>[días]</th>
                 </tr>
             </thead>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Observacion;
 use App\User;
+use App\PropiedadesGrafico;
 use App\Http\Requests\StoreProyectosRequest;
 use App\Http\Requests\UpdateProyectosRequest;
 use Jenssegers\Date\Date;
@@ -94,7 +95,8 @@ class ProyectosController extends Controller
             ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
-        return view('proyectos.show', compact('proyecto', 'tareas'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('proyectos.show', compact('proyecto', 'tareas', 'propiedades'));
     }
 
     /**
@@ -130,7 +132,7 @@ class ProyectosController extends Controller
         }
         if ($request->has('observaciones')) {
             $ids_observaciones = collect($request->ids_observaciones);
-            $proyectoNuevo->observaciones()->where('proyecto', $proyectoNuevo->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
+            $proyectoNuevo->observaciones()->where('proyecto_id', $proyectoNuevo->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
             $observacionesRestantes = $proyectoNuevo->observaciones()->get()->pluck('contenido');
             foreach ($request->observaciones as $n => $textoObservacion) {
                 if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
