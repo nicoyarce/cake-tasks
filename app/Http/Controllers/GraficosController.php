@@ -24,7 +24,6 @@ class GraficosController extends Controller
             })->values()->all();
         $propiedades = PropiedadesGrafico::all();
         $tareas = json_encode($tareas);
-        //dd($tareas);
         return view('grafico', compact('proyecto', 'areas', 'tareas', 'propiedades'));
     }
 
