@@ -42,7 +42,6 @@
   <!--<script type="text/javascript" src="ganttTestSuite.js"></script>-->
 </head>
 <body style="background-color: #fff;">
-{{app('debugbar')->disable()}}
 
 <div id="ndo" style="position:absolute;right:5px;top:5px;width:378px;padding:5px;background-color: #FFF5E6; border:1px solid #F9A22F; font-size:12px" class="noprint">
   <div>
