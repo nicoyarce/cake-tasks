@@ -45,7 +45,7 @@
     </tbody>
 </table>
 <br>
-@include('tareas.index', ['proyecto' => $proyecto])
+@include('tareas.index', ['proyecto' => $proyecto, 'propiedades' => $propiedades])
 </ul>
 @endsection
 

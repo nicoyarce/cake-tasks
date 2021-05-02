@@ -92,7 +92,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Tipo Tarea</h5>
-            <p class="card-text">{{$tarea->tipoTarea->descripcion or '-'}}</p>
+            <p class="card-text">{{$tarea->tipoTarea->descripcion}}</p>
           </div>
         </div>
     </div>
@@ -100,7 +100,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Área</h5>
-            <p class="card-text">{{$tarea->area->nombrearea or '-'}}</p>
+            <p class="card-text">{{$tarea->area->nombrearea}}</p>
           </div>
         </div>
     </div>

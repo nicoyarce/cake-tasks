@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\PropiedadesGrafico;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,8 +17,6 @@ class AppServiceProvider extends ServiceProvider
         /*Carbon::serializeUsing(function ($carbon) {
             return $carbon->format('Y-m-d');
         });*/
-        view()->share('propiedades', PropiedadesGrafico::all());
-        config(['propiedades' => PropiedadesGrafico::all()]);
     }
 
     /**

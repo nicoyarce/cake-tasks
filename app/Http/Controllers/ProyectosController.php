@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Observacion;
 use App\User;
+use App\PropiedadesGrafico;
 use App\Http\Requests\StoreProyectosRequest;
 use App\Http\Requests\UpdateProyectosRequest;
 use Jenssegers\Date\Date;
@@ -94,7 +95,8 @@ class ProyectosController extends Controller
             ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
-        return view('proyectos.show', compact('proyecto', 'tareas'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('proyectos.show', compact('proyecto', 'tareas', 'propiedades'));
     }
 
     /**
