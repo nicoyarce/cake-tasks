@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use App\PropiedadesGrafico;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use App\PropiedadesGrafico;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,8 +20,9 @@ class AppServiceProvider extends ServiceProvider
         /*Carbon::serializeUsing(function ($carbon) {
             return $carbon->format('Y-m-d');
         });*/
-        view()->share('propiedades', PropiedadesGrafico::all());
+        Paginator::useBootstrap();
         config(['propiedades' => PropiedadesGrafico::all()]);
+        View::share('propiedades', PropiedadesGrafico::all());
     }
 
     /**

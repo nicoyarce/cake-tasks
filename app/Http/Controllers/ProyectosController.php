@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Observacion;
 use App\User;
+use App\PropiedadesGrafico;
 use App\Http\Requests\StoreProyectosRequest;
 use App\Http\Requests\UpdateProyectosRequest;
 use Jenssegers\Date\Date;
@@ -28,9 +29,9 @@ class ProyectosController extends Controller
     public function index()
     {
         if (Auth::user()->can('gestionar_proyectos')) {
-            $proyectos = Proyecto::paginate(10);
+            $proyectos = Proyecto::with('tareas')->get();
         } else {
-            $proyectos = Auth::user()->proyectos()->paginate(10);
+            $proyectos = Auth::user()->proyectos()->with('tareas');
         }
         return view('proyectos.index', compact('proyectos'));
     }
@@ -38,9 +39,9 @@ class ProyectosController extends Controller
     public function indexArchivados()
     {
         if (Auth::user()->can('gestionar_proyectos') && Auth::user()->can('indice_proyectos_archivados')) {
-            $proyectos = Proyecto::onlyTrashed()->orderBy('deleted_at')->paginate(5);
+            $proyectos = Proyecto::with('tareas')->onlyTrashed()->orderBy('deleted_at')->paginate(5);
         } elseif (Auth::user()->can('indice_proyectos_archivados')) {
-            $proyectos = Auth::user()->proyectos()->onlyTrashed()->orderBy('deleted_at')->paginate(5);
+            $proyectos = Auth::user()->proyectos()->with('tareas')->onlyTrashed()->orderBy('deleted_at')->paginate(5);
         }
         return view('proyectos.indexarchivados', compact('proyectos'));
     }
@@ -93,7 +94,7 @@ class ProyectosController extends Controller
         $tareas = $proyecto->tareas
             ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
-            })->values()->all();
+            })->values()->all();        
         return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
@@ -130,7 +131,7 @@ class ProyectosController extends Controller
         }
         if ($request->has('observaciones')) {
             $ids_observaciones = collect($request->ids_observaciones);
-            $proyectoNuevo->observaciones()->where('proyecto', $proyectoNuevo->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
+            $proyectoNuevo->observaciones()->where('proyecto_id', $proyectoNuevo->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
             $observacionesRestantes = $proyectoNuevo->observaciones()->get()->pluck('contenido');
             foreach ($request->observaciones as $n => $textoObservacion) {
                 if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
@@ -172,12 +173,10 @@ class ProyectosController extends Controller
             ->where('id', $id)
             ->get()
             ->first();
-        //dd($proyecto);
         $tareas = $proyecto->tareas()->withTrashed()->get()
             ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
-        //dd(count($proyecto->tareas()->withTrashed()->get()));
         return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
@@ -187,7 +186,7 @@ class ProyectosController extends Controller
         $proyecto->restore();
         $proyecto->informes()->withTrashed()->restore();
         $proyecto->tareas()->withTrashed()->restore();
-        //$proyecto->tareasHijas()->withTrashed()->restore(); //usar esto en laravel 5.8
+        $proyecto->tareasHijas()->withTrashed()->restore(); //usar esto en laravel 5.8
         foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
             $tarea->restore();
             foreach ($tarea->tareasHijas()->withTrashed()->get() as $tareaHija) {
@@ -203,7 +202,7 @@ class ProyectosController extends Controller
         $proyecto = Proyecto::withTrashed()->find($id);
         $string = $proyecto->nombre;
         $proyecto->informes()->withTrashed()->forceDelete();
-        //$proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
+        $proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
         foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
             foreach ($tarea->tareasHijas()->withTrashed()->get() as $tareaHija) {
                 $tareaHija->forceDelete();

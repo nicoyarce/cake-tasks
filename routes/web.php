@@ -12,7 +12,7 @@
 */
 Route::get('/', 'HomeController@index');
 Route::get('/about', 'HomeController@about');
-//Route::get('/pdf', 'InformesController@test'); //test de pdf
+Route::get('/pdf', 'InformesController@test'); //test de pdf
 Route::group(['middleware' => ['permission:gestionar_proyectos']], function () {
     //Cargas masivas
     Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
@@ -32,6 +32,8 @@ Route::group(['middleware' => ['permission:gestionar_usuarios']], function () {
         'as' => 'users.destroySelected',
         'uses' => 'UsersController@destroySelected'
     ]);
+    Route::get('/users/cargarXLS', 'UsersController@vistaCargarUsuarios');
+    Route::post('/users/cargarXLS', 'UsersController@cargarUsuarios');
     Route::resource('users', 'UsersController');
 });
 Route::group(['middleware' => ['permission:gestionar_configuraciones']], function () {

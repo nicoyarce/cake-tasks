@@ -23,11 +23,7 @@ class GraficosController extends Controller
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
             })->values()->all();
         $propiedades = PropiedadesGrafico::all();
-        //dd($tareas);
-        //$tareas = $tareas->makeHidden('created_at');
-        //$tareas = $tareas->makeHidden('updated_at');
         $tareas = json_encode($tareas);
-        //dd($tareas);
         return view('grafico', compact('proyecto', 'areas', 'tareas', 'propiedades'));
     }
 

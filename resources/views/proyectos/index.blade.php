@@ -134,7 +134,6 @@
 		</tbody>
 	</table>
 </div>
-{{$proyectos->links()}}
 @else
 <hr>
 <h3 class="text-center">No hay proyectos activos</h3>

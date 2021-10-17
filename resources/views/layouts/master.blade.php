@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Holistic</title>
 		<!-- Bootstrap core CSS -->
-		<link href="/css/bootstrap.css" rel="stylesheet" >
+		<link href="/css/bootstrap.min.css" rel="stylesheet" >
 		<!-- Custom styles for this template -->
 		<link href="/css/personal.css" rel="stylesheet">
 		<!--Font Awesome -->
@@ -24,7 +24,7 @@
 	</head>
 	<body>
 		<div id="carga">
-			<img src="/ajax-loader.gif">
+			<img src="{{url('/img/ajax-loader.gif')}}">
 		</div>
 		<header>
 			@include('layouts.navbar')
@@ -34,9 +34,6 @@
 		<main id="main" role="main" class="container">
 			@yield('content')	
 			@include('layouts.modal')
-			@cannot('gestionar_configuraciones')
-				{{app('debugbar')->disable()}}
-			@endcannot
 		</main>
 		<!-- Begin footer -->
 		{{-- <footer id="footer" class="footer" style="">

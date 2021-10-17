@@ -5,15 +5,18 @@
 <link href="/css/signin.css" rel="stylesheet">
 <form method="POST" action="{{action('SessionsController@store')}}"class="form-signin">
     {{csrf_field()}}
-    <h1 class="h3 mb-3 font-weight-normal">Iniciar sesión</h1>
-    
-    <label for="run" class="sr-only">RUN</label>
-    <input type="text" id="run" name="run" class="form-control" placeholder="RUN" required autofocus>
 
-    <label for="password" class="sr-only">Contraseña</label>
-    <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
-    
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
+    <div class="card" style="width: 18rem;">
+        <img src="{{url('/img/holistic.png')}}" class="card-img-top" alt="Logo Holistic" width="35px" height="auto">
+        <div class="card-body">
+            <h5 class="card-title">Iniciar sesión</h5>
+            <label for="run" class="sr-only">RUN</label>
+            <input type="text" id="run" name="run" class="form-control" placeholder="RUN" required autofocus>
+            <label for="password" class="sr-only">Contraseña</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
+        </div>
+    </div>
 </form>
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script src="/js/jquery.rut.min.js"></script>

@@ -7,6 +7,8 @@ use App\User;
 use App\Proyecto;
 use Freshwork\ChileanBundle\Rut;
 use Spatie\Permission\Models\Role;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsuariosImport;
 
 class UsersController extends Controller
 {
@@ -22,7 +24,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $usuarios = User::all();
+        $usuarios = User::with('roles')->get();
         return view('usuarios.index', compact('usuarios'));
     }
     
@@ -125,6 +127,21 @@ class UsersController extends Controller
     {
         User::destroy($request->eliminar);
         flash('Usuarios eliminados')->success();
+        return redirect('users');
+    }
+
+    public function vistaCargarUsuarios()
+    {
+        return view('usuarios.cargarxls');
+    }
+
+    public function cargarUsuarios(Request $request)
+    {
+        $validatedData = $request->validate([
+            'archivo' => 'required|file|mimes:xlsx',
+        ]);
+        Excel::import(new UsuariosImport, $request->archivo);
+        flash('Usuarios importados correctamente')->success();
         return redirect('users');
     }
 }

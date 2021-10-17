@@ -175,12 +175,18 @@ class Tarea extends Model
 
     public function getNombreAutorUltimoCambioFtt()
     {
-        return array_get($this->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre');
+        if (!empty($this->autorUltimoCambioFtt())){
+            return array_get($this->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre');
+        }
+        return '';
     }
 
     public function getNombreAutorUltimoCambioAvance()
     {
-        return array_get($this->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre');
+        if (!empty($this->autorUltimoCambioAvance())){
+            return array_get($this->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre');
+        }
+        return '';
     }
 
     public function scopeCompletadas($query)

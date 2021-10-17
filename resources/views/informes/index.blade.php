@@ -43,7 +43,7 @@
                                 </button>                                
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     @foreach ($fechas as $informe)                                   
-                                    <a href="{{Storage::url($informe->ruta)}}" class="dropdown-item">
+                                    <a href="{{Storage::url($informe->ruta)}}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
                                         {{$informe->created_at->format('H:i:s')}}                                        
                                         @foreach((array)json_decode($informe->colores) as $color)
                                             <div class="cuadro-colores" style="background-color:{{$color}};">&nbsp;</div>

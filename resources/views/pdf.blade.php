@@ -7,10 +7,10 @@
         };
     </script> --}}
     <script src="{{public_path('js/jquery-3.3.1.min.js')}}"></script>
-    <link href="{{public_path('css/bootstrap.css')}}" rel="stylesheet">
+    <link href="{{public_path('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{public_path('css/personal.css')}}" rel="stylesheet">
     {{-- <script src="/js/jquery-3.3.1.min.js"></script>
-    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/personal.css" rel="stylesheet"> --}}
     <style>
         thead { display: table-header-group }
@@ -20,18 +20,19 @@
 
 <nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">
     <div id="logo" class="row">
-        <div class="col-1"><img src="{{public_path('armada.png')}}" width="35px" height="auto"></div>
-        {{-- <img src="/armada.png" width="35px" height="auto"> --}}
-        <div class="col-1 ml-3 d-flex align-items-end"><h3 class="text-light">Holistic</h3></div>
+        <div class="col-6"><img src="{{url('/img/armada.png')}}" width="35px" height="auto"></div>
+        <div class="col-6 ml-6 d-flex align-items-end"><h3 class="text-light">Holistic</h3></div>
     </div>
 </nav>
 <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s') }}</h3>
 <hr>
 <div class="row" id="graficoBotones">
-    @if (array_key_exists("incluye_grafico",$arrayConfiguraciones) && $arrayConfiguraciones['incluye_grafico'] == true)
-        <div id="grafico" style="width: 500px; height: 500px;"></div>  
-    @endif
-    <div id="botones" class="col-6">
+    <div id="seccion-grafico" class="col-xl-6 col-sm-6">
+        @if (array_key_exists("incluye_grafico",$arrayConfiguraciones) && $arrayConfiguraciones['incluye_grafico'] == true)    
+            <div id="grafico" style="width: 500px; height: 500px;"></div>
+        @endif
+    </div>
+    <div id="botones" class="col-xl-6 col-sm-6">
         <div class="row w-100">
             <ul class="detallesTarea list-group w-100">
                 <li class="list-group-item"><b>{{ $proyecto->nombre }}</b></li>

@@ -68,9 +68,11 @@ class GeneraInforme extends Command
             $informe->save();
             Storage::disk('local')->put($informe->ruta, $pdf->output());
             DB::commit();
+            return 0;
         } catch (\Exception $e) {
             Log::error('Ha ocurrido una excepcion: '.$e);
-            DB::rollBack();
+            DB::rollback();
+            return 1;
         }
         Log::info('Termino de generacion de informe');
     }

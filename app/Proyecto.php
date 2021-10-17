@@ -95,7 +95,7 @@ class Proyecto extends Model
 
     public function getAvanceAttribute()
     {        
-        $tareas = (is_null($this->deleted_at)) ? $this->tareas()->get() : $this->tareasArchivadas()->get();
+        $tareas = (is_null($this->deleted_at)) ? $this->tareas : $this->tareasArchivadas;
         if (count($tareas) == 0) {
             return 0;
         } else {
@@ -134,7 +134,7 @@ class Proyecto extends Model
 
     public function getPorcentajeAtrasoAttribute()
     {
-        $tareas = (is_null($this->deleted_at)) ? $this->tareas()->get() : $this->tareasArchivadas()->get();
+        $tareas = (is_null($this->deleted_at)) ? $this->tareas : $this->tareasArchivadas;
         if (count($tareas) == 0) {
             return 0;
         } else {

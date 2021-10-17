@@ -36,7 +36,7 @@
     <div class="col-1">
         <a type="button" class="btn btn-primary btn-sm float-right" href="{{url()->previous()}}">Atrás
             <i class="fas fa-arrow-left "></i>
-        </a>
+        </a>       
     </div>
 </div>
 <hr>
@@ -51,6 +51,11 @@
     <div id="botones" class="col-6">
         <div class="row form-group">
             <div class="col-2">
+                <a type="button" class="btn btn-primary btn-sm" id="maximizar">
+                    <span style="color: white;">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </span>
+                </a>
                 <div class="text-center">
                     <h3><span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span></h3>
                 </div>
@@ -133,6 +138,13 @@
 <script src="/js/dibujarGrafico.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#maximizar").on('click', function() {
+        if ($("#main").hasClass("container")) {
+            $("#main").removeClass("container").addClass("container-fluid");
+        } else {
+            $("#main").removeClass("container-fluid").addClass("container");
+        }
+    });
     $("#barra").hide();
     $("#footer").hide();
     dibujarSimbologia();

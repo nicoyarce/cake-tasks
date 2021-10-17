@@ -8,6 +8,7 @@ use App\Area;
 use App\Observacion;
 use App\User;
 use App\TipoTarea;
+use App\PropiedadesGrafico;
 use Jenssegers\Date\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +24,7 @@ class TareasController extends Controller
 
     public function show(Tarea $tarea)
     {
-        $tareasHijas = $tarea->tareasHijas()->get();
-        return view('tareas.show', compact('tarea', 'tareasHijas'));
+        return view('tareas.show', compact('tarea'));
     }
 
 
@@ -85,7 +85,8 @@ class TareasController extends Controller
         $tipo_tareas = (is_null($tarea->tipo_tarea)) ? TipoTarea::all() : TipoTarea::findOrFail($tarea->tipo_tarea)->get();
         $avances = (is_null($tarea->tipo_tarea)) ? [] : TipoTarea::find($tarea->tipo_tarea)->nomenclaturasAvances()->get()->sortBy('porcentaje');
         $observaciones = $tarea->observaciones()->get();
-        return view('tareas.edit', compact('tarea', 'listaProyectos', 'areas', 'tipo_tareas', 'avances', 'observaciones'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('tareas.edit', compact('tarea', 'listaProyectos', 'areas', 'tipo_tareas', 'avances', 'observaciones', 'propiedades'));
     }
 
     public function update(UpdateTareasRequest $request, Tarea $tarea)

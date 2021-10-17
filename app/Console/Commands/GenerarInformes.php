@@ -80,9 +80,11 @@ class GenerarInformes extends Command
                 }
             }
             DB::commit();
+            return 0;
         } catch (\Exception $e) {
             Log::error('Ha ocurrido una excepcion: '.$e);
             DB::rollback();
+            return 1;
         }
         Log::info('Termino de generacion de informes');
     }

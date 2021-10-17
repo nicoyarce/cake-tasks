@@ -18,7 +18,8 @@ class InformesController extends Controller
         $lista_informes = $proyecto->informes->sortByDesc('created_at')->groupBy(function ($item) {
             return $item->fecha->format('d-M-y');
         });
-        return view('informes.index', compact('proyecto', 'lista_informes'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('informes.index', compact('proyecto', 'lista_informes', 'propiedades'));
     }
 
     public function vistaListaInformesArchivados($id)
@@ -28,7 +29,8 @@ class InformesController extends Controller
             ->get()
             ->first();
         $informes = $proyecto->informes()->withTrashed()->get()->sortByDesc('created_at');
-        return view('informes.index', compact('proyecto', 'informes'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('informes.index', compact('proyecto', 'informes', 'propiedades'));
     }
 
     public function generarInforme(Proyecto $proyecto, Request $request)
@@ -61,8 +63,8 @@ class InformesController extends Controller
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareas);
-        //dd($tareasJSON);
-        $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
+        $propiedades = PropiedadesGrafico::all();
+        $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones', 'propiedades'));
         $pdf->setOption('encoding', 'UTF-8');
         $pdf->setOption('javascript-delay', 1000);
         $informe = new Informe;
@@ -78,20 +80,20 @@ class InformesController extends Controller
         flash('Informe generado')->success();
         return redirect()->action(
             'InformesController@vistaListaInformes',
-            ['id' => $proyecto->id]
+            ['proyecto' => $proyecto]
         );
     }
 
     public function destroy($id)
     {
         $informe = Informe::find($id);
-        $proyectoId = $informe->proyecto()->get()->first()->id;
+        $proyecto = $informe->proyecto()->get()->first();
         Storage::delete($informe->ruta);
         $informe->forceDelete();
         flash('Informe eliminado')->success();
         return redirect()->action(
             'InformesController@vistaListaInformes',
-            ['id' => $proyectoId]
+            ['proyecto' => $proyecto]
         );
     }
 
@@ -104,6 +106,7 @@ class InformesController extends Controller
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareasJSON);
-        return view('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'propiedades'));
     }
 }
