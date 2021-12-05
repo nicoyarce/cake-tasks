@@ -26,7 +26,9 @@ class AgregaCamposGeneracionInforme extends Migration
      * @return void
      */
     public function down()
-    {
-        $table->dropColumn(['grafico', 'observaciones', 'colores']);
+    {   
+        Schema::table('informes', function (Blueprint $table) {
+            $table->dropColumn(['grafico', 'observaciones', 'colores']);
+        });
     }
 }

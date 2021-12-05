@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {	
-		$base = env('DB_DATABASE', 'holistic');
-		$sql = "
+    {
+        $base = env('DB_DATABASE', 'holistic');
+        $sql = "
 		INSERT INTO $base.areas (id, nombrearea, created_at, updated_at) VALUES
 		(1, 'Ingeniería', now(), now()),
 		(2, 'Mecánica', now(), now()),
@@ -51,10 +51,15 @@ class DatabaseSeeder extends Seeder
 			(3, 'Peligro', 90, '#f48024'),
 			(4, 'Atrasado', 100, '#dc3545'),
 			(5, 'Avance', -1, '#074590'),
-			(6, 'Porcentaje para verde', 101, '#28a745');
+			(6, 'Porcentaje para verde', 101, '#28a745');		
+
+		INSERT INTO $base.categoria (id, nombre) VALUES
+			(1, 'PID'),
+			(2, 'MOD'),
+			(3, 'REC');
 		";
         $this->call(RoleTableSeeder::class);
-        DB::unprepared($sql); 
-        $this->call(ProyectosTareasSeeder::class);             
-    }      
+        DB::unprepared($sql);
+        $this->call(ProyectosTareasSeeder::class);
+    }
 }

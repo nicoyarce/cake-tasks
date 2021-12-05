@@ -10,6 +10,7 @@ use App\Tarea;
 use App\TareaHija;
 use App\User;
 use App\Informe;
+use App\Categoria;
 
 /**
  * App\Proyecto
@@ -74,15 +75,47 @@ class Proyecto extends Model
         return $this->belongsTo(User::class, 'autor_ultimo_cambio_ftr_id');
     }
 
+    public function categorias()
+    {
+        return $this->belongsToMany(Categoria::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
         static::deleting(function ($proyecto) {
-            foreach ($proyecto->tareas as $tarea) {
-                $tarea->delete();
+            if (!is_null($proyecto->tareas())) {
+                foreach ($proyecto->observaciones()->get() as $item) {
+                    $item->delete();
+                }
+                foreach ($proyecto->tareas()->get() as $item) {
+                    $item->delete();
+                }
+                $proyecto->tareas()->delete();
             }
-            foreach ($proyecto->informes as $informe) {
-                $informe->delete();
+            if (!is_null($proyecto->informes())) {
+                $proyecto->informes()->delete();
+            }
+            if (!is_null($proyecto->observaciones())) {
+                $proyecto->observaciones()->delete();
+            }
+        });
+
+        static::restoring(function ($proyecto) {
+            if (!is_null($proyecto->tareas())) {
+                foreach ($proyecto->tareas()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+                foreach ($proyecto->tareas()->get() as $item) {
+                    $item->withTrashed()->restore();
+                }
+                $proyecto->tareas()->restore();
+            }
+            if (!is_null($proyecto->informes())) {
+                $proyecto->informes()->restore();
+            }
+            if (!is_null($proyecto->observaciones())) {
+                $proyecto->observaciones()->restore();
             }
         });
     }
@@ -94,14 +127,14 @@ class Proyecto extends Model
     }
 
     public function getAvanceAttribute()
-    {        
+    {
         $tareas = (is_null($this->deleted_at)) ? $this->tareas : $this->tareasArchivadas;
         if (count($tareas) == 0) {
             return 0;
         } else {
             $totalDuracion = 0;
             foreach ($tareas as $tarea) {
-                $totalDuracion = $totalDuracion + $tarea->duracion; //dias duracion
+                $totalDuracion += $tarea->duracion; //dias duracion
             }
             $tiempoPonderado = 0;
             $avancePonderado = 0;

@@ -5,7 +5,7 @@
     </div>      
     <a id="titulo" class="navbar-brand">Holistic</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav bd-navbar-nav flex-row">
@@ -37,6 +37,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/areas/">Gestionar áreas</a>
+                            <a class="dropdown-item" href="/categorias/">Gestionar tipos de proyecto</a>
                             <a class="dropdown-item" href="/tipotareas/">Gestionar tipos de tarea</a>
                             <a class="dropdown-item" href="/propiedadesGrafico/">Gestionar colores gráfico</a>
                             <a class="dropdown-item" href="/roles/">Gestionar roles y permisos</a>

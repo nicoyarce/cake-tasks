@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Proyectos Archivados')
 <div class="row">
     <div class="col-6">
         <h1>Proyectos Terminados</h1>

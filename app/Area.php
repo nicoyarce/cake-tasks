@@ -20,7 +20,7 @@ class Area extends Model
 
     public function getHabilitaBorradoAttribute()
     {
-        if (Tarea::where('area_id', '=', $this->id)->exists()) {
+        if (Tarea::where('area_id', $this->id)->exists()) {
             return false;
         } else {
             return true;

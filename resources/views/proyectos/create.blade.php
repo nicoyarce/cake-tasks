@@ -10,9 +10,19 @@
 @include('layouts.errors')
 <form class="form-horizontal" method="POST" action="/proyectos">
     {{csrf_field()}}
-    <div class="form-group">
-        <label for="nombre">Nombre</label>       
-        <input type="text" class="form-control" id="nombre" required name="nombre">        
+    <div class="form-row">
+        <div class="form-group col-6">
+            <label for="nombre">Nombre</label>       
+            <input type="text" class="form-control" id="nombre" required name="nombre">     
+        </div>        
+        <div class="form-group col-6" id="divCategorias">
+            <label for="nombre">Tipos sub-proyecto</label>
+            <select multiple class="form-control" id="listaCategorias" name="listaCategorias[]">
+                @foreach ($categorias as $categoria)                          
+                    <option value="{{$categoria->id}}">{{$categoria->nombre}}</option>
+                @endforeach
+            </select>               
+        </div>            
     </div>
     <div class="form-row">
         <div class="form-group col-6">
@@ -27,18 +37,18 @@
     <div class="form-row">
         <div class="form-group col-12">
             <label for="observaciones">Observaciones</label>
-            <button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
+            <button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2 mb-2">Agregar <i class="fas fa-plus"></i></button>
             <div id="listaObservaciones" class="form-group">                
                 <div id="fila_0" class="fila col-12 row form-group pr-0">
-                    <input id="observacion_" name="observaciones[]" value="" class="texto form-control col-11 mr-1">
-                    <button disabled="true" id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus" ></i></button>
+                    <input id="observacion_" name="observaciones[]" value="" class="texto form-control col-11">
+                    <button disabled="true" id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm ml-3">Quitar <i class="fas fa-minus" ></i></button>
                 </div>                
             </div>
             {{-- Fila dummy --}}
             <div id="fila_" class="fila col-12 row form-group pr-0" style="display: none;">
-                <input disabled="true" id="observacion_" name="observaciones[]" value="" class="form-control col-11 mr-1">
+                <input disabled="true" id="observacion_" name="observaciones[]" value="" class="texto form-control col-11">
                 <input disabled="true" type="hidden" id="id_observacion_" name="ids_observaciones[]" value="" class="form-control">
-                <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus"></i></button>
+                <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm ml-3">Quitar <i class="fas fa-minus"></i></button>
             </div>                  
         </div>          
     </div>   
@@ -48,6 +58,7 @@
 </form>
 <script>
     $(document).ready(function(){
+        iniciarMultiSelect();
         var nroObservaciones = $("#listaObservaciones").children().length;
         console.log(nroObservaciones);
         if(nroObservaciones<=1){

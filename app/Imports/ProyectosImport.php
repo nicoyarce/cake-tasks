@@ -7,6 +7,7 @@ use App\Area;
 use App\Tarea;
 use App\TareaHija;
 use App\TipoTarea;
+use App\Categoria;
 use Carbon\Carbon;
 use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +46,7 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
         $ultimaTareaMadre = new Tarea;
         DB::beginTransaction();
         try {
-            $formato = "d-m-y G:i"; //01-06-20 8:00
+            $formato = "d-m-y G:i"; //14-11-21 17:00
             $timeZone = "America/Santiago";
             foreach ($rows as $key => $row) {
                 $indicador = $row['indicador'];
@@ -56,6 +57,8 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                 $tipo_tarea = $row['tipo_tarea'];
                 $area = $row['area'];
                 $nro_documento = $row['cot'];
+                $tipo_proyecto = $row['tipo_proyecto'];
+                $trabajo_externo = $row['trabajo_asmar'];
                 if ($row->filter()->isNotEmpty()) {
                     if ($key == 0) {
                         $proyecto = Proyecto::create([
@@ -69,26 +72,37 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                         if ($indicador == "*") {
                             $tarea = new Tarea;
                             try {
-                                $area = Area::where('nombrearea', $area)->firstOrFail();
+                                $area = Area::where('nombrearea', $area)
+                                    ->orWhereRaw('UPPER("nombrearea") LIKE ?', ['%' . strtoupper($area) . '%'])->firstOrFail();
                             } catch (ModelNotFoundException $e) {
-                                $area = Area::where('nombrearea', 'Otra')->first();
+                                $area = Area::all()->first();
                             } finally {
                                 $tarea->area()->associate($area);
                             }
                             try {
                                 $tipo_tarea = TipoTarea:: where('descripcion', $tipo_tarea)
-                                    ->orWhere('descripcion', 'like', '%' . $tipo_tarea . '%')->firstOrFail();
+                                    ->orWhereRaw('UPPER("descripcion") LIKE ?', ['%' . strtoupper($tipo_tarea) . '%'])->firstOrFail();
                             } catch (ModelNotFoundException $e) {
                                 $tipo_tarea = TipoTarea::all()->first();
                             } finally {
                                 $tarea->tipoTarea()->associate($tipo_tarea);
                             }
+                            try {
+                                $tipo_proyecto = Categoria:: where('nombre', $tipo_proyecto)
+                                    ->orWhereRaw('UPPER("nombre") LIKE ?', ['%' . strtoupper($tipo_proyecto) . '%'])->firstOrFail();
+                            } catch (ModelNotFoundException $e) {
+                                $tipo_proyecto = Categoria::all()->first();
+                            } finally {
+                                $tarea->tipoTarea()->associate($tipo_proyecto);
+                            }
                             $tarea->nombre = $nombre;
-                            //$tarea->nro_documento = (!is_null($nro_documento)) ? $nro_documento : '';
+                            $tarea->nro_documento = (!is_null($nro_documento)) ? $nro_documento : null;
                             $tarea->fecha_inicio = Date::createFromFormat($formato, $fecha_inicio, $timeZone)->toDateTimeString();
                             $tarea->fecha_termino_original =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
                             $tarea->fecha_termino =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
+                            $tarea->trabajo_externo = (!is_null($trabajo_externo)) ? $trabajo_externo : 0;
                             $tarea->proyecto()->associate($proyecto);
+                            $tarea->categoria()->associate($tipo_proyecto);
                             $tarea->save();
                             $ultimaTareaMadre = $tarea;
                         } else {

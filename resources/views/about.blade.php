@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Acerca del Sitio')
  <div class="row justify-content-between">
         <div class="col-11">
             <h1>Holistic</h1>

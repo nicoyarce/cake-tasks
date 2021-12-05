@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-
+@section('tituloPagina', 'Inicio')
 <h2 class="display-4">Bienvenido a Holistic</h2>
 <hr>
 @if(!Auth::check())

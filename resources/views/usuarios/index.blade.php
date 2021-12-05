@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Usuarios')
 @include('layouts.errors')
 <form method="POST">
     {{csrf_field()}}

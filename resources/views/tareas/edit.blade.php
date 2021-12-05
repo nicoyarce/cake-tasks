@@ -13,23 +13,21 @@
     {{-- Formulario para Admin y OCR --}}
     @if(Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas'))
         <hr>
-        @foreach ($listaProyectos as $listaProyecto)
-            @if($listaProyecto->id == $tarea->proyecto_id)
-                <p class="alert alert-primary">Pertenece a <b>proyecto</b>: {{$listaProyecto->nombre}}</p>
-            @endif
-        @endforeach
+        <h4><p class="alert alert-primary"><b>Proyecto</b>: {{$proyecto->nombre}}</p></h4>
         <div class="form-row">
-            <div class="form-group col-5">
+            <div class="form-group col-8">
                 <label for="nombre">Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" value="{{$tarea->nombre}}">
             </div>
-            <div class="form-group col-2">
+            <div class="form-group col-4">
                 <label for="area_id">Nro. Documento</label>
                 <input type="text" class="form-control" id="nro_documento" name="nro_documento" value="{{$tarea->nro_documento}}">
-            </div>
-            <div class="form-group col-3">
+            </div>            
+        </div>
+        <div class="form-row">
+            <div class="form-group col-8">
                 <label for="area_id">Área</label>
-                <select class="form-control" id="area_id" name="area_id">
+                <select class="form-control" id="area_id" required name="area_id">
                     @foreach ($areas as $area)
                         @if($area->id == $tarea->area->id)
                             <option selected value="{{$area->id}}">{{$area->nombrearea}}</option>
@@ -39,10 +37,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="mx-auto d-flex align-items-center">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" @if($tarea->critica) checked @endif id="critica" name="critica">
-                    <label class="custom-control-label" for="critica">¿Es ruta crítica?</label>
+            <div class="form-group col-4">
+                <label for="switches">Opciones</label>
+                <div class="mx-auto d-flex align-items-center">
+                    <div class="custom-control custom-switch custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" @if($tarea->critica)checked @endif id="critica" name="critica">
+                        <label class="custom-control-label" for="critica">¿Ruta crítica?</label>
+                    </div>
+                    <div class="custom-control custom-switch custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" @if($tarea->trabajo_externo)checked @endif id="trabajo_externo" name="trabajo_externo">
+                        <label class="custom-control-label" for="trabajo_externo">¿Trabajo ASMAR?</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,33 +78,33 @@
         <div class="form-row">
             <div class="form-group col-12">
                 <label for="observaciones">Observaciones</label>
-                <button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2"><i class="fas fa-plus"></i></button>
+                <button id="agregaObs" type="button" class="btn btn-success btn-sm ml-2 mb-2">Agregar <i class="fas fa-plus"></i></button>
                 <div id="listaObservaciones" class="form-group">
                     @if(count($observaciones)>0)
                         @foreach ($observaciones as $n => $observacion)
                             <div id="fila_{{$n}}" class="fila col-12 row form-group pr-0">
-                                <input id="observacion_{{$n}}" name="observaciones[]" value="{{$observacion->contenido}}" class="texto form-control col-11 mr-1">
+                                <input readonly id="observacion_{{$n}}" name="observaciones[]" value="{{$observacion->contenido}}" class="texto form-control col-11">
                                 <input type="hidden" id="id_observacion_{{$n}}" name="ids_observaciones[]" value="{{$observacion->id}}" class="form-control">
-                                <button id="quitaObs_{{$n}}" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus"></i></button>
+                                <button id="quitaObs_{{$n}}" type="button" class="quitar btn btn-danger btn-sm ml-3">Quitar <i class="fas fa-minus"></i></button>
                             </div>
                         @endforeach
                     @else
                         <div id="fila_0" class="fila col-12 row form-group pr-0">
-                            <input id="observacion_" name="observaciones[]" value="" class="texto form-control col-11 mr-1">
-                            <button disabled="true" id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm float-right"><i class="fas fa-minus" ></i></button>
+                            <input id="observacion_0" name="observaciones[]" value="" class="texto form-control col-11">
+                            <button disabled="true" id="quitaObs_0" type="button" class="quitar btn btn-danger btn-sm ml-3">Quitar <i class="fas fa-minus" ></i></button>
                         </div>
                     @endif
                 </div>
                 {{-- Fila dummy --}}
                 <div id="fila_" class="fila col-12 row form-group pr-0" style="display: none;">
-                    <input disabled="true" id="observacion_" name="observaciones[]" value="" class="form-control col-11 mr-1">
+                    <input disabled="true" id="observacion_" name="observaciones[]" value="" class="texto form-control col-11">
                     <input disabled="true" type="hidden" id="id_observacion_" name="ids_observaciones[]" value="" class="form-control">
-                    <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm pull-right"><i class="fas fa-minus"></i></button>
+                    <button id="quitaObs_" type="button" class="quitar btn btn-danger btn-sm ml-3">Quitar <i class="fas fa-minus"></i></button>
                 </div>
             </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-12">
+            <div class="form-group col-6">
                 <label for="avance">Tipo Tarea</label>
                 <select class="form-control" id="tipo_tarea" required name="tipo_tarea">
                     @if($tarea->tipo_tarea == null)
@@ -110,6 +115,19 @@
                             <option selected value="{{$tipo_tarea->id}}">{{$tipo_tarea->descripcion}}</option>
                         @else
                             <option value="{{$tipo_tarea->id}}">{{$tipo_tarea->descripcion}}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <label for="tipo_tarea">Tipo proyecto</label>
+                <select class="form-control" id="categoria_id" required name="categoria_id">
+                    <option value="" disabled selected>Elija una opción</option>
+                    @foreach($categorias as $categoria)
+                        @if($categoria->id == $tarea->categoria_id)
+                            <option selected value="{{$categoria->id}}">{{$categoria->nombre}}</option>
+                        @else
+                            <option value="{{$categoria->id}}">{{$categoria->nombre}}</option>
                         @endif
                     @endforeach
                 </select>
@@ -198,7 +216,7 @@
         </div>
     </div>
     @if (Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas'))
-        <div class="form-group text-center">
+        <div class="form-group text-center mt-4">
             <button class="btn btn-primary" type="submit">Confirmar</button>
         </div>
     @endif

@@ -41,7 +41,18 @@
 					@elseif($tarea->colorAtraso == $propiedades[3]->color)
 						<td style="background-color: {{$propiedades[3]->color}};">
                     @endif
-                    <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}">{{$tarea->nombre}}</a>
+                    <a class="text-dark" href="{{action('TareasController@show', $tarea['id'])}}" 
+						data-toggle="popover" data-placement="left" data-html="true" data-trigger="hover" data-title="Detalles Tarea"
+						data-content="
+						<ul>
+							<li><b>Nro. Cotización</b>: @if(is_null($tarea->nro_documento))-@else{{$tarea->nro_documento}}@endif</li>
+							<li><b>Área</b>: @if(!empty($tarea->area->nombrearea)){{$tarea->area->nombrearea}}@else-@endif</li>
+							<li><b>Tipo Tarea</b>:  @if(!empty($tarea->tipoTarea->descripcion)){{$tarea->tipoTarea->descripcion}}@else-@endif</li>	
+							<li><b>Tipo Proyecto</b>: @if(!empty($tarea->categoria->nombre)){{$tarea->categoria->nombre}}@else-@endif</li>
+						</ul>						
+						">
+						{{$tarea->nombre}}
+					</a>
 					@if($tarea->critica)
 						<span class="badge badge-pill badge-warning">Crítica</span>
 					@endif
@@ -57,7 +68,7 @@
 							@else
 								<a data-toggle="tooltip" data-placement="bottom" data-html="true"
 									title="Modificado por: {{$tarea->getNombreAutorUltimoCambioFtt()}} <br>
-									Fecha: <br>
+									Fecha:
 									{{$tarea->fecha_ultimo_cambio_ftt->format('d-M-Y H:i:s')}}">
 									{{ $tarea->fecha_termino->format('d-M-Y')}}
 								</a>
@@ -81,7 +92,7 @@
 							</a>
 						@endif
 					</td>
-                    <td>{{$tarea->porcentajeAtraso}}</td>
+                    <td>{{$tarea->porcentajeAtraso}}</td>					
 					@if(Auth::user()->can('modificar_tareas') || Auth::user()->can('modificar_avance_tareas'))
 					<td>
 						<a href="{{action('TareasController@edit', $tarea)}} "type="button" class="btn btn-primary">
@@ -187,27 +198,41 @@
 		<h3 class="text-center">No hay tareas</h3>
 	@endif
 @endif
+
 <link rel="stylesheet" type="text/css" href="/css/fixedHeader.dataTables.min.css">
 <script src="/js/dataTables.fixedHeader.min.js"></script>
-<script src="/js/jquery.stickytableheaders.min.js"></script>
+<script src="/js/jquery.stickytableheaders.min.js"></script>	
 
-<script>
-	$(document).ready(function() {
-		$('#tablaTareas').stickyTableHeaders();
-    	$('#tablaTareas').DataTable( {
-    		//"order": [[ 1, 'asc' ], [ 2, 'asc' ]],
-    		//"fixedHeader": true,
-    		"ordering": false,
-    		"paging":   false,
-	        "language": {
-	            "url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
-	        }
-    	} );
-	} );
-	@if (session('idTareaMod'))
-		window.scrollTo(0, $("#{{session('idTareaMod')}}").offset().top-100);
-		$(document).ready(function(){
-			$("#{{session('idTareaMod')}}").effect("highlight", {}, 3000);
-		});
-	@endif
-</script>
+@if(session('idTareaMod'))
+	<script>		
+		$(document).ready(function(){			
+			$('#tablaTareas').stickyTableHeaders();
+			$('#tablaTareas').DataTable( {    
+				"fixedHeader": false,
+				"ordering": false,
+				"paging":   false,
+				"searching": true,
+				"language": {
+					"url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
+				}
+			} );
+			window.scrollTo(0, $("#{{session('idTareaMod')}}").offset().top-100);
+			$("#{{session('idTareaMod')}}").effect("highlight", {}, 3000);		
+		});	
+	</script>
+@else
+	<script>
+		$(document).ready(function() {
+			$('#tablaTareas').stickyTableHeaders();
+			$('#tablaTareas').DataTable( {    		
+				"fixedHeader": false,
+				"ordering": false,
+				"paging":   false,
+				"searching": true,
+				"language": {
+					"url": "/js/locales/datatables.net_plug-ins_1.10.19_i18n_Spanish.json"
+				}
+			} );
+		} );
+	</script>	
+@endif

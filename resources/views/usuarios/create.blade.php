@@ -42,44 +42,43 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group col-6" id="divProyectos" style="display: none;">
+        <div class="form-group col-6" id="divProyectos">
             <label for="listaProyectos">Lista de proyectos</label>
-            <select multiple class="form-control" id="listaProyectos" name="listaProyectos[]">
-                <option id="elijaOpcion" value="" disabled selected style="display: none;">Elija una opción</option>                             
+            <select multiple class="form-control" id="listaProyectos" name="listaProyectos[]">                                           
                 @foreach ($proyectos as $proyecto)
-                <option value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
+                    <option value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
                 @endforeach
             </select>
-            <small id="sugerencia" class="form-text text-muted">Mantenga pulsado Ctrl para seleccionar varios</small>
         </div>
     </div>
     <div class="form-group text-center">
         <button class="btn btn-primary" type="submit">Crear usuario</button>
     </div>
 </form>
-<script src="/js/jquery-3.3.1.min.js"></script>
-<script src="/js/jquery.rut.min.js"></script>
 <script>
     $(document).ready(function(){
         $("#run").rut().on('rutValido', function(e, rut, dv) {
             alert("El run " + rut + "-" + dv + " es correcto");
         }, { minimumLength: 7} );
-        $("#role_id").change(function(){
-            if($(this).val()==1){ //es admin
+        
+        if($("#role_id").val() == 1 || $("#role_id").val() == ""){ //es admin
+            $("#divProyectos").hide();
+        } else{ //es ocr o usuario
+            $("#divProyectos").show();
+        }
+        
+        $("#role_id").change(function(){      
+            $('select[multiple]').multiselect('reset');      
+            if($(this).val() == "1") { //es admin
                 $("#divProyectos").hide();
-            }
-            else{ //es ocr
-                $("#divProyectos").show();
-            }
-            if($(this).val()==3){ //es usuario
+            } else if ($(this).val() == "3") { //es usuario       
+                $("#divProyectos").show();         
+                $('select[multiple]').multiselect('unload');
                 $("#listaProyectos").removeAttr('multiple');
-                $("#elijaOpcion").show();
-                $("#sugerencia").hide();
-            }
-            else{
+            } else {                
+                $("#divProyectos").show();
                 $("#listaProyectos").attr('multiple', 'multiple');
-                $("#elijaOpcion").hide();
-                $("#sugerencia").show();
+                iniciarMultiSelect();
             }
         });
     });

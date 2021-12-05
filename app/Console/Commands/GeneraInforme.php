@@ -57,8 +57,11 @@ class GeneraInforme extends Command
             })->values()->all();
             $tareasJSON = json_encode($tareasJSON);
             $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
+            $pdf->setOption('enable-local-file-access', true);
             $pdf->setOption('encoding', 'UTF-8');
-            $pdf->setOption('javascript-delay', 1000);
+            $pdf->setOption('enable-javascript', true);
+            $pdf->setOption('images', true);
+            $pdf->setOption('javascript-delay', 5000);
             $informe = new Informe;
             $informe->fecha = Date::now();
             $informe->ruta = 'public/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'-'.$informe->fecha->format('H.i.s').'.pdf';

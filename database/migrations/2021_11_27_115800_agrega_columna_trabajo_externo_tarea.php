@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class AgregarCampoRutaCritica extends Migration
+class AgregaColumnaTrabajoExternoTarea extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AgregarCampoRutaCritica extends Migration
     public function up()
     {
         Schema::table('tareas', function (Blueprint $table) {
-            $table->boolean('critica')->default(false);
+            $table->boolean('trabajo_externo')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AgregarCampoRutaCritica extends Migration
     public function down()
     {
         Schema::table('tareas', function (Blueprint $table) {
-            $table->dropColumn('critica');
+            $table->dropColumn('trabajo_externo');
         });
     }
 }

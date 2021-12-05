@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Informes')
 @include('layouts.errors')
 @if(is_null($proyecto->deleted_at))
     {{-- Para informes normales --}}

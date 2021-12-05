@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-@section('content')
+@section('tituloPagina', 'Roles y Permisos')
 <div class="row">
 	<div class="col-10">
 		<h1>Roles y Permisos</h1>

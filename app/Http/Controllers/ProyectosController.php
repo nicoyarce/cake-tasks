@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Observacion;
 use App\User;
-use App\PropiedadesGrafico;
+use App\Categoria;
 use App\Http\Requests\StoreProyectosRequest;
 use App\Http\Requests\UpdateProyectosRequest;
 use Jenssegers\Date\Date;
@@ -53,7 +53,8 @@ class ProyectosController extends Controller
      */
     public function create()
     {
-        return view('proyectos.create');
+        $categorias = Categoria::all();
+        return view('proyectos.create', compact('categorias'));
     }
 
     /**
@@ -69,6 +70,7 @@ class ProyectosController extends Controller
         $proyecto->fecha_inicio = $request->fecha_inicio;
         $proyecto->fecha_termino_original = $request->fecha_termino_original;
         $proyecto->fecha_termino = $request->fecha_termino_original;
+        $proyecto->categorias()->attach($request->listaCategorias);
         $proyecto->save();
         foreach ($request->observaciones as $textoObservacion) {
             if (!is_null($textoObservacion)) {
@@ -91,10 +93,10 @@ class ProyectosController extends Controller
      */
     public function show(Proyecto $proyecto)
     {
-        $tareas = $proyecto->tareas
+        $tareas = $proyecto->tareas()->with(['area', 'tipoTarea', 'categoria'])->get()
             ->sortBy(function ($tarea) {
                 return [$tarea->fecha_inicio, $tarea->fecha_termino];
-            })->values()->all();        
+            })->values()->all();
         return view('proyectos.show', compact('proyecto', 'tareas'));
     }
 
@@ -106,7 +108,8 @@ class ProyectosController extends Controller
      */
     public function edit(Proyecto $proyecto)
     {
-        return view('proyectos.edit', compact('proyecto'));
+        $categorias = Categoria::all();
+        return view('proyectos.edit', compact('proyecto', 'categorias'));
     }
 
     /**
@@ -146,6 +149,7 @@ class ProyectosController extends Controller
         if ($request->has('fecha_termino_original') && Auth::user()->can('modificar_fechas_originales_proyecto')) {
             $proyectoNuevo->fecha_termino_original = $request->fecha_termino_original;
         }
+        $proyectoNuevo->categorias()->sync($request->listaCategorias);
         $proyectoNuevo->save();
         flash('Proyecto <b>' . $proyectoNuevo->nombre . '</b> actualizado.')->success();
         return redirect('proyectos');
@@ -183,16 +187,7 @@ class ProyectosController extends Controller
     public function restaurar($id)
     {
         $proyecto = Proyecto::withTrashed()->find($id);
-        $proyecto->restore();
-        $proyecto->informes()->withTrashed()->restore();
-        $proyecto->tareas()->withTrashed()->restore();
-        $proyecto->tareasHijas()->withTrashed()->restore(); //usar esto en laravel 5.8
-        foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
-            $tarea->restore();
-            foreach ($tarea->tareasHijas()->withTrashed()->get() as $tareaHija) {
-                $tareaHija->restore();
-            }
-        }
+        $proyecto = $proyecto->restore();
         flash('Proyecto restaurado')->success();
         return redirect('proyectosArchivados');
     }
@@ -202,13 +197,12 @@ class ProyectosController extends Controller
         $proyecto = Proyecto::withTrashed()->find($id);
         $string = $proyecto->nombre;
         $proyecto->informes()->withTrashed()->forceDelete();
-        $proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
-        foreach ($proyecto->tareas()->withTrashed()->get() as $tarea) {
-            foreach ($tarea->tareasHijas()->withTrashed()->get() as $tareaHija) {
-                $tareaHija->forceDelete();
-            }
-            $tarea->forceDelete();
+        foreach ($proyecto->tareas as $item) {
+            $item->delete();
         }
+        $proyecto->tareas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
+        $proyecto->tareasHijas()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
+        $proyecto->observaciones()->withTrashed()->forceDelete(); //usar esto en laravel 5.8
         $proyecto->forceDelete();
         flash('Proyecto <b>' . $string . '</b> eliminado')->success();
         return redirect('proyectosArchivados');

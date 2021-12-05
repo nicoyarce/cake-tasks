@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Cargar Proyecto XLS')
 <div class="row justify-content-between">
     <h1>Cargar proyecto XLS</h1>
     <div class="col-4">
@@ -16,15 +17,18 @@
             <li class="list-inline-item">Indicador</li>
             <li class="list-inline-item"> - Area</li>
             <li class="list-inline-item"> - Tipo Tarea</li>
+            <li class="list-inline-item"> - Cot</li>
+            <li class="list-inline-item"> - Tipo Proyecto</li>
+            <li class="list-inline-item"> - Trabajo ASMAR </li>
             <li class="list-inline-item"> - Nombre</li>
-            <li class="list-inline-item"> - Comienzo</li>
-            <li class="list-inline-item"> - Fin</li>
             <li class="list-inline-item"> - Duracion</li>
+            <li class="list-inline-item"> - Comienzo</li>
+            <li class="list-inline-item"> - Fin</li>            
             <li class="list-inline-item"> - Nivel de esquema</li>
             </b>
       </ul>
       <li>La segunda fila sera considerada como el nombre del proyecto.</li>
-      <li>El formato de fechas aceptado es: dia-mes-año hora:minuto Ej: (20-11-2020 8:00).</li>
+      <li>El formato de fechas aceptado es: dia-mes-año hora:minuto Ej: (14-11-21 17:00).</li>
       <li>Revisar el formato de las celdas excel antes de cargar</li>
   </ul>
 </div>

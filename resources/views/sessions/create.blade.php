@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Iniciar Sesión')
 @include('layouts.errors')
 
 <link href="/css/signin.css" rel="stylesheet">
