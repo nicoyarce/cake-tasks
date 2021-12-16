@@ -25,6 +25,8 @@ class AgregarCampoRutaCritica extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('tareas', function (Blueprint $table) {
+            $table->dropColumn('critica');
+        });
     }
 }

@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Lista Tareas - ' . $proyecto->nombre)
 @include('layouts.errors')
 <table class="table table-hover">
     <thead>
@@ -45,7 +46,6 @@
     </tbody>
 </table>
 <br>
-@include('tareas.index', ['proyecto' => $proyecto])
-</ul>
+@include('tareas.index', ['proyecto' => $proyecto, 'propiedades' => $propiedades])
 @endsection
 

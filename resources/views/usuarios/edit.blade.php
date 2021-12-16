@@ -35,59 +35,62 @@
             <label for="role_id">Rol de usuario</label>
             <select class="form-control" name="role_id" id="role_id">
                 @foreach ($roles as $rol)
-                @if($usuario->hasRole($rol->name))
-                <option selected value="{{$rol->id}}">{{$rol->name}}</option>
-                @else
-                <option value="{{$rol->id}}">{{$rol->name}}</option>
-                @endif
+                    @if($usuario->hasRole($rol->name))
+                        <option selected value="{{$rol->id}}">{{$rol->name}}</option>
+                    @else
+                        <option value="{{$rol->id}}">{{$rol->name}}</option>
+                    @endif
                 @endforeach
             </select>
-        </div>
-        @if($usuario->hasRole('Administrador'))
-        <div class="form-group" id="divProyectos" style="display: none;">
-            @else
-            <div class="form-group col-6" id="divProyectos">
-                @endif
-                <label for="listaProyectos">Lista de proyectos</label>
-                <select @if(!$usuario->hasRole('Usuario')) multiple @endif class="form-control" id="listaProyectos" name="listaProyectos[]">
-                    @if($usuario->hasRole('Usuario'))
-                    <option value="" disabled selected>Elija una opción</option>
-                    @endif
-                    @foreach ($proyectos as $proyecto)
+        </div>    
+        <div class="form-group col-6" id="divProyectos">                
+            <label for="listaProyectos">Lista de proyectos</label>
+            <select multiple class="form-control" id="listaProyectos" name="listaProyectos[]">                    
+                @foreach ($proyectos as $proyecto)
                     @if($usuario->proyectos->contains($proyecto))
-                    <option selected value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
+                        <option selected value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
                     @else
-                    <option value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
+                        <option value="{{$proyecto->id}}">{{$proyecto->nombre}}</option>
                     @endif
-                    @endforeach
-                </select>               
-                    <small id="sugerencia" class="form-text text-muted" @if($usuario->hasRole('Usuario')) style="display: none;" @endif>Mantenga pulsado Ctrl para seleccionar varios</small>
-            </div>
+                @endforeach
+            </select>               
         </div>
-        <div class="form-group text-center">
-            <button class="btn btn-primary" type="submit">Modificar usuario</button>
-        </div>
-    </form>
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script>
+    </div>
+    <div class="form-group text-center">
+        <button class="btn btn-primary" type="submit">Modificar usuario</button>
+    </div>
+</form>
+<script>
     // Este codigo revisa el combobox con el tipo de usuario para cambiar el tipo de lista de proyectos
     $(document).ready(function(){
-    $("#role_id").change(function(){
-        if($(this).val()==1){
+        if($("#role_id").val() == "1") { //es admin
             $("#divProyectos").hide();
-        }
-        else{
-            $("#divProyectos").show();
-        }
-        if($(this).val()==3){
+            $('select[multiple]').multiselect('unload');
             $("#listaProyectos").removeAttr('multiple');
-            $("#sugerencia").hide();
-            }
-        else{
+        } else if ($("#role_id").val() == "3") { //es usuario       
+            $("#divProyectos").show();
+            $('select[multiple]').multiselect('unload');
+            $("#listaProyectos").removeAttr('multiple');
+        } else {                
+            $("#divProyectos").show();
             $("#listaProyectos").attr('multiple', 'multiple');
-            $("#sugerencia").show();
+            iniciarMultiSelect();
         }
+        
+        $("#role_id").change(function(){      
+            $('select[multiple]').multiselect('reset');      
+            if($(this).val() == "1") { //es admin
+                $("#divProyectos").hide();
+            } else if ($(this).val() == "3") { //es usuario       
+                $("#divProyectos").show();         
+                $('select[multiple]').multiselect('unload');
+                $("#listaProyectos").removeAttr('multiple');
+            } else {                
+                $("#divProyectos").show();
+                $("#listaProyectos").attr('multiple', 'multiple');
+                iniciarMultiSelect();
+            }
+        });
     });
-    });
-    </script>
-    @endsection
+</script>
+@endsection

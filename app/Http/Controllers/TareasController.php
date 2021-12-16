@@ -8,6 +8,8 @@ use App\Area;
 use App\Observacion;
 use App\User;
 use App\TipoTarea;
+use App\PropiedadesGrafico;
+use App\Categoria;
 use Jenssegers\Date\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +25,7 @@ class TareasController extends Controller
 
     public function show(Tarea $tarea)
     {
-        $tareasHijas = $tarea->tareasHijas()->get();
-        return view('tareas.show', compact('tarea', 'tareasHijas'));
+        return view('tareas.show', compact('tarea'));
     }
 
 
@@ -43,7 +44,8 @@ class TareasController extends Controller
         $proyecto = Proyecto::find($proyectoId);
         $areas = Area::all();
         $tipo_tareas = TipoTarea::all();
-        return view('tareas.create', compact('proyecto', 'areas', 'tipo_tareas'));
+        $categorias = $proyecto->categorias;
+        return view('tareas.create', compact('proyecto', 'areas', 'tipo_tareas', 'categorias'));
     }
 
 
@@ -51,6 +53,7 @@ class TareasController extends Controller
     {
         $tarea = new Tarea;
         $area = Area::find($request->area_id);
+        $categoria = Categoria::find($request->categoria_id);
         $proyecto = Proyecto::find($request->proyecto_id);
         $tipo_tarea = TipoTarea::find($request->tipo_tarea);
         $tarea->nombre = $request->nombre;
@@ -60,10 +63,12 @@ class TareasController extends Controller
         $tarea->nro_documento = $request->nro_documento;
 
         $tarea->critica = ($request->has('critica')) ? true : false;
+        $tarea->trabajo_externo = ($request->has('trabajo_externo')) ? true : false;
 
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
         $tarea->area()->associate($area);
+        $tarea->categoria()->associate($categoria);
         $tarea->tipoTarea()->associate($tipo_tarea);
         $tarea->save();
         foreach ($request->observaciones as $textoObservacion) {
@@ -80,12 +85,13 @@ class TareasController extends Controller
 
     public function edit(Tarea $tarea)
     {
-        $listaProyectos = Proyecto::all();
+        $proyecto = $tarea->proyecto;
         $areas = Area::all();
+        $categorias = $tarea->proyecto->categorias;
         $tipo_tareas = (is_null($tarea->tipo_tarea)) ? TipoTarea::all() : TipoTarea::findOrFail($tarea->tipo_tarea)->get();
         $avances = (is_null($tarea->tipo_tarea)) ? [] : TipoTarea::find($tarea->tipo_tarea)->nomenclaturasAvances()->get()->sortBy('porcentaje');
         $observaciones = $tarea->observaciones()->get();
-        return view('tareas.edit', compact('tarea', 'listaProyectos', 'areas', 'tipo_tareas', 'avances', 'observaciones'));
+        return view('tareas.edit', compact('tarea', 'proyecto', 'areas', 'tipo_tareas', 'avances', 'observaciones', 'categorias'));
     }
 
     public function update(UpdateTareasRequest $request, Tarea $tarea)
@@ -96,7 +102,10 @@ class TareasController extends Controller
             $tareaNueva->nro_documento = $request->nro_documento;
             $area = Area::find($request->area_id);
             $tareaNueva->area()->associate($area);
+            $categoria = Categoria::find($request->categoria_id);
+            $tareaNueva->categoria()->associate($categoria);
             $tareaNueva->critica = ($request->has('critica')) ? true : false;
+            $tareaNueva->trabajo_externo = ($request->has('trabajo_externo')) ? true : false;
             if (Auth::user()->can('modificar_fechas_originales_tareas')) {
                 if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $tarea->fecha_termino_original) {
                     $tareaNueva->fecha_termino_original = $request->fecha_termino_original;
@@ -111,7 +120,10 @@ class TareasController extends Controller
             }
             if ($request->has('observaciones')) {
                 $ids_observaciones = collect($request->ids_observaciones);
-                $tareaNueva->observaciones()->where('tarea_id', $tareaNueva->id)->whereNotIn('id', $ids_observaciones)->forceDelete();
+                $tareaNueva->observaciones()
+                ->where('tarea_id', $tareaNueva->id)
+                ->whereNotIn('id', $ids_observaciones)
+                ->forceDelete();
                 $observacionesRestantes = $tareaNueva->observaciones()->get()->pluck('contenido');
                 foreach ($request->observaciones as $textoObservacion) {
                     if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {

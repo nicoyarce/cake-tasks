@@ -3,23 +3,22 @@ var width = 500,
     radius = Math.min(width, height) / 2,
     innerRadius = 0.12 * radius; //radio circulo interno
 
-var pie = d3.layout.pie()
-    .value(function (d) { return d.width; })
+var pie = d3.layout
+    .pie()
+    .value(function (d) {
+        return d.width;
+    })
     .sort(null);
 
-var arc = d3.svg.arc()
+var arc = d3.svg
+    .arc()
     .innerRadius(innerRadius)
     .outerRadius(function (d) {
         return (radius - innerRadius) * (d.data.avance / 100.0) + innerRadius;
     });
 
-var outlineArc = d3.svg.arc()
-    .innerRadius(innerRadius)
-    .outerRadius(radius);
-
-var svgSimbologia = d3.select('#simbologia')
-    .attr('viewBox', "0,0,150,53");
-
+var outlineArc = d3.svg.arc().innerRadius(innerRadius).outerRadius(radius);
+var svgSimbologia = d3.select("#simbologia").attr("viewBox", "0,0,150,53");
 var formatoFecha = d3.timeFormat("%d-%m-%Y");
 /*var tip = d3.tip()
     .attr('class', 'd3-tip')
@@ -29,14 +28,15 @@ var formatoFecha = d3.timeFormat("%d-%m-%Y");
         return d.data.nombre + ": <span style='color:cyan'>" + d.data.avance + "</span>" + "% " + "<br>" + formatoFecha(fechaFormateada);
     });*/
 function dibujarGrafico(data) {
-    console.log(data);
-    var svg = d3.select("#grafico").append("svg")
+    var svg = d3
+        .select("#grafico")
+        .append("svg")
         //.attr("width", width)
         //.attr("height", height)
-        .attr('viewBox', "-37 -37 " + 570 + " " + 570)
+        .attr("viewBox", "-37 -37 " + 570 + " " + 570)
         .attr("class", "grafico")
         .append("g")
-        .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
     try {
         data.forEach(function (d) {
             d.id = d.id;
@@ -46,11 +46,13 @@ function dibujarGrafico(data) {
     } catch (TypeError) {
         document.getElementById("titulo").innerHTML = "Error al cargar datos";
     }
-    var outerPath = svg.selectAll(".outlineArc")
+    var outerPath = svg
+        .selectAll(".outlineArc")
         .data(pie(data))
-        .enter().append("g")
+        .enter()
+        .append("g")
         .attr("class", "parte")
-        .on('click', function (d, i) {
+        .on("click", function (d, i) {
             //$(".detallesTarea").hide();
             $("#listaObservaciones").hide();
             $("#critica").hide();
@@ -60,46 +62,57 @@ function dibujarGrafico(data) {
             d3.selectAll(".outlineArc")
                 .style("stroke-width", "0")
                 .style("stroke", "cyan");
-            d3.select(this).select("path")
+            d3.selectAll(".solidArc")
+                .style("stroke-width", "0")
+                .style("stroke", "cyan");
+            d3.select(this)
+                .select(".outlineArc")
+                .style("stroke-width", "3")
+                .style("stroke", "cyan");
+            d3.select(this)
+                .select(".solidArc")
                 .style("stroke-width", "3")
                 .style("stroke", "cyan");
         })
-        .on('dblclick', function (d, i) {
+        .on("dblclick", function (d, i) {
             cargarVistaGantt(d.data.id);
         });
 
-    outerPath.append("path")
+    outerPath
+        .append("path")
         .attr("fill", calcularColor)
         .attr("class", "outlineArc")
         .attr("d", outlineArc);
 
-    outerPath.append("path")
+    outerPath
+        .append("path")
         .attr("fill", "#074590")
         .attr("class", "solidArc")
         .attr("d", arc);
 
-    outerPath.append("svg:text")                             //add a label to each slice
-        .attr("transform", function (d) {                    //set the label's origin to the center of the arc
+    outerPath
+        .append("svg:text") //add a label to each slice
+        .attr("transform", function (d) {
+            //set the label's origin to the center of the arc
             //we have to make sure to set these before calling arc.centroid
             d.innerRadius = 0;
             d.outerRadius = radius;
-            var c = outlineArc.centroid(d)
-            return "translate(" + c[0] * 1.92 + "," + c[1] * 1.92 + ")";        //this gives us a pair of coordinates like [50, 50]
+            var c = outlineArc.centroid(d);
+            return "translate(" + c[0] * 1.92 + "," + c[1] * 1.92 + ")"; //this gives us a pair of coordinates like [50, 50]
         })
-        .attr("text-anchor", "middle")                          //center the text on it's origin
+        .attr("text-anchor", "middle") //center the text on it's origin
         .text(function (d, i) {
             if (d.data.critica == 1) {
                 return i + 1;
-            }
-            else {
+            } else {
                 return "";
             }
-        });        //get the label from our original data array
+        }); //get the label from our original data array
 
     // calculate the weighted mean avance
     var avance =
         data.reduce(function (a, b) {
-            return a + (b.avance * b.weight);
+            return a + b.avance * b.weight;
         }, 0) /
         data.reduce(function (a, b) {
             return a + b.weight;
@@ -127,40 +140,49 @@ function muestraDatosGrafico(d, i) {
     $(".detallesTarea").show();
     $("#nombre").text(d.data.nombre);
     $("#area").text(d.data.nombreArea);
-    $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio.date)));
-    $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original.date)));
-    if (d.data.fecha_termino.date == d.data.fecha_termino_original.date) {
+    $("#fir").text(formatoFecha(new Date(d.data.fecha_inicio)));
+    $("#ftro").text(formatoFecha(new Date(d.data.fecha_termino_original)));
+    if (d.data.fecha_termino == d.data.fecha_termino_original) {
         $("#ftrm").text("-");
         $("#atraso").text("-");
     } else {
-        $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino.date)));
+        $("#ftrm").text(formatoFecha(new Date(d.data.fecha_termino)));
         $("#atraso").text(d.data.atraso);
     }
-    $("#avance").text(d.data.avance + '% - ' + d.data.glosaAvance);
+    $("#avance").text(d.data.avance + "% - " + d.data.glosaAvance);
     if (d.data.observaciones.length > 0) {
         $("#listaObservaciones").show();
     } else {
         $("#listaObservaciones").hide();
     }
     $.each(d.data.observaciones, function (indice) {
-        string = d.data.observaciones[indice].contenido + " - " + formatoFecha(new Date(d.data.observaciones[indice].created_at)) + " - " + d.data.observaciones[indice].autor[0];
-        $('<div class="list-group-item flex-column align-items-start"></div>').appendTo("#listaObservaciones").text(string);
+        string =
+            d.data.observaciones[indice].contenido +
+            " - " +
+            formatoFecha(new Date(d.data.observaciones[indice].created_at)) +
+            " - " +
+            d.data.observaciones[indice].autor[0];
+        $('<div class="list-group-item flex-column align-items-start"></div>')
+            .appendTo("#listaObservaciones")
+            .text(string);
     });
     if (d.data.critica == 1) {
         $("#critica").show();
-    }
-    else {
+    } else {
         $("#critica").hide();
     }
-    console.log(d.data.porcentajeAtraso);
+    if (d.data.trabajo_externo == 1) {
+        $("#trabajo_externo").show();
+    } else {
+        $("#trabajo_externo").hide();
+    }
     dibujarFlecha(d.data.porcentajeAtraso);
 }
 
 function calcularColor(d) {
     if (d.data.colorAtraso != "") {
         return d.data.colorAtraso;
-    }
-    else {
+    } else {
         return "#000000";
     }
 }
@@ -176,57 +198,24 @@ function habilitarZoom() {
 
 function cargarVistaGantt(id_tarea) {
     var proyectoid = $("#opcion").attr("data-id");
-    var ruta = '/visor';
+    var ruta = "/visor";
     var datos = {
-        "proyectoid": proyectoid,
-        "tareaid": id_tarea,
+        proyectoid: proyectoid,
+        tareaid: id_tarea,
     };
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').val()
-        }
-    })
+            "X-CSRF-TOKEN": $('input[name="_token"]').val(),
+        },
+    });
     $.post(ruta, datos, function (html) {
-        var w = window.open('about:blank');
+        var w = window.open("about:blank");
         w.document.open();
         w.document.write(html);
         w.document.close();
     });
 }
 
-$(".form-control").change(function () {
-    //console.log("Cambio en combobox")
-    var proyectoid = $(this).attr("data-id");
-    var opcionArea = $("#opcionArea").val();
-    var opcionColor = $("#opcionColor").val();
-    var ruta = '/grafico/' + proyectoid + '/filtrar';
-    var datos = {
-        "proyectoid": proyectoid,
-        "areaid": opcionArea,
-        "colorAtraso": opcionColor
-    };
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').val()
-        }
-    })
-    $.ajax({
-        method: 'POST', // Type of response and matches what we said in the route
-        url: ruta, // This is the url we gave in the route
-        data: datos, // la información a enviar (también es posible utilizar una cadena de datos)
-        dataType: 'json', //tipo de respuesta esperada
-        success: function (response) { // What to do if we succeed
-            $("#detallesTarea").hide();
-            d3.selectAll("svg.grafico").remove();
-            dibujarGrafico(response);
-            //habilitarZoom();
-        },
-        error: function (jqXHR, textStatus, errorThrown, exception) { // What to do if we fail
-            console.log(JSON.stringify(jqXHR));
-            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
-        }
-    });
-})
 /* Codigo Zoom
 var primeraVez = true;
 $("#activar").click(function() {
@@ -252,60 +241,67 @@ $("#activar").click(function() {
     }
 });
 */
-var borde = 10;
-var bordeArriba = 20;
-var alturaBarra = 10;
-var largoFlecha = 25;
-var colorBorde = "black";
-var grosorLineaNegra = 0.4;
+const borde = 10;
+const bordeArriba = 20;
+const alturaBarra = 10;
+const largoFlecha = 25;
+const colorBorde = "black";
+const grosorLineaNegra = 0.4;
 
 function dibujarSimbologia(propiedades) {
     /*---LINEAS---*/
-    var lineaVertIzq = svgSimbologia.append("line")
+    const lineaVertIzq = svgSimbologia
+        .append("line")
         .attr("x1", borde)
         .attr("y1", bordeArriba)
         .attr("x2", borde)
         .attr("y2", borde)
         .attr("stroke", colorBorde)
         .attr("stroke-width", grosorLineaNegra);
-    var lineaHorizIzq = svgSimbologia.append("line")
+    const lineaHorizIzq = svgSimbologia
+        .append("line")
         .attr("x1", borde)
         .attr("y1", (bordeArriba + borde) / 2)
         .attr("x2", 30 + borde)
         .attr("y2", (bordeArriba + borde) / 2)
         .attr("stroke", "black")
         .attr("stroke-width", grosorLineaNegra);
-    var lineaHorizDer = svgSimbologia.append("line")
+    const lineaHorizDer = svgSimbologia
+        .append("line")
         .attr("x1", 70 + borde)
         .attr("y1", (bordeArriba + borde) / 2)
         .attr("x2", 100 + borde)
         .attr("y2", (bordeArriba + borde) / 2)
         .attr("stroke", "black")
         .attr("stroke-width", grosorLineaNegra);
-    var lineaVertDer = svgSimbologia.append("line")
+    const lineaVertDer = svgSimbologia
+        .append("line")
         .attr("x1", 100 + borde)
         .attr("y1", bordeArriba)
         .attr("x2", 100 + borde)
         .attr("y2", borde)
         .attr("stroke", "black")
         .attr("stroke-width", grosorLineaNegra);
-    var lineaFinal1 = svgSimbologia.append("line")
+    const lineaFinal1 = svgSimbologia
+        .append("line")
         .attr("x1", 130)
         .attr("y1", bordeArriba + 5)
         .attr("x2", 140)
-        .attr("y2", bordeArriba + (alturaBarra / 2) + 5)
+        .attr("y2", bordeArriba + alturaBarra / 2 + 5)
         .attr("stroke", colorBorde)
         .attr("stroke-width", grosorLineaNegra);
-    var lineaFinal2 = svgSimbologia.append("line")
+    const lineaFinal2 = svgSimbologia
+        .append("line")
         .attr("x1", 130)
         .attr("y1", bordeArriba + alturaBarra + 5)
         .attr("x2", 140)
-        .attr("y2", bordeArriba + alturaBarra - (alturaBarra / 2) + 5)
+        .attr("y2", bordeArriba + alturaBarra - alturaBarra / 2 + 5)
         .attr("stroke", colorBorde)
         .attr("stroke-width", grosorLineaNegra);
 
     /*---TEXTO---*/
-    var fit = svgSimbologia.append("text")
+    const fit = svgSimbologia
+        .append("text")
         .attr("x", borde)
         .attr("y", borde / 2)
         .text("F.I.T.")
@@ -313,7 +309,8 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "6px")
         .attr("fill", "black");
-    var tiempo = svgSimbologia.append("text")
+    const tiempo = svgSimbologia
+        .append("text")
         .attr("x", 50 + borde)
         .attr("y", (bordeArriba + borde) / 2)
         .text("Tiempo")
@@ -321,7 +318,8 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "6px")
         .attr("fill", "black");
-    var ftt = svgSimbologia.append("text")
+    const ftt = svgSimbologia
+        .append("text")
         .attr("x", 100 + borde)
         .attr("y", borde / 2)
         .text("F.T.T.")
@@ -329,7 +327,8 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "6px")
         .attr("fill", "black");
-    var cero = svgSimbologia.append("text")
+    const cero = svgSimbologia
+        .append("text")
         .attr("x", borde)
         .attr("y", bordeArriba + alturaBarra + 10)
         .text("0")
@@ -337,7 +336,8 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
         .attr("fill", "black");
-    var sesenta = svgSimbologia.append("text")
+    const sesenta = svgSimbologia
+        .append("text")
         .attr("x", 60 + borde)
         .attr("y", bordeArriba + alturaBarra + 10)
         .text("0,6")
@@ -345,7 +345,8 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
         .attr("fill", "black");
-    var noventa = svgSimbologia.append("text")
+    const noventa = svgSimbologia
+        .append("text")
         .attr("x", 90 + borde)
         .attr("y", bordeArriba + alturaBarra + 10)
         .text("0,9")
@@ -353,7 +354,8 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
         .attr("fill", "black");
-    var cien = svgSimbologia.append("text")
+    const cien = svgSimbologia
+        .append("text")
         .attr("x", 100 + borde)
         .attr("y", bordeArriba + alturaBarra + 10)
         .text("1")
@@ -361,64 +363,49 @@ function dibujarSimbologia(propiedades) {
         .attr("font-family", "sans-serif")
         .attr("font-size", "4px")
         .attr("fill", "black");
-
-    var ruta = '/obtienePropiedadesGrafico';
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').val()
-        }
-    });
-    $.ajax({
-        method: 'POST', // Type of response and matches what we said in the route
-        url: ruta, // This is the url we gave in the route
-        data: '', // la información a enviar (también es posible utilizar una cadena de datos)
-        dataType: 'json', //tipo de respuesta esperada
-        success: function (response) { // What to do if we succeed
-            /*---BARRA---*/
-            var rectangulo1 = svgSimbologia.append("rect")
-                .attr("fill", response[0]['color']) //verde
-                .attr("x", borde)
-                .attr("y", bordeArriba + 5)
-                .attr("width", 60)
-                .attr("height", alturaBarra)
-                .attr("stroke", colorBorde)
-                .attr("stroke-width", grosorLineaNegra);
-            var rectangulo2 = svgSimbologia.append("rect")
-                .attr("fill", response[1]['color']) //amarillo
-                .attr("x", 60 + borde)
-                .attr("y", bordeArriba + 5)
-                .attr("width", 30)
-                .attr("height", alturaBarra)
-                .attr("stroke", colorBorde)
-                .attr("stroke-width", grosorLineaNegra);
-            var rectangulo3 = svgSimbologia.append("rect")
-                .attr("fill", response[2]['color']) //naranjo
-                .attr("x", 90 + borde)
-                .attr("y", bordeArriba + 5)
-                .attr("width", 10)
-                .attr("height", alturaBarra)
-                .attr("stroke", colorBorde)
-                .attr("stroke-width", grosorLineaNegra);
-            var rectangulo4 = svgSimbologia.append("rect")
-                .attr("fill", response[3]['color']) //rojo
-                .attr("x", 100 + borde)
-                .attr("y", bordeArriba + 5)
-                .attr("width", 20)
-                .attr("height", alturaBarra)
-                .attr("stroke", colorBorde)
-                .attr("stroke-width", grosorLineaNegra);
-        },
-        error: function (jqXHR, textStatus, errorThrown, exception) { // What to do if we fail
-            console.log(JSON.stringify(jqXHR));
-            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
-        }
-    });
+    const rectangulo1 = svgSimbologia
+        .append("rect")
+        .attr("fill", propiedades[0]["color"]) //verde
+        .attr("x", borde)
+        .attr("y", bordeArriba + 5)
+        .attr("width", 60)
+        .attr("height", alturaBarra)
+        .attr("stroke", colorBorde)
+        .attr("stroke-width", grosorLineaNegra);
+    const rectangulo2 = svgSimbologia
+        .append("rect")
+        .attr("fill", propiedades[1]["color"]) //amarillo
+        .attr("x", 60 + borde)
+        .attr("y", bordeArriba + 5)
+        .attr("width", 30)
+        .attr("height", alturaBarra)
+        .attr("stroke", colorBorde)
+        .attr("stroke-width", grosorLineaNegra);
+    const rectangulo3 = svgSimbologia
+        .append("rect")
+        .attr("fill", propiedades[2]["color"]) //naranjo
+        .attr("x", 90 + borde)
+        .attr("y", bordeArriba + 5)
+        .attr("width", 10)
+        .attr("height", alturaBarra)
+        .attr("stroke", colorBorde)
+        .attr("stroke-width", grosorLineaNegra);
+    const rectangulo4 = svgSimbologia
+        .append("rect")
+        .attr("fill", propiedades[3]["color"]) //rojo
+        .attr("x", 100 + borde)
+        .attr("y", bordeArriba + 5)
+        .attr("width", 20)
+        .attr("height", alturaBarra)
+        .attr("stroke", colorBorde)
+        .attr("stroke-width", grosorLineaNegra);
 }
 
 function dibujarFlecha(avance) {
     /*---FLECHA---*/
     //console.log(avance);
-    var line = svgSimbologia.append("line")
+    const line = svgSimbologia
+        .append("line")
         //mover coordenadas x para avance  //278 100%
         .attr("x1", avance + borde)
         .attr("y1", bordeArriba + alturaBarra + largoFlecha + 5)
@@ -429,5 +416,3 @@ function dibujarFlecha(avance) {
         .attr("stroke-width", 0.9)
         .attr("marker-end", "url(#arrow)");
 }
-
-

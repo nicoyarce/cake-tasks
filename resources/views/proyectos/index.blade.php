@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Proyectos Activos')
 <div class="row">
 	<div class="col-6">
 		<h1>Proyectos Activos</h1>
@@ -134,7 +135,6 @@
 		</tbody>
 	</table>
 </div>
-{{$proyectos->links()}}
 @else
 <hr>
 <h3 class="text-center">No hay proyectos activos</h3>

@@ -8,6 +8,7 @@ use App\Informe;
 use App\PropiedadesGrafico;
 use Jenssegers\Date\Date;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Snappy as PDF;
 use Validator;
 
@@ -18,7 +19,8 @@ class InformesController extends Controller
         $lista_informes = $proyecto->informes->sortByDesc('created_at')->groupBy(function ($item) {
             return $item->fecha->format('d-M-y');
         });
-        return view('informes.index', compact('proyecto', 'lista_informes'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('informes.index', compact('proyecto', 'lista_informes', 'propiedades'));
     }
 
     public function vistaListaInformesArchivados($id)
@@ -28,7 +30,8 @@ class InformesController extends Controller
             ->get()
             ->first();
         $informes = $proyecto->informes()->withTrashed()->get()->sortByDesc('created_at');
-        return view('informes.index', compact('proyecto', 'informes'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('informes.index', compact('proyecto', 'informes', 'propiedades'));
     }
 
     public function generarInforme(Proyecto $proyecto, Request $request)
@@ -61,49 +64,63 @@ class InformesController extends Controller
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareas);
-        //dd($tareasJSON);
-        $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
-        $pdf->setOption('encoding', 'UTF-8');
-        $pdf->setOption('javascript-delay', 1000);
-        $informe = new Informe;
-        $informe->fecha = Date::now();
-        $informe->grafico = $incluye_grafico;
-        $informe->observaciones = $incluye_observaciones;
-        $informe->colores = json_encode($arrayColores, JSON_FORCE_OBJECT);
-        $informe->ruta = 'public/' . $proyecto->nombre . ' - ' . $informe->fecha->format('d-M-Y') . '-' . $informe->fecha->format('H.i.s') . '.pdf';
-        //$rutaCompleta = storage_path().'/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'.pdf';
-        $informe->proyecto()->associate($proyecto);
-        $informe->save();
-        Storage::disk('local')->put($informe->ruta, $pdf->output());
-        flash('Informe generado')->success();
+        $propiedades = PropiedadesGrafico::all();
+        DB::beginTransaction();
+        try {
+            $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones', 'propiedades'));
+            $pdf->setOption('enable-local-file-access', true);
+            $pdf->setOption('encoding', 'UTF-8');
+            $pdf->setOption('enable-javascript', true);
+            $pdf->setOption('images', true);
+            $pdf->setOption('javascript-delay', 2000);
+            $informe = new Informe;
+            $informe->fecha = Date::now();
+            $informe->grafico = $incluye_grafico;
+            $informe->observaciones = $incluye_observaciones;
+            $informe->colores = json_encode($arrayColores, JSON_FORCE_OBJECT);
+            $informe->ruta = 'public/' . $proyecto->nombre . ' - ' . $informe->fecha->format('d-M-Y') . '-' . $informe->fecha->format('H.i.s') . '.pdf';
+            //$rutaCompleta = storage_path().'/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'.pdf';
+            $informe->proyecto()->associate($proyecto);
+            $informe->save();
+            Storage::disk('local')->put($informe->ruta, $pdf->output());
+            DB::commit();
+            flash('Informe generado')->success();
+        } catch (\RuntimeException $e) {
+            flash('Error al generar informe')->error();
+            DB::rollBack();
+        }
         return redirect()->action(
             'InformesController@vistaListaInformes',
-            ['id' => $proyecto->id]
+            ['proyecto' => $proyecto]
         );
     }
 
     public function destroy($id)
     {
         $informe = Informe::find($id);
-        $proyectoId = $informe->proyecto()->get()->first()->id;
+        $proyecto = $informe->proyecto()->get()->first();
         Storage::delete($informe->ruta);
         $informe->forceDelete();
         flash('Informe eliminado')->success();
         return redirect()->action(
             'InformesController@vistaListaInformes',
-            ['id' => $proyectoId]
+            ['proyecto' => $proyecto]
         );
     }
 
     public function test()
     {
         $id = 1;
+        $incluye_grafico = true;
+        $incluye_observaciones = true;
+        $arrayConfiguraciones = compact('incluye_grafico', 'incluye_observaciones');
         $proyecto = Proyecto::find($id);
         $tareas = $proyecto->tareas()->get();
         $tareasJSON = $tareas->sortBy(function ($tarea) {
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareasJSON);
-        return view('pdf', compact('proyecto', 'tareas', 'tareasJSON'));
+        $propiedades = PropiedadesGrafico::all();
+        return view('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'propiedades', 'arrayConfiguraciones'));
     }
 }

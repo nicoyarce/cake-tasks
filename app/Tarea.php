@@ -79,6 +79,11 @@ class Tarea extends Model
         return $this->belongsTo(TipoTarea::class, 'tipo_tarea');
     }
 
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
     protected static function boot()
     {
         //elimina tareas hijas al eliminar tarea madre
@@ -89,6 +94,15 @@ class Tarea extends Model
             }
             if (!is_null($tarea->observaciones())) {
                 $tarea->observaciones()->delete();
+            }
+        });
+
+        static::restoring(function ($tarea) {
+            if (!is_null($tarea->tareasHijas())) {
+                $tarea->tareasHijas()->restore();
+            }
+            if (!is_null($tarea->observaciones())) {
+                $tarea->observaciones()->restore();
             }
         });
     }
@@ -175,12 +189,18 @@ class Tarea extends Model
 
     public function getNombreAutorUltimoCambioFtt()
     {
-        return array_get($this->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre');
+        if (!empty($this->autorUltimoCambioFtt())){
+            return array_get($this->autorUltimoCambioFtt()->withTrashed()->first(), 'nombre');
+        }
+        return '';
     }
 
     public function getNombreAutorUltimoCambioAvance()
     {
-        return array_get($this->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre');
+        if (!empty($this->autorUltimoCambioAvance())){
+            return array_get($this->autorUltimoCambioAvance()->withTrashed()->first(), 'nombre');
+        }
+        return '';
     }
 
     public function scopeCompletadas($query)

@@ -24,7 +24,7 @@ class HomeController extends Controller
             $nroUsuarios = null;
             $nroInformes = null;
             if (Auth::user()->can('gestionar_proyectos') && Auth::user()->can('indice_proyectos_archivados')) {
-                $nroProyectos = Proyecto::all()->count();
+                $nroProyectos = Proyecto::count();
                 $nroProyectosArch = Proyecto::onlyTrashed()->count();
             } elseif (Auth::user()->can('indice_proyectos_archivados')) {
                 $nroProyectos = Auth::user()->proyectos->count();
@@ -33,10 +33,10 @@ class HomeController extends Controller
                 $nroProyectos = Auth::user()->proyectos->count();
             }
             if (Auth::user()->can('gestionar_usuarios')) {
-                $nroUsuarios = User::all()->count();
+                $nroUsuarios = User::count();
             }
             if (Auth::user()->can('crear_informes')) {
-                $nroInformes = Informe::all()->count();
+                $nroInformes = Informe::count();
             }
             return view('welcome', compact('nroProyectos', 'nroProyectosArch', 'nroUsuarios', 'nroInformes'));
         } else {
@@ -52,18 +52,6 @@ class HomeController extends Controller
     /*public function __construct()
     {
         $this->middleware('auth');
-    }
-
-    public function index(Request $request){
-        $request->user()->authorizeRoles(['user','admin','cr']);
-    }*/
-
-    /*
-    public function someAdminStuff(Request $request)
-    {
-        $request->user()->authorizeRoles(‘admin’);
-
-        return view(‘some.view’);
     }
     */
 }

@@ -4,7 +4,7 @@
   <meta name="_token" content="{!! csrf_token() !!}" />
   <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <title>Holistic</title>
+  <title>Holistic - Visor</title>
 
   <link rel=stylesheet href="/platform.css" type="text/css">
   <link rel=stylesheet href="/libs/jquery/dateField/jquery.dateField.css" type="text/css">
@@ -42,7 +42,6 @@
   <!--<script type="text/javascript" src="ganttTestSuite.js"></script>-->
 </head>
 <body style="background-color: #fff;">
-{{app('debugbar')->disable()}}
 
 <div id="ndo" style="position:absolute;right:5px;top:5px;width:378px;padding:5px;background-color: #FFF5E6; border:1px solid #F9A22F; font-size:12px" class="noprint">
   <div>

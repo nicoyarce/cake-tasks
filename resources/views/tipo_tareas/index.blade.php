@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Tipos Tarea')
 <div class="row">
     <div class="col-10">
         <h1>Tipos de tarea</h1>

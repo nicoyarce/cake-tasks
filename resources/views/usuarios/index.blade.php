@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Usuarios')
 @include('layouts.errors')
 <form method="POST">
     {{csrf_field()}}
@@ -8,15 +9,19 @@
         <div class="col-8">
             <h1>Usuarios</h1>
         </div>
-        <div class="col-2">
-            <button formaction="{{route('users.destroySelected')}}" id="borraSelec" type="submit" disabled class="btn btn-danger float-right" onclick="return confirm('¿Desea eliminar los usuarios seleccionados?')">Eliminar seleccionados
+        <div class="col-2 mb-2">
+            <button formaction="{{route('users.destroySelected')}}" id="borraSelec" type="submit" disabled class="btn btn-danger float-right" onclick="return confirm('¿Desea eliminar los usuarios seleccionados?')">Eliminar marcados
                 <i class="fas fa-trash-alt"></i>
             </button>
         </div>
-        <div class="col-2">
-            <a type="button" class="btn btn-success float-right" href="{{action('UsersController@create')}}" role="button">Crear usuario
-                <i class="fas fa-plus"></i>
-            </a>
+        <div class="btn-group col-2 mb-2">
+            <button type="button" class="btn btn-success dropdown-toggle float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Agregar <i class="fas fa-plus"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{action('UsersController@create')}}">Usuario</a>
+                <a class="dropdown-item" href="/users/cargarXLS">Excel / XLS</a>
+            </div>
         </div>
     </div>
     @if(count($usuarios)>0)    

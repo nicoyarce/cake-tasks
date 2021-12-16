@@ -12,7 +12,7 @@
 */
 Route::get('/', 'HomeController@index');
 Route::get('/about', 'HomeController@about');
-//Route::get('/pdf', 'InformesController@test'); //test de pdf
+Route::get('/pdf', 'InformesController@test'); //test de pdf
 Route::group(['middleware' => ['permission:gestionar_proyectos']], function () {
     //Cargas masivas
     Route::get('/proyectos/cargarXLS', 'ProyectosController@vistaCargarXLS');
@@ -32,6 +32,8 @@ Route::group(['middleware' => ['permission:gestionar_usuarios']], function () {
         'as' => 'users.destroySelected',
         'uses' => 'UsersController@destroySelected'
     ]);
+    Route::get('/users/cargarXLS', 'UsersController@vistaCargarUsuarios');
+    Route::post('/users/cargarXLS', 'UsersController@cargarUsuarios');
     Route::resource('users', 'UsersController');
 });
 Route::group(['middleware' => ['permission:gestionar_configuraciones']], function () {
@@ -48,15 +50,14 @@ Route::group(['middleware' => ['permission:gestionar_configuraciones']], functio
 
     Route::get('roles/crear', 'RolesController@indexConModal');
     Route::resource('roles', 'RolesController');
+
+    Route::get('categorias/crear', 'CategoriasController@indexConModal');
+    Route::resource('categorias', 'CategoriasController');
+
 });
 
 Route::group(['middleware' => ['permission:borrar_tareas']], function () {
     Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);
-});
-
-Route::group(['middleware' => ['permission:ver_graficos']], function () {
-    Route::post('/visor', 'TareasController@cargarVisor'); //ajax
-    Route::get('/visor', 'TareasController@cargarVisor'); //ajax
 });
 
 Route::group(['middleware' => ['permission:crear_tareas']], function () {
@@ -111,6 +112,8 @@ Route::group(['middleware' => ['permission:ver_informes']], function () {
 Route::group(['middleware' => ['permission:ver_graficos']], function () {
     Route::get('/grafico/{proyecto}', 'GraficosController@vistaGrafico'); //ajax
     Route::post('/grafico/{proyecto}/filtrar', 'GraficosController@filtrar');  //ajax
+    Route::post('/visor', 'TareasController@cargarVisor'); //ajax
+    Route::get('/visor', 'TareasController@cargarVisor'); //ajax
 });
 
 Route::post('/tareas/consultaAvances', 'NomenclaturaAvancesController@avances'); //ajax

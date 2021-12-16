@@ -1,6 +1,7 @@
 {{-- Propiedad con id = 6 es el porcentaje para que color de grafico pase a verde, se maneja directamente con la id --}}
 @extends('layouts.master')
 @section('content')
+@section('tituloPagina', 'Propiedades Gráfico')
 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 <div class="row">
     <div class="col-12">
