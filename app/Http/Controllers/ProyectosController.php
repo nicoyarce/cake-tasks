@@ -127,7 +127,7 @@ class ProyectosController extends Controller
         if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $proyecto->fecha_termino_original) {
             $proyectoNuevo->fecha_termino_original = $request->fecha_termino_original;
         }
-        if ($request->has('fecha_termino') && $request->fecha_termino != $proyecto->fecha_termino) {
+        if ($request->has('fecha_termino') && $request->fecha_termino != null && $request->fecha_termino != $proyecto->fecha_termino) {
             $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
             $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
             $proyectoNuevo->fecha_termino = $request->fecha_termino;

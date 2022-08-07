@@ -26,7 +26,7 @@ class UpdateProyectosRequest extends FormRequest
         return [
             'nombre' => 'required|min:4|max:100',
             'fecha_inicio' => 'required|date|before:fecha_termino_original',
-            'fecha_termino_original' => 'required|date|after:fecha_inicio|before:fecha_termino',
+            'fecha_termino_original' => 'required|date|after:fecha_inicio',
             'fecha_termino' => 'nullable|date',
             'listaCategorias'=>'required'
         ];

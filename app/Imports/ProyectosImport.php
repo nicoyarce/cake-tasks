@@ -26,24 +26,6 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
     
     public function collection(Collection $rows)
     {
-        //dd($rows->toArray());
-        // Validator::make($rows->toArray(),[
-        //     '*.comienzo' => [
-        //         function($attribute, $value, $fail) {
-        //             if ($value === 'foo') {
-        //                 return $fail($attribute.' es invalido.');
-        //             }
-        //         }
-        //     ],
-        //     '*.fin' => [
-        //         function($attribute, $value, $fail) {
-        //             if ($value === 'foo') {
-        //                 return $fail($attribute.' es invalido.');
-        //             }
-        //         }
-        //     ]
-        // ])->validate();
-        
         $ultimaTareaMadre = new Tarea;
         DB::beginTransaction();
         try {
@@ -55,12 +37,12 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                 $fecha_inicio = $row['comienzo'];
                 $fecha_termino = $row['fin'];
                 $nivel = $row['nivel_de_esquema'];
-                $tipo_tarea = $row['tipo_tarea'];
-                $area = $row['area'];
+                $nombre_tipo_tarea = ($row['tipo_tarea'] != "") ? $row['tipo_tarea'] : "";
+                $nombre_area = ($row['area'] != "") ? $row['area'] : "";
                 $nro_documento = $row['cot'];
-                $tipo_proyecto = $row['tipo_proyecto'];
+                $nombre_tipo_proyecto = ($row['tipo_proyecto'] != "") ? $row['tipo_proyecto'] : "";
                 $trabajo_externo = $row['trabajo_asmar'];
-                $avance = $row['avance'];
+    
                 if ($row->filter()->isNotEmpty()) {
                     if ($key == 0) {
                         $proyecto = Proyecto::create([
@@ -73,57 +55,49 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                     } else {
                         if ($indicador == "*") {
                             $tarea = new Tarea;
-                            try {
-                                $area = Area::where('nombrearea', $area)
-                                    ->orWhereRaw('UPPER("nombrearea") LIKE ?', ['%' . strtoupper($area) . '%'])->firstOrFail();
-                            } catch (ModelNotFoundException $e) {
-                                $nuevaArea = new Area;
-                                $nuevaArea->nombrearea = $area;
-                                $nuevaArea->save();
-                                $area = $nuevaArea;
-                            } finally {
-                                $tarea->area()->associate($area);
+                            if ($nombre_area != "")                        
+                                $area = Area::where('nombrearea', $nombre_area)
+                                    ->orWhereRaw('UPPER("nombrearea") LIKE ?', ['%' . strtoupper($nombre_area) . '%'])->get();
+                                if($area->isEmpty()){
+                                    $nuevaArea = new Area;
+                                    $nuevaArea->nombrearea = $nombre_area;
+                                    $nuevaArea->save();
+                                    $tarea->area()->associate($nuevaArea);
+                                } else {
+                                    $tarea->area()->associate($area->first());
+                                }                          
                             }
-                            try {
-                                $tipo_tarea = TipoTarea:: where('descripcion', $tipo_tarea)
-                                    ->orWhereRaw('UPPER("descripcion") LIKE ?', ['%' . strtoupper($tipo_tarea) . '%'])->firstOrFail();
-                            } catch (ModelNotFoundException $e) {
-                                $nuevoTipoTarea = new TipoTarea;
-                                $nuevoTipoTarea->descripcion = $tipo_tarea;
-                                $nuevoTipoTarea->save();
-                                $tipo_tarea = $nuevoTipoTarea;
-                            } finally {
-                                $tarea->tipoTarea()->associate($tipo_tarea);
+                            $tipo_tarea = TipoTarea:: where('descripcion', $nombre_tipo_tarea)
+                                ->orWhereRaw('UPPER("descripcion") LIKE ?', ['%' . strtoupper($nombre_tipo_tarea) . '%'])->firstOrFail();
+                            if ($nombre_tipo_tarea != ""){
+                                if ($tipo_tarea->isEmpty()){
+                                    $nuevoTipoTarea = new TipoTarea;
+                                    $nuevoTipoTarea->descripcion = $nombre_tipo_tarea;
+                                    $nuevoTipoTarea->save();
+                                    $tarea->tipoTarea()->associate($nuevoTipoTarea);
+                                } else {
+                                    $tarea->tipoTarea()->associate($tipo_tarea->first());
+                                }
                             }
-                            try {
-                                $tipo_proyecto = Categoria:: where('nombre', $tipo_proyecto)
-                                    ->orWhereRaw('UPPER("nombre") LIKE ?', ['%' . strtoupper($tipo_proyecto) . '%'])->firstOrFail();
-                            } catch (ModelNotFoundException $e) {
-                                $nuevoTipoProyecto = new Categoria;
-                                $nuevoTipoProyecto->nombre = $tipo_Proyecto;
-                                $nuevoTipoProyecto->save();
-                                $tipo_proyecto = $nuevoTipoProyecto;
-                            } finally {
-                                $tarea->categoria()->associate($tipo_proyecto);
+                            if ($nombre_tipo_proyecto != ""){
+                                $tipo_proyecto = Categoria:: where('nombre', $nombre_tipo_proyecto)
+                                    ->orWhereRaw('UPPER("nombre") LIKE ?', ['%' . strtoupper($nombre_tipo_proyecto) . '%'])->firstOrFail();
+                                if ($tipo_proyecto->isEmpty()){
+                                    $nuevoTipoProyecto = new Categoria;
+                                    $nuevoTipoProyecto->nombre = $tipo_Proyecto;
+                                    $nuevoTipoProyecto->save();
+                                    $tarea->categoria()->associate($nuevoTipoProyecto);
+                                } finally {
+                                    $tarea->categoria()->associate($tipo_proyecto->first());
+                                }
                             }
-                            /*try {
-                                $avance = NomenclaturaAvance:: where('avance', $avance)
-                                    ->orWhereRaw('UPPER("porcentaje") LIKE ?', ['%' . strtoupper($avance) . '%'])->firstOrFail();
-                            } catch (ModelNotFoundException $e) {
-                                $nuevaNomenclatura = new NomenclaturaAvance;
-                                $nuevaNomenclatura->nombre = $avance;
-                                $nuevaNomenclatura->save();
-                                $avance = $nuevaNomenclatura;
-                            } finally {
-                                $tarea->nomenclaturasAvance()->associate($avance);
-                            }*/
+                            
                             $tarea->nombre = $nombre;
                             $tarea->nro_documento = (!is_null($nro_documento)) ? $nro_documento : null;
                             $tarea->fecha_inicio = Date::createFromFormat($formato, $fecha_inicio, $timeZone)->toDateTimeString();
                             $tarea->fecha_termino_original =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
                             $tarea->fecha_termino =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
-                            $tarea->trabajo_externo = (!is_null($trabajo_externo)) ? $trabajo_externo : 0;
-                            $tarea->avance = (!is_null($avance)) ? $avance : 0;
+                            $tarea->trabajo_externo = (!is_null($trabajo_externo)) ? $trabajo_externo : 1;                            
                             $tarea->proyecto()->associate($proyecto);
                             $tarea->categoria()->associate($tipo_proyecto);
                             $tarea->save();
