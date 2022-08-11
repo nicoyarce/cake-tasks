@@ -31,7 +31,7 @@ class ProyectosController extends Controller
         if (Auth::user()->can('gestionar_proyectos')) {
             $proyectos = Proyecto::with('tareas')->get();
         } else {
-            $proyectos = Auth::user()->proyectos()->with('tareas');
+            $proyectos = Auth::user()->proyectos()->with('tareas')->get();
         }
         return view('proyectos.index', compact('proyectos'));
     }
