@@ -41,7 +41,7 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                 $nombre_area = ($row['area'] != "") ? $row['area'] : "";
                 $nro_documento = $row['cot'];
                 $nombre_tipo_proyecto = ($row['tipo_proyecto'] != "") ? $row['tipo_proyecto'] : "";
-                $trabajo_externo = $row['trabajo_asmar'];
+                $trabajo_interno = ($row['trabajo_propio'] != "") ? $row['trabajo_propio'] : 0;
     
                 if ($row->filter()->isNotEmpty()) {
                     if ($key == 0) {
@@ -55,9 +55,10 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                     } else {
                         if ($indicador == "*") {
                             $tarea = new Tarea;
-                            if ($nombre_area != "")                        
+                            if ($nombre_area != "") {                     
                                 $area = Area::where('nombrearea', $nombre_area)
                                     ->orWhereRaw('UPPER("nombrearea") LIKE ?', ['%' . strtoupper($nombre_area) . '%'])->get();
+
                                 if($area->isEmpty()){
                                     $nuevaArea = new Area;
                                     $nuevaArea->nombrearea = $nombre_area;
@@ -66,10 +67,11 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                                 } else {
                                     $tarea->area()->associate($area->first());
                                 }                          
-                            }
-                            $tipo_tarea = TipoTarea:: where('descripcion', $nombre_tipo_tarea)
-                                ->orWhereRaw('UPPER("descripcion") LIKE ?', ['%' . strtoupper($nombre_tipo_tarea) . '%'])->firstOrFail();
-                            if ($nombre_tipo_tarea != ""){
+                            }                            
+                            if ($nombre_tipo_tarea != ""){                                
+                                $tipo_tarea = TipoTarea::where('descripcion', $nombre_tipo_tarea)
+                                ->orWhereRaw('UPPER("descripcion") LIKE ?', ['%' . strtoupper($nombre_tipo_tarea) . '%'])->get();
+
                                 if ($tipo_tarea->isEmpty()){
                                     $nuevoTipoTarea = new TipoTarea;
                                     $nuevoTipoTarea->descripcion = $nombre_tipo_tarea;
@@ -80,14 +82,15 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                                 }
                             }
                             if ($nombre_tipo_proyecto != ""){
-                                $tipo_proyecto = Categoria:: where('nombre', $nombre_tipo_proyecto)
-                                    ->orWhereRaw('UPPER("nombre") LIKE ?', ['%' . strtoupper($nombre_tipo_proyecto) . '%'])->firstOrFail();
+                                $tipo_proyecto = Categoria::where('nombre', $nombre_tipo_proyecto)
+                                    ->orWhereRaw('UPPER("nombre") LIKE ?', ['%' . strtoupper($nombre_tipo_proyecto) . '%'])->get();
+                               
                                 if ($tipo_proyecto->isEmpty()){
                                     $nuevoTipoProyecto = new Categoria;
-                                    $nuevoTipoProyecto->nombre = $tipo_Proyecto;
+                                    $nuevoTipoProyecto->nombre = $nombre_tipo_proyecto;
                                     $nuevoTipoProyecto->save();
                                     $tarea->categoria()->associate($nuevoTipoProyecto);
-                                } finally {
+                                } else {
                                     $tarea->categoria()->associate($tipo_proyecto->first());
                                 }
                             }
@@ -97,9 +100,8 @@ class ProyectosImport implements ToCollection, WithHeadingRow, WithBatchInserts,
                             $tarea->fecha_inicio = Date::createFromFormat($formato, $fecha_inicio, $timeZone)->toDateTimeString();
                             $tarea->fecha_termino_original =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
                             $tarea->fecha_termino =  Date::createFromFormat($formato, $fecha_termino, $timeZone)->toDateTimeString();
-                            $tarea->trabajo_externo = (!is_null($trabajo_externo)) ? $trabajo_externo : 1;                            
+                            $tarea->trabajo_interno = (!is_null($trabajo_interno)) ? $trabajo_interno : 0;                            
                             $tarea->proyecto()->associate($proyecto);
-                            $tarea->categoria()->associate($tipo_proyecto);
                             $tarea->save();
                             $ultimaTareaMadre = $tarea;
                         } else {

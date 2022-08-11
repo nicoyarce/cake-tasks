@@ -71,7 +71,7 @@ class GraficosController extends Controller
         $opcionColor = json_decode($request->filtro_color);
         $areaid = json_decode($request->filtro_area);
         $categoriaid = json_decode($request->filtro_categoria);
-        $trabajoExterno = json_decode($request->filtro_externo);
+        $filtroTrabajo = json_decode($request->filtro_trabajo);
         $tareas = Proyecto::with('tareas')->find($proyecto_id)->tareas;
         $tareas = $tareas
         ->when($opcionColor != null, function ($query) use ($opcionColor) {
@@ -81,8 +81,8 @@ class GraficosController extends Controller
             return $query->whereIn('area_id', $areaid);
         })->when($categoriaid != null, function ($query) use ($categoriaid) {
             return $query->whereIn('categoria_id', $categoriaid);
-        })->when($trabajoExterno != null, function ($query) use ($trabajoExterno) {
-            return $query->where('trabajo_externo', $trabajoExterno);
+        })->when($filtroTrabajo != null, function ($query) use ($filtroTrabajo) {
+            return $query->where('trabajo_interno', $filtroTrabajo);
         })->sortBy(function ($tarea) {
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();

@@ -117,11 +117,11 @@
                 </select>
             </div> 
             <div class="form-group col-6">
-                <label for="filtro_externo">Filtro trabajos propios/ASMAR:</label>
-                <select class="form-control" id="filtro_externo" name="filtro_externo">
+                <label for="filtro_trabajo">Filtro trabajos ASMAR/propios:</label>
+                <select class="form-control" id="filtro_trabajo" name="filtro_trabajo">
                     <option value="">Todos</option>
-                    <option value="0">Propios</option>
-                    <option value="1">ASMAR</option>
+                    <option value="0">ASMAR</option>
+                    <option value="1">Propios</option>                    
                 </select>
             </div>            
         </div>
@@ -130,7 +130,8 @@
                 <h3 class="text-center"><span id="critica" class="badge badge-pill badge-warning" style="display: none;">Crítica</span></h3>                
             </div>
             <div class="w-50">
-                <h3 class="text-center"><span id="trabajo_externo" class="badge badge-pill badge-info" style="display: none;">Trabajo ASMAR</span></h3>  
+                <h3 class="text-center"><span id="trabajo_interno" class="badge badge-pill badge-info" style="display: none;">Trabajo Propio</span></h3>
+                <h3 class="text-center"><span id="trabajo_externo" class="badge badge-pill badge-primary" style="display: none;">Trabajo ASMAR</span></h3>  
             </div>
         </div>
         <div class="row">
@@ -176,7 +177,7 @@
                 filtro_area: JSON.stringify($("#filtro_area").val()),
                 filtro_color: JSON.stringify($("#filtro_color").val()),
                 filtro_categoria: JSON.stringify($("#filtro_categoria").val()),
-                filtro_externo: JSON.stringify($("#filtro_externo").val()),
+                filtro_trabajo: JSON.stringify($("#filtro_trabajo").val()),
             },
             success: function (response) {
                 // What to do if we succeed
@@ -208,7 +209,7 @@
                 $("#icono_maximizar").removeClass('fa-compress-arrows-alt').addClass('fa-expand-arrows-alt');
             }
         });
-        $("select[multiple], #filtro_externo").on("change", function () {
+        $("select[multiple], #filtro_trabajo").on("change", function () {
             cambioFiltro();
         });
         dibujarSimbologia({!!json_encode($propiedades)!!});

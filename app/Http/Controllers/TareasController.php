@@ -63,7 +63,7 @@ class TareasController extends Controller
         $tarea->nro_documento = $request->nro_documento;
 
         $tarea->critica = ($request->has('critica')) ? true : false;
-        $tarea->trabajo_externo = ($request->has('trabajo_externo')) ? true : false;
+        $tarea->trabajo_interno = ($request->has('trabajo_interno')) ? true : false;
 
         $tarea->avance = $request->avance;
         $tarea->proyecto()->associate($proyecto);
@@ -105,7 +105,7 @@ class TareasController extends Controller
             $categoria = Categoria::find($request->categoria_id);
             $tareaNueva->categoria()->associate($categoria);
             $tareaNueva->critica = ($request->has('critica')) ? true : false;
-            $tareaNueva->trabajo_externo = ($request->has('trabajo_externo')) ? true : false;
+            $tareaNueva->trabajo_interno = ($request->has('trabajo_interno')) ? true : false;
             if (Auth::user()->can('modificar_fechas_originales_tareas')) {
                 if ($request->has('fecha_termino_original') && $request->fecha_termino_original != $tarea->fecha_termino_original) {
                     $tareaNueva->fecha_termino_original = $request->fecha_termino_original;

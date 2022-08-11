@@ -171,10 +171,13 @@ function muestraDatosGrafico(d, i) {
     } else {
         $("#critica").hide();
     }
-    if (d.data.trabajo_externo == 1) {
-        $("#trabajo_externo").show();
-    } else {
+    console.log(d.data);
+    if (d.data.trabajo_interno == 1) {
+        $("#trabajo_interno").show();
         $("#trabajo_externo").hide();
+    } else {
+        $("#trabajo_interno").hide();
+        $("#trabajo_externo").show();
     }
     dibujarFlecha(d.data.porcentajeAtraso);
 }

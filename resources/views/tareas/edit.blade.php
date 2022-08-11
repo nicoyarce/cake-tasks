@@ -45,8 +45,8 @@
                         <label class="custom-control-label" for="critica">¿Ruta crítica?</label>
                     </div>
                     <div class="custom-control custom-switch custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" @if($tarea->trabajo_externo)checked @endif id="trabajo_externo" name="trabajo_externo">
-                        <label class="custom-control-label" for="trabajo_externo">¿Trabajo ASMAR?</label>
+                        <input type="checkbox" class="custom-control-input" @if(!$tarea->trabajo_interno)checked @endif id="trabajo_interno" name="trabajo_interno">
+                        <label class="custom-control-label" for="trabajo_interno">¿Trabajo propio?</label>
                     </div>
                 </div>
             </div>

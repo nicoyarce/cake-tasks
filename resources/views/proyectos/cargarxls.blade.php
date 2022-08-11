@@ -19,7 +19,7 @@
             <li class="list-inline-item"> - Tipo Tarea</li>
             <li class="list-inline-item"> - Cot</li>
             <li class="list-inline-item"> - Tipo Proyecto</li>
-            <li class="list-inline-item"> - Trabajo ASMAR </li>
+            <li class="list-inline-item"> - Trabajo Propio </li>
             <li class="list-inline-item"> - Nombre</li>
             <li class="list-inline-item"> - Duracion</li>
             <li class="list-inline-item"> - Comienzo</li>
@@ -51,7 +51,9 @@
         theme:'fa',            
         language:'es',
         required:'true',
-        maxfile:'1',});    
+        maxfile:'1',
+        autoOrientImage: false
+    });    
     $('#formulario').submit(function() {
         $('#carga').show();
     });
