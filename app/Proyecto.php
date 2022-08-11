@@ -128,22 +128,15 @@ class Proyecto extends Model
 
     public function getAvanceAttribute()
     {
-        $tareas = (is_null($this->deleted_at)) ? $this->tareas : $this->tareasArchivadas;
-        if (count($tareas) == 0) {
-            return 0;
-        } else {
-            $totalDuracion = 0;
-            foreach ($tareas as $tarea) {
-                $totalDuracion += $tarea->duracion; //dias duracion
+        $promedio_avances_tareas = 0;
+        $tareas = $this->tareas;
+        if (count($tareas) > 0) {
+            foreach ($tareas as $key => $tarea) {
+                $promedio_avances_tareas += $tarea->avance;
             }
-            $tiempoPonderado = 0;
-            $avancePonderado = 0;
-            foreach ($tareas as $tarea) {
-                $tiempoPonderado = $tarea->duracion / $totalDuracion;
-                $avancePonderado = $avancePonderado + ($tarea->avance * $tiempoPonderado);
-            }
-            return floor($avancePonderado);
+            $promedio_avances_tareas = round($promedio_avances_tareas/count($tareas), 2);
         }
+        return $promedio_avances_tareas;
     }
 
     public function getColorAtrasoAttribute()
@@ -167,21 +160,13 @@ class Proyecto extends Model
 
     public function getPorcentajeAtrasoAttribute()
     {
-        $tareas = (is_null($this->deleted_at)) ? $this->tareas : $this->tareasArchivadas;
-        if (count($tareas) == 0) {
-            return 0;
-        } else {
-            $totalDuracion = 0;
-            foreach ($tareas as $tarea) {
-                $totalDuracion = $totalDuracion + $tarea->duracion; //dias duracion
-            }
-            $tiempoPonderado = 0;
-            $avanceProyectado = 0;
-            foreach ($tareas as $tarea) {
-                $tiempoPonderado = $tarea->duracion / $totalDuracion;
-                $avanceProyectado = $avanceProyectado + ($tarea->porcentajeAtraso * $tiempoPonderado);
-            }
-            return floor($avanceProyectado);
-        }
+        //AKA AVANCE PROYECTADO
+        $fechaInicioCarbon = Carbon::parse($this->fecha_inicio);
+        $fechaTerminoCarbon = Carbon::parse($this->fecha_termino);
+        $hoyCarbon = (is_null($this->deleted_at)) ? Carbon::today() : $this->deleted_at;
+        $diferenciaFechasProyecto = $fechaInicioCarbon->diffInDays($fechaTerminoCarbon);
+        $diferenciaAHoy = $hoyCarbon->diffInDays($fechaInicioCarbon);
+        $resultado = round(($diferenciaAHoy*100)/$diferenciaFechasProyecto, 2);
+        return ($resultado >= 100) ? 100 : $resultado;
     }
 }
