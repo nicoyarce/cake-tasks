@@ -14,9 +14,9 @@
         <table class="table table-sm table-borderless">
             <thead>
                 <tr>
-                    <th>FIR</th>
-                    <th>FTR Original</th>
-                    <th>FTR Modificada</th>
+                    <th>Fecha Inicio Proyecto</th>
+                    <th>Fecha Término Proyecto Original</th>
+                    <th>Fecha Término Proyecto Modificada</th>
                 </tr>
             </thead>
             <tbody>
@@ -117,10 +117,10 @@
                 </select>
             </div> 
             <div class="form-group col-6">
-                <label for="filtro_trabajo">Filtro trabajos ASMAR/propios:</label>
+                <label for="filtro_trabajo">Filtro trabajos Externo/propios:</label>
                 <select class="form-control" id="filtro_trabajo" name="filtro_trabajo">
                     <option value="">Todos</option>
-                    <option value="0">ASMAR</option>
+                    <option value="0">Externo</option>
                     <option value="1">Propios</option>                    
                 </select>
             </div>            
@@ -131,7 +131,7 @@
             </div>
             <div class="w-50">
                 <h3 class="text-center"><span id="trabajo_interno" class="badge badge-pill badge-info" style="display: none;">Trabajo Propio</span></h3>
-                <h3 class="text-center"><span id="trabajo_externo" class="badge badge-pill badge-primary" style="display: none;">Trabajo ASMAR</span></h3>  
+                <h3 class="text-center"><span id="trabajo_externo" class="badge badge-pill badge-primary" style="display: none;">Trabajo Externo</span></h3>  
             </div>
         </div>
         <div class="row">
@@ -143,9 +143,9 @@
         <div class="row">
             <ul class="detallesTarea list-group w-50" style="display: none;">
                 <li class="list-group-item"><span class="titulospan">Área:</span><br><span id="area"></span></li>
-                <li class="list-group-item"><span class="titulospan">FIT:</span><span id="fir"></span></li>
-                <li class="list-group-item"><span class="titulospan">FTT original:</span><span id="ftro"></span></li>
-                <li class="list-group-item"><span class="titulospan">FTT modificada:</span><span id="ftrm"></span></li>
+                <li class="list-group-item"><span class="titulospan">Fecha Inicio Tarea:</span><span id="fir"></span></li>
+                <li class="list-group-item"><span class="titulospan">Fecha Término Tarea original:</span><span id="ftro"></span></li>
+                <li class="list-group-item"><span class="titulospan">Fecha Término Tarea modificada:</span><span id="ftrm"></span></li>
                 <li class="list-group-item"><span class="titulospan">Atraso [días]:</span><span id="atraso"></span></li>
             </ul>
             <ul class="detallesTarea list-group w-50 mb-1" style="display: none;">

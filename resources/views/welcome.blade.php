@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
-@section('tituloPagina', 'Inicio')
-<h2 class="display-4">Bienvenido a Holistic</h2>
+
+<h2 class="display-4">Bienvenido a CakeTasks</h2>
 <hr>
 @if(!Auth::check())
   <p>Debe iniciar sesión para utilizar el sistema.</p>

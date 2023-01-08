@@ -6,9 +6,9 @@
     <thead>
         <tr>
             <th>NOMBRE<br>PROYECTO</th>
-            <th>FIR<br>&nbsp;</th>
-            <th>FTR<br>Original</th>
-            <th>FTR<br>Modificada</th>
+            <th>Fecha Inicio Proyecto<br>&nbsp;</th>
+            <th>Fecha Término Proyecto<br>Original</th>
+            <th>Fecha Término Proyecto<br>Modificada</th>
             <th>ATRASO<br>[días]</th>
             <th>AVANCE<br>[%]</th>
             @if(!is_null($proyecto->deleted_at))

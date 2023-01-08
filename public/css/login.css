@@ -24,7 +24,7 @@ body {
     /* centers the loading animation horizontally one the screen */
     top: 50%;
     /* centers the loading animation vertically one the screen */
-    background-image: url("/img/holistic.png");
+    background-image: url("/img/logo.png");
     /* path to your loading animation */
     background-repeat: no-repeat;
     background-position: center;

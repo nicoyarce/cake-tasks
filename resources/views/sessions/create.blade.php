@@ -8,7 +8,7 @@
     {{csrf_field()}}
 
     <div class="card" style="width: 18rem;">
-        <img src="{{url('/img/holistic.png')}}" class="card-img-top" alt="Logo Holistic" width="35px" height="auto">
+        <img src="{{url('/img/logo_no_back.png')}}" class="card-img-top" alt="Logo Caketasks" width="150px" height="auto">
         <div class="card-body">
             <h5 class="card-title">Iniciar sesión</h5>
             <label for="run" class="sr-only">RUN</label>

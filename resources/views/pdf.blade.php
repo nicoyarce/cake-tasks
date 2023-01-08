@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         
-        <title>Holistic - {{ $proyecto->nombre }} - Informe / {{Date::now()->format('d-M-Y - H:i:s') }}</title>
+        <title>Informe - {{ $proyecto->nombre }} - / {{Date::now()->format('d-M-Y - H:i:s') }}</title>
 
         <link href="{{url('css/bootstrap.min.css')}}" rel="stylesheet">
         <link href="{{url('css/personal.css')}}" rel="stylesheet">
@@ -26,7 +26,7 @@
             <nav id="barra" class="navbar navbar-expand-md navbar-dark mb-3">
                 <div id="logo" class="row">
                     <div class="col-6"><img src="{{url('img/armada.png')}}" width="35px" height="auto"></div>
-                    <div class="col-6 ml-6 d-flex align-items-end"><h3 class="text-light">Holistic</h3></div>
+                    <div class="col-6 ml-6 d-flex align-items-end"><h3 class="text-light">CakeTasks</h3></div>
                 </div>
             </nav>
             <h3>Informe / {{Date::now()->format('d-M-Y - H:i:s') }}</h3>
@@ -41,9 +41,9 @@
                     <div class="row w-100">
                         <ul class="detallesTarea list-group w-100">
                             <li class="list-group-item"><b>{{ $proyecto->nombre }}</b></li>
-                            <li class="list-group-item"><b>FIR:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
-                            <li class="list-group-item"><b>FTR original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
-                            <li class="list-group-item"><b>FTR modificada: </b>
+                            <li class="list-group-item"><b>Fecha Inicio Proyecto:</b> {{ $proyecto->fecha_inicio->format('d-M-Y') }}</li>
+                            <li class="list-group-item"><b>Fecha Término Proyecto original:</b> {{ $proyecto->fecha_termino_original->format('d-M-Y') }}</li>
+                            <li class="list-group-item"><b>Fecha Término Proyecto modificada: </b>
                                 @if($proyecto->fecha_termino_original == $proyecto->fecha_termino)
                                     -
                                 @else
@@ -100,9 +100,9 @@
                     <tr>
                         <th>#</th>
                         <th>NOMBRE<br>TAREA</th>
-                        <th>FIT<br>&nbsp;</th>
-                        <th>FTT<br>Original</th>
-                        <th>FTT<br>Modificada</th>
+                        <th>Fecha Inicio Tarea<br>&nbsp;</th>
+                        <th>Fecha Término Tarea<br>Original</th>
+                        <th>Fecha Término Tarea<br>Modificada</th>
                         <th>ATRASO<br>[días]</th>
                         <th class="text-center">AVANCE<br>REAL<br>[%]</th>
                         <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>

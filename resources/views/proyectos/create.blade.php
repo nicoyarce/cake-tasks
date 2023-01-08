@@ -26,11 +26,11 @@
     </div>
     <div class="form-row">
         <div class="form-group col-6">
-            <label for="fecha_inicio">FIR</label>            
+            <label for="fecha_inicio">Fecha Inicio Proyecto</label>            
             <input class="form-control" type="date" id="fecha_inicio" required name="fecha_inicio">
         </div>
         <div class="form-group col-6">
-            <label for="fecha_termino">FTR</label>
+            <label for="fecha_termino">Fecha Término Proyecto</label>
             <input class="form-control" type="date" id="fecha_termino_original" required name="fecha_termino_original">
         </div>
     </div>

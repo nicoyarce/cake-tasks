@@ -1,9 +1,8 @@
 <!-- Fixed navbar -->
 <nav id="barra" class="navbar navbar-expand-md navbar-dark">      
     <div id="logo">
-        <img src="{{url('/img/armada.png')}}" width="35px" height="auto">
+        <img src="{{url('/img/logo_no_back.png')}}" width="150px" height="auto">
     </div>      
-    <a id="titulo" class="navbar-brand">Holistic</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>

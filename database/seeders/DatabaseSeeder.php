@@ -15,12 +15,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 		DB::table('areas')->insert([
-			['id'=> 1, 'nombrearea' => 'Ingeniería'],
-			['id'=> 2, 'nombrearea' => 'Mecánica'],
-			['id'=> 3, 'nombrearea' => 'Telecomunicaciones'],
-			['id'=> 4, 'nombrearea' => 'Electricidad'],
-			['id'=> 5, 'nombrearea' => 'Electrónica'],
-			['id'=> 6, 'nombrearea' => 'Otra'],
+			['id'=> 1, 'nombrearea' => 'Trabajo'],
+			['id'=> 2, 'nombrearea' => 'Familiares'],
+			['id'=> 3, 'nombrearea' => 'Ocio']
 		]);
 		DB::table('tipo_tareas')->insert([
 			['id'=> 1, 'descripcion' => 'Tarea Normal']	,		
@@ -31,7 +28,7 @@ class DatabaseSeeder extends Seeder
 			['id'=> 2, 'porcentaje' => 25, 'glosa' => 'Paso 2: Planificada', 'tipo_tarea' => 1],
 			['id'=> 3, 'porcentaje' => 50, 'glosa' => 'Paso 3: Desarrollo', 'tipo_tarea' => 1],
 			['id'=> 4, 'porcentaje' => 75, 'glosa' => 'Paso 4: Finalizando', 'tipo_tarea' => 1],
-			['id'=> 5, 'porcentaje' => 95, 'glosa' => 'Paso 5: Revision Final', 'tipo_tarea' => 1],
+			['id'=> 5, 'porcentaje' => 95, 'glosa' => 'Paso 5: Revisión Final', 'tipo_tarea' => 1],
 			['id'=> 6, 'porcentaje' => 100, 'glosa' => 'Paso 6: Terminada', 'tipo_tarea' => 1],
 		]);
 

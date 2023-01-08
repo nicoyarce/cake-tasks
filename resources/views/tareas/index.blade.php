@@ -15,9 +15,9 @@
 			<thead class="thead-light" style="position: sticky;">
 				<tr>
 					<th>NOMBRE<br>TAREA</th>
-					<th>FIT<br>&nbsp;</th>
-					<th>FTT<br>Original</th>
-					<th>FTT<br>Modificada</th>
+					<th>Fecha Inicio Tarea<br>&nbsp;</th>
+					<th>Fecha Término Tarea<br>Original</th>
+					<th>Fecha Término Tarea<br>Modificada</th>
 					<th>ATRASO<br>[días]</th>
 					<th class="text-center">AVANCE<br>REAL<br>[%]</th>
                     <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>
@@ -128,9 +128,9 @@
 			<thead class="thead-light" style="position: sticky; top: 0;">
 				<tr>
 					<th>NOMBRE<br>TAREA</th>
-					<th>FIT<br>&nbsp;</th>
-					<th>FTT<br>Original</th>
-					<th>FTT<br>Modificada</th>
+					<th>Fecha Inicio Tarea<br>&nbsp;</th>
+					<th>Fecha Término Tarea<br>Original</th>
+					<th>Fecha Término Tarea<br>Modificada</th>
 					<th>ATRASO<br>[días]</th>
 					<th class="text-center">AVANCE<br>REAL<br>[%]</th>
                     <th class="text-center">AVANCE<br>PROGRAMADO<br>[%]</th>

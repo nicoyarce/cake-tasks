@@ -53,7 +53,7 @@
         </div>
         <div class="form-row">
             <div class="form-group col-4">
-                <label for="fecha_inicio">FIT</label>
+                <label for="fecha_inicio">Fecha Inicio Tarea</label>
                 <input class="form-control" id="fecha_inicio" type="date"
                 name="fecha_inicio"
                 @cannot('modificar_fechas_originales_proyecto')
@@ -140,9 +140,9 @@
                 <tr>
                     <th>NOMBRE<br>TAREA</th>
                     <th>ÁREA<br>&nbsp;</th>
-                    <th>FIT<br>&nbsp;</th>
-                    <th>FTT<br>Original</th>
-                    <th>FTT<br>Modificada</th>
+					<th>Fecha Inicio Tarea<br>&nbsp;</th>
+					<th>Fecha Término Tarea<br>Original</th>
+					<th>Fecha Término Tarea<br>Modificada</th>
                     <th>ATRASO<br>[días]</th>
                 </tr>
             </thead>

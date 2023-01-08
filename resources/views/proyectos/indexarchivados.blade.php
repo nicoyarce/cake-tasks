@@ -25,9 +25,9 @@
         <thead>
             <tr>
                 <th style="vertical-align: top">NOMBRE PROYECTO</th>
-                <th style="vertical-align: top">FIR</th>
-                <th style="vertical-align: top">FTR Original</th>
-                <th style="vertical-align: top">FTR Modificada</th>
+                <th style="vertical-align: top">Fecha Inicio Proyecto</th>
+                <th style="vertical-align: top">Fecha Término Proyecto Original</th>
+                <th style="vertical-align: top">Fecha Término Proyecto Modificada</th>
                 <th style="vertical-align: top">ATRASO [días]</th>
                 <th style="vertical-align: top">AVANCE REAL[%]</th>
                 <th style="vertical-align: top">AVANCE PROGRAM.[%]</th>
