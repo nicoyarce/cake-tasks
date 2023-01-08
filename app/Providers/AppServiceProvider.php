@@ -26,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
             config(['propiedades' => DB::select('select * from propiedades_grafico')]);
             View::share('propiedades', DB::select('select * from propiedades_grafico'));
         }
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 
     /**
