@@ -14,9 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $base = env('DB_DATABASE', 'holistic');
         $sql = "
-		INSERT INTO $base.areas (id, nombrearea, created_at, updated_at) VALUES
+		INSERT INTO areas (id, nombrearea, created_at, updated_at) VALUES
 		(1, 'Ingeniería', now(), now()),
 		(2, 'Mecánica', now(), now()),
 		(3, 'Telecomunicaciones', now(), now()),
@@ -24,10 +23,10 @@ class DatabaseSeeder extends Seeder
 		(5, 'Electrónica', now(), now()),
 		(6, 'Otra', now(), now());
 
-		INSERT INTO $base.tipo_tareas (id, descripcion, created_at, updated_at) VALUES
+		INSERT INTO tipo_tareas (id, descripcion, created_at, updated_at) VALUES
 			(1, 'Tarea', now(), now());
 
-		INSERT INTO $base.nomenclaturasavance (id, porcentaje, glosa, created_at, updated_at, tipo_tarea) VALUES
+		INSERT INTO nomenclaturasavance (id, porcentaje, glosa, created_at, updated_at, tipo_tarea) VALUES
 			(1, 0, 'Paso 1', now(), now(), 1),
 			(2, 5, 'Paso 2', now(), now(), 1),
 			(3, 10, 'Paso 3', now(), now(), 1),
@@ -45,7 +44,7 @@ class DatabaseSeeder extends Seeder
 			(15, 95, 'Paso 15', now(), now(), 1),
 			(16, 100, 'Paso 16', now(), now(), 1);
 
-		INSERT INTO $base.propiedades_grafico (id, nombre, avance, color) VALUES
+		INSERT INTO propiedades_grafico (id, nombre, avance, color) VALUES
 			(1, 'A tiempo', 0, '#28a745'),
 			(2, 'Advertencia', 60, '#ffff00'),
 			(3, 'Peligro', 90, '#f48024'),
@@ -53,7 +52,7 @@ class DatabaseSeeder extends Seeder
 			(5, 'Avance', -1, '#074590'),
 			(6, 'Porcentaje para verde', 101, '#28a745');		
 
-		INSERT INTO $base.categoria (id, nombre) VALUES
+		INSERT INTO categoria (id, nombre) VALUES
 			(1, 'PID'),
 			(2, 'MOD'),
 			(3, 'REC');

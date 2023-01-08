@@ -1,6 +1,6 @@
 # CakeTasks
-Hecho con Laravel 8
 
+Hecho con Laravel 8
 
 Para instalar proyecto
 
@@ -9,15 +9,11 @@ Para instalar proyecto
 2. Configurar el archivo .env
 
 3. Luego ejecutar comandos en shell
+
 ```
-php artisan key:generate
-
 php artisan migrate:fresh
-
-php artisan migrate
 
 php artisan db:seed
 ```
-
 
 4. Finalmente ejecutar `composer update`
