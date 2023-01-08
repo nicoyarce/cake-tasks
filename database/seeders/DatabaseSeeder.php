@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 			['id'=> 1, 'descripcion' => 'Tarea Normal']	,		
 			['id'=> 2, 'descripcion' => 'Tarea Extendida']	
 		]);
-		DB::table('nomenclaturasavance')->insert([
+		DB::table('nomenclaturasAvance')->insert([
 			['id'=> 1, 'porcentaje' => 5, 'glosa' => 'Paso 1: Iniciada', 'tipo_tarea' => 1],
 			['id'=> 2, 'porcentaje' => 25, 'glosa' => 'Paso 2: Planificada', 'tipo_tarea' => 1],
 			['id'=> 3, 'porcentaje' => 50, 'glosa' => 'Paso 3: Desarrollo', 'tipo_tarea' => 1],
