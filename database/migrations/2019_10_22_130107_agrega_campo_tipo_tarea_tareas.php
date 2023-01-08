@@ -17,7 +17,7 @@ class AgregaCampoTipoTareaTareas extends Migration
             $table->unsignedInteger('tipo_tarea')->nullable();
         });
 
-        Schema::table('nomenclaturasAvance', function (Blueprint $table) {
+        Schema::table('nomenclaturas_avance', function (Blueprint $table) {
             $table->unsignedInteger('tipo_tarea')->nullable();
         });
     }
@@ -33,7 +33,7 @@ class AgregaCampoTipoTareaTareas extends Migration
             $table->dropColumn('tipo_tarea');
         });
 
-        Schema::table('nomenclaturasAvance', function (Blueprint $table) {
+        Schema::table('nomenclaturas_avance', function (Blueprint $table) {
             $table->dropColumn('tipo_tarea');
         });
     }

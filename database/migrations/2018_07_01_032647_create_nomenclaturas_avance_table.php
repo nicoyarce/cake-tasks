@@ -13,7 +13,7 @@ class CreateNomenclaturasAvanceTable extends Migration
      */
     public function up()
     {
-        Schema::create('nomenclaturasAvance', function (Blueprint $table) {
+        Schema::create('nomenclaturas_avance', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('porcentaje');
             $table->string('glosa');
@@ -28,6 +28,6 @@ class CreateNomenclaturasAvanceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nomenclaturasAvance');
+        Schema::dropIfExists('nomenclaturas_avance');
     }
 }

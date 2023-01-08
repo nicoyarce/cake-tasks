@@ -20,7 +20,7 @@ class AgregaIndexTablas extends Migration
         //     $table->index('id');
         //     //$table->foreign('proyecto_id')->references('id')->on('proyectos');
         // });
-        // Schema::table('nomenclaturasavance', function (Blueprint $table) {
+        // Schema::table('nomenclaturas_avance', function (Blueprint $table) {
         //     $table->index('id');
         //     //$table->foreign('tipo_tarea')->references('id')->on('tipo_tareas');
         // });
