@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class NomenclaturaAvance extends Model
 {
     use FechasTraducidas;
-    protected $table = 'nomenclaturasAvance';
+    protected $table = 'nomenclaturas_avance';
 
     public function tipoTarea(){
         return $this->belongsTo(TipoTarea::class, 'tipo_tarea');

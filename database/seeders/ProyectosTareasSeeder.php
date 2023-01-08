@@ -43,7 +43,7 @@ class ProyectosTareasSeeder extends Seeder
 
         $proyectos = Proyecto::all()->pluck('id');
         $areas = Area::all()->pluck('id');
-        $multiplos = DB::table('nomenclaturasAvance')->pluck('porcentaje');
+        $multiplos = DB::table('nomenclaturas_avance')->pluck('porcentaje');
         $tipo_tarea = TipoTarea::all()->pluck('id');
         $categorias = Categoria::all()->pluck('id');
         foreach (range(1, 250) as $index) {
