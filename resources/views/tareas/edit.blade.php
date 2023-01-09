@@ -10,7 +10,7 @@
 <form id="formulario" method="POST" action="{{action('TareasController@update', $tarea)}}">
     {{csrf_field()}}
     {{method_field('PUT')}}
-    {{-- Formulario para Admin y OCR --}}
+    {{-- Formulario para Admin y Mod --}}
     @if(Auth::user()->can('modificar_tareas') && Auth::user()->can('modificar_avance_tareas'))
         <hr>
         <h4><p class="alert alert-primary"><b>Proyecto</b>: {{$proyecto->nombre}}</p></h4>

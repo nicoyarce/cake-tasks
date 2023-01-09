@@ -18,7 +18,7 @@ class RoleTableSeeder extends Seeder
     {
         app()['cache']->forget('spatie.permission.cache');
         $roleAdmin = Role::create(['name' => 'Administrador']);        
-        $roleOCR = Role::create(['name' => 'OCR']);       
+        $roleModerador = Role::create(['name' => 'Moderador']);       
         $roleUser = Role::create(['name' => 'Usuario']);    
 
         Permission::create(['name' => 'crear_tareas']);
@@ -54,7 +54,7 @@ class RoleTableSeeder extends Seeder
         $user->run = '11.111.112-K';
         $user->password = bcrypt('secret');
         $user->save();
-        $user->assignRole(['OCR']);        
+        $user->assignRole(['Moderador']);        
         
         $user = new User();
         $user->nombre = 'Diego';

@@ -63,7 +63,7 @@
         
         if($("#role_id").val() == 1 || $("#role_id").val() == ""){ //es admin
             $("#divProyectos").hide();
-        } else{ //es ocr o usuario
+        } else{ //es moderador o usuario
             $("#divProyectos").show();
         }
         
