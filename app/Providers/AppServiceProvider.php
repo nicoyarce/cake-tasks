@@ -8,6 +8,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
         if (Schema::hasTable('propiedades_grafico')) {
             config(['propiedades' => DB::select('select * from propiedades_grafico')]);
             View::share('propiedades', DB::select('select * from propiedades_grafico'));
+        }
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
         }
     }
 
