@@ -29,17 +29,17 @@ class GraficosController extends Controller
         foreach ($tareas as $key => $tarea) {
             $promedio_avances_tareas += $tarea->avance;
         }
-        $promedio_avances_tareas = round($promedio_avances_tareas/$proyecto->tareas_count, 2);
+        $promedio_avances_tareas = round($promedio_avances_tareas / $proyecto->tareas_count, 2);
         $tareas = $tareas
-        ->when($opcionColor != null, function ($query) use ($opcionColor) {
-            return $query->where('colorAtraso', $opcionColor);
-        })->when($areaid != null, function ($query) use ($areaid) {
-            return $query->where('area_id', $areaid);
-        })->when($categoriaid != null, function ($query) use ($categoriaid) {
-            return $query->whereIn('categoria_id', $categoriaid);
-        })->sortBy(function ($tarea) {
-            return [$tarea->fecha_inicio, $tarea->fecha_termino];
-        })->values()->all();
+            ->when($opcionColor != null, function ($query) use ($opcionColor) {
+                return $query->where('colorAtraso', $opcionColor);
+            })->when($areaid != null, function ($query) use ($areaid) {
+                return $query->where('area_id', $areaid);
+            })->when($categoriaid != null, function ($query) use ($categoriaid) {
+                return $query->whereIn('categoria_id', $categoriaid);
+            })->sortBy(function ($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
         $tareas = json_encode($tareas);
         return view('grafico', compact('proyecto', 'areas', 'tareas', 'categorias', 'promedio_avances_tareas'));
     }
@@ -60,7 +60,7 @@ class GraficosController extends Controller
         foreach ($tareas as $key => $tarea) {
             $promedio_avances_tareas += $tarea->avance;
         }
-        $promedio_avances_tareas = round($promedio_avances_tareas/count($tareas), 2);
+        $promedio_avances_tareas = round($promedio_avances_tareas / count($tareas), 2);
         $tareas = json_encode($tareas);
         return view('grafico', compact('proyecto', 'areas', 'tareas', 'categorias', 'promedio_avances_tareas'));
     }
@@ -74,24 +74,24 @@ class GraficosController extends Controller
         $filtroTrabajo = json_decode($request->filtro_trabajo);
         $tareas = Proyecto::with('tareas')->find($proyecto_id)->tareas;
         $tareas = $tareas
-        ->when($opcionColor != null, function ($query) use ($opcionColor) {
-            return $query->whereIn('colorAtraso', $opcionColor)
-                        ->where('avance', '<', 100);
-        })->when($areaid != null, function ($query) use ($areaid) {
-            return $query->whereIn('area_id', $areaid);
-        })->when($categoriaid != null, function ($query) use ($categoriaid) {
-            return $query->whereIn('categoria_id', $categoriaid);
-        })->when($filtroTrabajo != null, function ($query) use ($filtroTrabajo) {
-            return $query->where('trabajo_interno', $filtroTrabajo);
-        })->sortBy(function ($tarea) {
-            return [$tarea->fecha_inicio, $tarea->fecha_termino];
-        })->values()->all();
+            ->when($opcionColor != null, function ($query) use ($opcionColor) {
+                return $query->whereIn('colorAtraso', $opcionColor)
+                    ->where('avance', '<', 100);
+            })->when($areaid != null, function ($query) use ($areaid) {
+                return $query->whereIn('area_id', $areaid);
+            })->when($categoriaid != null, function ($query) use ($categoriaid) {
+                return $query->whereIn('categoria_id', $categoriaid);
+            })->when($filtroTrabajo != null, function ($query) use ($filtroTrabajo) {
+                return $query->where('trabajo_interno', $filtroTrabajo);
+            })->sortBy(function ($tarea) {
+                return [$tarea->fecha_inicio, $tarea->fecha_termino];
+            })->values()->all();
         $promedio_avances_tareas = 0;
         if (count($tareas) > 0) {
             foreach ($tareas as $key => $tarea) {
                 $promedio_avances_tareas += $tarea->avance;
             }
-            $promedio_avances_tareas = round($promedio_avances_tareas/count($tareas), 2);
+            $promedio_avances_tareas = round($promedio_avances_tareas / count($tareas), 2);
         }
         return json_encode(compact('tareas', 'promedio_avances_tareas'));
     }

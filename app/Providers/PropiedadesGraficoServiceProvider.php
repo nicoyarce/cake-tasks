@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Models\PropiedadesGrafico;
+use App\PropiedadesGrafico;  // Asegúrate de que estás usando el modelo correcto
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;  // Agregar para verificar la existencia de la tabla
+use Illuminate\Database\QueryException;
 
 class PropiedadesGraficoServiceProvider extends ServiceProvider
 {
@@ -15,7 +18,7 @@ class PropiedadesGraficoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Aquí no necesitas registrar nada, ya que utilizaremos el modelo directamente
+        // Aquí no necesitas registrar nada, ya que utilizamos el modelo directamente
     }
 
     /**
@@ -39,10 +42,31 @@ class PropiedadesGraficoServiceProvider extends ServiceProvider
 
         // Si no están en la sesión, cargar desde la base de datos y almacenarlas en la sesión
         if (!$data) {
-            $data = PropiedadesGrafico::all();  // Cargar todas las propiedades de la base de datos
+            // Verificar si la tabla existe
+            if (Schema::hasTable('propiedades_grafico')) {
+                try {
+                    // Intentar cargar las propiedades de la base de datos
+                    $data = PropiedadesGrafico::all();  // Cargar todas las propiedades de la base de datos
 
-            // Almacenar las propiedades en la sesión
-            Session::put('propiedades_grafico_cache', $data);
+                    // Almacenar las propiedades en la sesión
+                    View::share('propiedades', $data);
+                    Session::put('propiedades_grafico_cache', $data);
+                } catch (QueryException $e) {
+                    // Capturar la excepción si la consulta falla (por ejemplo, la tabla no existe)
+                    \Log::error("Error al cargar las propiedades desde la base de datos: " . $e->getMessage());
+
+                    // Puedes hacer cualquier otra acción, como enviar un mensaje o manejar el error de manera más amigable
+                    Session::put('propiedades_grafico_cache', []);
+                    View::share('propiedades', []);
+                }
+            } else {
+                // Si la tabla no existe, maneja el caso (por ejemplo, muestra un mensaje de error o limpia la caché)
+                \Log::warning("La tabla propiedades_grafico no existe en la base de datos.");
+
+                // Limpiar la caché de la sesión si la tabla no existe
+                Session::put('propiedades_grafico_cache', []);
+                View::share('propiedades', []);
+            }
         }
     }
 }

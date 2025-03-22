@@ -19,7 +19,7 @@ class InformesController extends Controller
         $lista_informes = $proyecto->informes->sortByDesc('created_at')->groupBy(function ($item) {
             return $item->fecha->format('d-M-y');
         });
-        $propiedades = PropiedadesGrafico::all();
+        $propiedades = session('propiedades_grafico_cache');
         return view('informes.index', compact('proyecto', 'lista_informes', 'propiedades'));
     }
 
@@ -30,7 +30,7 @@ class InformesController extends Controller
             ->get()
             ->first();
         $informes = $proyecto->informes()->withTrashed()->get()->sortByDesc('created_at');
-        $propiedades = PropiedadesGrafico::all();
+        $propiedades = session('propiedades_grafico_cache');
         return view('informes.index', compact('proyecto', 'informes', 'propiedades'));
     }
 
@@ -54,7 +54,7 @@ class InformesController extends Controller
         } else {
             $incluye_grafico = true;
             $incluye_observaciones = true;
-            $arrayColores = PropiedadesGrafico::all()->whereNotIn('id', 6)->pluck('color');
+            $arrayColores = session('propiedades_grafico_cache')->whereNotIn('id', 6)->pluck('color');
             $arrayConfiguraciones = compact('incluye_grafico', 'incluye_observaciones');
             $proyecto = Proyecto::find($proyecto->id);
             $tareas = $proyecto->tareas()->get();
@@ -64,7 +64,7 @@ class InformesController extends Controller
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareas);
-        $propiedades = PropiedadesGrafico::all();
+        $propiedades = session('propiedades_grafico_cache');
         DB::beginTransaction();
         try {
             $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones', 'propiedades'));
@@ -120,7 +120,7 @@ class InformesController extends Controller
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
         $tareasJSON = json_encode($tareasJSON);
-        $propiedades = PropiedadesGrafico::all();
+        $propiedades = session('propiedades_grafico_cache');
         return view('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'propiedades', 'arrayConfiguraciones'));
     }
 }

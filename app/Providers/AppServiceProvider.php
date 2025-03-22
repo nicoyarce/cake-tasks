@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
             return $carbon->format('Y-m-d');
         });*/
         Paginator::useBootstrap();
-
+        Carbon::setLocale('es');
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
