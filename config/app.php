@@ -146,12 +146,11 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        
+
         /*
          * Package Service Providers...
          */
         Laraveles\Spanish\SpanishServiceProvider::class,
-        Jenssegers\Date\DateServiceProvider::class,
         Freshwork\ChileanBundle\Laravel\ChileanBundleServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
@@ -166,6 +165,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // Register the new service provider        
+        App\Providers\PropiedadesGraficoServiceProvider::class,
     ],
 
     /*
@@ -193,7 +194,6 @@ return [
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,
-        'Date' => Jenssegers\Date\Date::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
@@ -204,7 +204,7 @@ return [
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
-        'Password' => Illuminate\Support\Facades\Password::class,        
+        'Password' => Illuminate\Support\Facades\Password::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
@@ -212,7 +212,7 @@ return [
         'Request' => Illuminate\Support\Facades\Request::class,
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
-        'Rut'   => Freshwork\ChileanBundle\Laravel\Facades\Rut::class,        
+        'Rut'   => Freshwork\ChileanBundle\Laravel\Facades\Rut::class,
         'Schema' => Illuminate\Support\Facades\Schema::class,
         'Session' => Illuminate\Support\Facades\Session::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,

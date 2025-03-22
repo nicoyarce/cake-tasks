@@ -10,7 +10,7 @@ use App\User;
 use App\Categoria;
 use App\Http\Requests\StoreProyectosRequest;
 use App\Http\Requests\UpdateProyectosRequest;
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProyectosImport;
 use App\Imports\TareasImport;
@@ -129,7 +129,7 @@ class ProyectosController extends Controller
         }
         if ($request->has('fecha_termino') && $request->fecha_termino != null && $request->fecha_termino != $proyecto->fecha_termino) {
             $proyectoNuevo->autorUltimoCambioFtr()->associate(User::find(Auth::user()->id))->save();
-            $proyectoNuevo->fecha_ultimo_cambio_ftr = Date::now();
+            $proyectoNuevo->fecha_ultimo_cambio_ftr = Carbon::now();
             $proyectoNuevo->fecha_termino = $request->fecha_termino;
         }
         if ($request->has('observaciones')) {

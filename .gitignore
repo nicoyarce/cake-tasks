@@ -25,3 +25,4 @@ _ide_helper.php
 graph.png
 npm-debug.log
 /storage/framework/laravel-excel
+database.sqlite

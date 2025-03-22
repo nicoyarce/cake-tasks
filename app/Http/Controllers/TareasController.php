@@ -10,7 +10,7 @@ use App\User;
 use App\TipoTarea;
 use App\PropiedadesGrafico;
 use App\Categoria;
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTareasRequest;
@@ -114,16 +114,16 @@ class TareasController extends Controller
             }
             if ($request->has('fecha_termino') && !is_null($request->fecha_termino) && $request->fecha_termino != $tarea->fecha_termino) {
                 $tareaNueva->autorUltimoCambioFtt()->associate(User::find(Auth::user()->id));
-                $tareaNueva->fecha_ultimo_cambio_ftt = Date::now();
+                $tareaNueva->fecha_ultimo_cambio_ftt = Carbon::now();
                 $tareaNueva->fecha_termino = $request->fecha_termino;
                 $tareaNueva->save();
             }
             if ($request->has('observaciones')) {
                 $ids_observaciones = collect($request->ids_observaciones);
                 $tareaNueva->observaciones()
-                ->where('tarea_id', $tareaNueva->id)
-                ->whereNotIn('id', $ids_observaciones)
-                ->forceDelete();
+                    ->where('tarea_id', $tareaNueva->id)
+                    ->whereNotIn('id', $ids_observaciones)
+                    ->forceDelete();
                 $observacionesRestantes = $tareaNueva->observaciones()->get()->pluck('contenido');
                 foreach ($request->observaciones as $textoObservacion) {
                     if (!is_null($textoObservacion) && !$observacionesRestantes->contains($textoObservacion)) {
@@ -139,7 +139,7 @@ class TareasController extends Controller
             $tareaNueva->tipoTarea()->associate($tipo_tarea);
             if ($request->has('avance') && $request->avance != $tarea->avance) {
                 $tareaNueva->autorUltimoCambioAvance()->associate(User::find(Auth::user()->id));
-                $tareaNueva->fecha_ultimo_cambio_avance = Date::now();
+                $tareaNueva->fecha_ultimo_cambio_avance = Carbon::now();
                 $tareaNueva->avance = $request->avance;
             }
         } elseif (Auth::user()->can('modificar_avance_tareas')) {

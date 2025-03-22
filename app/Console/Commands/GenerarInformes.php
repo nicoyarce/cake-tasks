@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Proyecto;
 use App\Informe;
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\Snappy\Snappy as PDF;
@@ -52,9 +52,9 @@ class GenerarInformes extends Command
             $incluye_grafico = true;
             $incluye_observaciones = true;
             $arrayConfiguraciones = compact('incluye_grafico', 'incluye_observaciones');
-            for ($i=1; $i <= 4; $i++) {
+            for ($i = 1; $i <= 4; $i++) {
                 foreach ($proyectos as $proyecto) {
-                    if ($i==1) {
+                    if ($i == 1) {
                         //para generar informe completo
                         $arrayColores = PropiedadesGrafico::all()->whereNotIn('id', 6)->pluck('color');
                         $tareas = $proyecto->tareas()->get();
@@ -64,7 +64,7 @@ class GenerarInformes extends Command
                         $tareas = $proyecto->tareas()->get()->whereIn('colorAtraso', $arrayColores);
                     }
                     $tareasJSON = $tareas->sortBy(function ($tarea) {
-                                    return [$tarea->fecha_inicio, $tarea->fecha_termino];
+                        return [$tarea->fecha_inicio, $tarea->fecha_termino];
                     })->values()->all();
                     $tareasJSON = json_encode($tareasJSON);
                     $pdf = \PDF::loadView('pdf', compact('proyecto', 'tareas', 'tareasJSON', 'arrayConfiguraciones'));
@@ -74,8 +74,8 @@ class GenerarInformes extends Command
                     $pdf->setOption('images', true);
                     $pdf->setOption('javascript-delay', 5000);
                     $informe = new Informe;
-                    $informe->fecha = Date::now();
-                    $informe->ruta = 'public/'.$proyecto->nombre.' - '.$informe->fecha->format('d-M-Y').'-'.$informe->fecha->format('H.i.s').'.pdf';
+                    $informe->fecha = Carbon::now();
+                    $informe->ruta = 'public/' . $proyecto->nombre . ' - ' . $informe->fecha->format('d-M-Y') . '-' . $informe->fecha->format('H.i.s') . '.pdf';
                     $informe->colores = json_encode($arrayColores, JSON_FORCE_OBJECT);
                     $informe->proyecto()->associate($proyecto);
                     $informe->save();
@@ -85,7 +85,7 @@ class GenerarInformes extends Command
             DB::commit();
             return 0;
         } catch (\Exception $e) {
-            Log::error('Ha ocurrido una excepcion: '.$e);
+            Log::error('Ha ocurrido una excepcion: ' . $e);
             DB::rollback();
             return 1;
         }

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Proyecto;
 use App\Informe;
 use App\PropiedadesGrafico;
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Snappy\Snappy as PDF;
@@ -59,7 +59,7 @@ class InformesController extends Controller
             $proyecto = Proyecto::find($proyecto->id);
             $tareas = $proyecto->tareas()->get();
         }
-        
+
         $tareas = $tareas->sortBy(function ($tarea) {
             return [$tarea->fecha_inicio, $tarea->fecha_termino];
         })->values()->all();
@@ -74,7 +74,7 @@ class InformesController extends Controller
             $pdf->setOption('images', true);
             $pdf->setOption('javascript-delay', 2000);
             $informe = new Informe;
-            $informe->fecha = Date::now();
+            $informe->fecha = Carbon::now();
             $informe->grafico = $incluye_grafico;
             $informe->observaciones = $incluye_observaciones;
             $informe->colores = json_encode($arrayColores, JSON_FORCE_OBJECT);

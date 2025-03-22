@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Proyecto;
 use App\Tarea;
 use App\TareaHija;
-use Jenssegers\Date\Date;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -39,8 +39,8 @@ class TareasImport implements ToCollection, WithHeadingRow
                     } elseif ($primerIndicadorEncontrado) {
                         $tareaHija = new TareaHija;
                         $tareaHija->nombre = $row['nombre'];
-                        $tareaHija->fecha_inicio = Date::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
-                        $tareaHija->fecha_termino =  Date::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_inicio = Carbon::createFromFormat('d-m-y G:i', $row['comienzo'], 'America/Santiago')->toDateTimeString();
+                        $tareaHija->fecha_termino =  Carbon::createFromFormat('d-m-y G:i', $row['fin'], 'America/Santiago')->toDateTimeString();
                         $tareaHija->nivel = $row['nivel_de_esquema'];
                         $tareaHija->tareaMadre()->associate($ultimaTareaMadre->first());
                         $tareaHija->save();
