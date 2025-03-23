@@ -16,9 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*Carbon::serializeUsing(function ($carbon) {
+        Carbon::serializeUsing(function ($carbon) {
             return $carbon->format('Y-m-d');
-        });*/
+        });
         Paginator::useBootstrap();
         Carbon::setLocale('es');
         if ($this->app->environment('production')) {
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() !== 'production') {
+        if ($this->app->environment() == 'local') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
     }
