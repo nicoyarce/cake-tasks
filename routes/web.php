@@ -53,7 +53,6 @@ Route::group(['middleware' => ['permission:gestionar_configuraciones']], functio
 
     Route::get('categorias/crear', 'CategoriasController@indexConModal');
     Route::resource('categorias', 'CategoriasController');
-
 });
 
 Route::group(['middleware' => ['permission:borrar_tareas']], function () {
@@ -90,7 +89,7 @@ Route::group(['middleware' => ['permission:modificar_tareas|modificar_avance_tar
     ]);
 });
 
-Route::get('/tareas/{tarea}', [
+Route::get('/tareas/{tarea}/detalle', [
     'as' => 'tareas.show',
     'uses' => 'TareasController@show'
 ]);
