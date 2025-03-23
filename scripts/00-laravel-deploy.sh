@@ -5,9 +5,6 @@ composer install --no-dev --working-dir=/var/www/html
 echo "Storage link"
 php artisan storage:link
 
-echo "Generating application key..."
-php artisan key:generate
-
 echo "Clearing caches..."
 php artisan optimize:clear
 
