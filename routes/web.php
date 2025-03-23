@@ -56,7 +56,7 @@ Route::group(['middleware' => ['permission:gestionar_configuraciones']], functio
 });
 
 Route::group(['middleware' => ['permission:borrar_tareas']], function () {
-    Route::resource('tareas', 'TareasController', ['except' => 'create', 'edit', 'update', 'show']);
+    Route::delete('tareas/{tarea}', 'TareasController@destroy')->name('tareas.destroy');
 });
 
 Route::group(['middleware' => ['permission:crear_tareas']], function () {
