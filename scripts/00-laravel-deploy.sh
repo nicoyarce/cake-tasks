@@ -11,10 +11,10 @@ php artisan optimize:clear
 echo "Caching config..."
 php artisan config:cache
 
-echo "Caching routes..."
-php artisan route:cache
-
 echo "Running migrations..."
 php artisan migrate:fresh --seed
+
+echo "Caching routes..."
+php artisan route:cache
 
 echo "Deploy done"
